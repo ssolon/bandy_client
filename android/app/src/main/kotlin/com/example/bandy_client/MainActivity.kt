@@ -1,4 +1,4 @@
-package com.example.bandy_client
+package com.samuelsolon.bandy_client
 
 import io.flutter.embedding.android.FlutterActivity
 
