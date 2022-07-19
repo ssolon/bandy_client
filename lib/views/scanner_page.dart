@@ -70,8 +70,36 @@ class ScannerResultsWidget extends ConsumerWidget with UiLoggy {
                 leading: Text("${d.rssi}"),
                 title: Text(d.name),
                 subtitle: Text(d.deviceId),
+                onTap: () => _selectDevice(context, d),
               );
             });
+  }
+
+  _selectDevice(BuildContext context, ScannedDevice device) async {
+    final navigator = Navigator.of(context);
+    final useIt = await showDialog<bool?>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(device.name),
+          content: const Text("Use this device?"),
+          actions: [
+            TextButton(
+              child: const Text("Cancel"),
+              onPressed: () => Navigator.pop(context),
+            ),
+            TextButton(
+              child: const Text("Yes"),
+              onPressed: () => Navigator.pop(context, true),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (useIt ?? false) {
+      navigator.pop(device);
+    }
   }
 }
 
