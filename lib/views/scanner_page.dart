@@ -76,7 +76,8 @@ class ScannerResultsWidget extends ConsumerWidget with UiLoggy {
   }
 
   _selectDevice(BuildContext context, ScannedDevice device) async {
-    final navigator = Navigator.of(context);
+    final navigator = Navigator.of(context); // To get around linter warning
+
     final useIt = await showDialog<bool?>(
       context: context,
       builder: (context) {

@@ -4,6 +4,8 @@ import 'package:flutter_loggy/flutter_loggy.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loggy/loggy.dart';
 
+import 'ble/scanner/logic/scanned_device.dart';
+
 void main() {
   Loggy.initLoggy(logPrinter: const PrettyDeveloperPrinter());
   runApp(const ProviderScope(child: MyApp()));
@@ -81,13 +83,10 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
         actions: [
           IconButton(
-              icon: const Icon(Icons.devices),
-              tooltip: 'Scan',
-              onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ScannerResultsRoute(),
-                  ))),
+            icon: const Icon(Icons.devices),
+            tooltip: 'Scan',
+            onPressed: () => _gotoScanner(context),
+          ),
         ],
       ),
       body: Center(
@@ -126,5 +125,13 @@ class _MyHomePageState extends State<MyHomePage> {
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  _gotoScanner(BuildContext context) async {
+    final selected = await Navigator.push<ScannedDevice?>(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const ScannerResultsRoute(),
+        ));
   }
 }
