@@ -1,7 +1,12 @@
+import 'package:bandy_client/views/scanner_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_loggy/flutter_loggy.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:loggy/loggy.dart';
 
 void main() {
-  runApp(const MyApp());
+  Loggy.initLoggy(logPrinter: const PrettyDeveloperPrinter());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -74,6 +79,16 @@ class _MyHomePageState extends State<MyHomePage> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
+        actions: [
+          IconButton(
+              icon: const Icon(Icons.devices),
+              tooltip: 'Scan',
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ScannerResultsRoute(),
+                  ))),
+        ],
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
