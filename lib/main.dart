@@ -107,10 +107,12 @@ class _MyHomePageState extends State<MyHomePage> {
           builder: (context) => const ScannerResultsRoute(),
         ));
 
-    saveDefaultDevice(selected);
-    setState(() {
-      defaultDevice = selected;
-    });
+    if (selected != null) {
+      saveDefaultDevice(selected);
+      setState(() {
+        defaultDevice = selected;
+      });
+    }
   }
 }
 
