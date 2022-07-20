@@ -1,8 +1,10 @@
+import 'package:bandy_client/views/device_display.dart';
 import 'package:bandy_client/views/scanner_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_loggy/flutter_loggy.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loggy/loggy.dart';
+import 'package:quick_blue/quick_blue.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'ble/scanner/logic/scanned_device.dart';
@@ -68,6 +70,25 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _MyHomePageState() {
     defaultDevice = getDefaultDevice();
+    /*!!!!
+    if (defaultDevice != null) {
+      QuickBlue.setConnectionHandler((deviceId, state) {
+        if (state == BlueConnectionState.connected) {
+          logDebug("Connected to deviceId=$deviceId");
+          QuickBlue.discoverServices(defaultDevice!.deviceId);
+        } else if (state == BlueConnectionState.disconnected) {
+          logDebug("Disconnected from deviceId=$deviceId");
+        } else {
+          logDebug("Unknown connection state for deviceId=$deviceId");
+        }
+      });
+
+      QuickBlue.setServiceHandler((deviceId, serviceId) {
+        logDebug("Service discovered serviceId=$serviceId");
+      });
+
+      QuickBlue.connect(defaultDevice!.deviceId);
+    }*/
   }
 
   @override
@@ -75,29 +96,28 @@ class _MyHomePageState extends State<MyHomePage> {
     final device = defaultDevice;
 
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.devices),
-            tooltip: 'Scan',
-            onPressed: () => _gotoScanner(context),
-          ),
-        ],
-      ),
-      body: device == null
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const <Widget>[
-                  Text('No Bandy device selected. Tap scan to find one'),
-                ],
-              ),
-            )
-          : Text("${device.name} (${device.deviceId})"),
-    );
+        appBar: AppBar(
+          // Here we take the value from the MyHomePage object that was created by
+          // the App.build method, and use it to set our appbar title.
+          title: Text(widget.title),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.devices),
+              tooltip: 'Scan',
+              onPressed: () => _gotoScanner(context),
+            ),
+          ],
+        ),
+        body: device == null
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const <Widget>[
+                    Text('No Bandy device selected. Tap scan to find one'),
+                  ],
+                ),
+              )
+            : DeviceDisplayWidget(defaultDevice!));
   }
 
   _gotoScanner(BuildContext context) async {
