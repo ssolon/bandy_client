@@ -39,6 +39,7 @@ dependencies:
   flutter_loggy: ^2.0.1
   freezed_annotation: ^2.1.0
   quick_blue: ^0.4.1+1
+  shared_preferences: ^2.0.15
 
 dev_dependencies:
   flutter_test:

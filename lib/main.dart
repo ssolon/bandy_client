@@ -3,11 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_loggy/flutter_loggy.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loggy/loggy.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'ble/scanner/logic/scanned_device.dart';
 
-void main() {
+late final SharedPreferences sharedPreferences;
+
+const prefDefaultDeviceName = 'defaultDeviceName';
+const prefDefaultDeviceId = 'defaultDeviceId';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   Loggy.initLoggy(logPrinter: const PrettyDeveloperPrinter());
+  sharedPreferences = await SharedPreferences.getInstance();
+
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -55,27 +64,16 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  ScannedDevice? defaultDevice;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  _MyHomePageState() {
+    defaultDevice = getDefaultDevice();
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    final device = defaultDevice;
+
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -89,41 +87,16 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      body: device == null
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const <Widget>[
+                  Text('No Bandy device selected. Tap scan to find one'),
+                ],
+              ),
+            )
+          : Text("${device.name} (${device.deviceId})"),
     );
   }
 
@@ -133,5 +106,26 @@ class _MyHomePageState extends State<MyHomePage> {
         MaterialPageRoute(
           builder: (context) => const ScannerResultsRoute(),
         ));
+
+    saveDefaultDevice(selected);
+    setState(() {
+      defaultDevice = selected;
+    });
   }
+}
+
+void saveDefaultDevice(ScannedDevice? device) {
+  if (device != null) {
+    sharedPreferences.setString(prefDefaultDeviceName, device.name);
+    sharedPreferences.setString(prefDefaultDeviceId, device.deviceId);
+  }
+}
+
+ScannedDevice? getDefaultDevice() {
+  final name = sharedPreferences.getString(prefDefaultDeviceName);
+  final id = sharedPreferences.getString(prefDefaultDeviceId);
+
+  return (name != null && id != null)
+      ? ScannedDevice(deviceId: id, name: name)
+      : null;
 }
