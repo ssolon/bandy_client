@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_loggy/flutter_loggy.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loggy/loggy.dart';
-import 'package:quick_blue/quick_blue.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'ble/scanner/logic/scanned_device.dart';
@@ -70,25 +69,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _MyHomePageState() {
     defaultDevice = getDefaultDevice();
-    /*!!!!
-    if (defaultDevice != null) {
-      QuickBlue.setConnectionHandler((deviceId, state) {
-        if (state == BlueConnectionState.connected) {
-          logDebug("Connected to deviceId=$deviceId");
-          QuickBlue.discoverServices(defaultDevice!.deviceId);
-        } else if (state == BlueConnectionState.disconnected) {
-          logDebug("Disconnected from deviceId=$deviceId");
-        } else {
-          logDebug("Unknown connection state for deviceId=$deviceId");
-        }
-      });
-
-      QuickBlue.setServiceHandler((deviceId, serviceId) {
-        logDebug("Service discovered serviceId=$serviceId");
-      });
-
-      QuickBlue.connect(defaultDevice!.deviceId);
-    }*/
   }
 
   @override

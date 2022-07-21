@@ -5,7 +5,6 @@ import 'package:bandy_client/ble/device/logic/device_state.dart';
 import 'package:bandy_client/ble/scanner/logic/scanned_device.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:loggy/loggy.dart';
 
 class DeviceDisplayWidget extends ConsumerWidget {
   final ScannedDevice scannedDevice;
@@ -82,77 +81,8 @@ class DeviceDisplayWidget extends ConsumerWidget {
     return 0.0;
   }
 
-  void _doConnect(BuildContext context, WidgetRef ref) {
-    Navigator.pop(context);
-  }
-
   void _doDisconnect(WidgetRef ref) {
     ref.read(deviceNotifierProvider(scannedDevice).notifier).disconnect();
-  }
-}
-
-class ConnectionWidget extends ConsumerStatefulWidget {
-  final ScannedDevice scannedDevice;
-  const ConnectionWidget(this.scannedDevice, {Key? key}) : super(key: key);
-
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _ConnectionWidgetState();
-}
-
-class _ConnectionWidgetState extends ConsumerState<ConnectionWidget> {
-  DeviceState? currentDeviceState;
-
-  @override
-  Widget build(BuildContext context) {
-    final deviceState = ref.watch(deviceNotifierProvider(widget.scannedDevice));
-
-    // We only care about connection state transitions so we ignore everything
-    // else and just keep the connection states.
-
-    currentDeviceState = deviceState.map((value) => currentDeviceState,
-        initial: (arg) => currentDeviceState,
-        connected: (connectedState) => connectedState,
-        disconnected: (disconnected) => disconnected,
-        error: (error) => currentDeviceState);
-
-    if (deviceState == const DeviceState.disconnected()) {
-      return ConnectWidget(widget.scannedDevice);
-    } else if (deviceState == const DeviceState.connected()) {
-      return DisconnectWidget(widget.scannedDevice);
-    } else {
-      return const Text('');
-    }
-  }
-}
-
-/// Button to create a connection to [scannedDevice].
-class ConnectWidget extends ConsumerWidget {
-  final ScannedDevice scannedDevice;
-
-  const ConnectWidget(this.scannedDevice, {super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return const TextButton(
-      onPressed: null,
-      child: (Text('Connect')),
-    );
-  }
-}
-
-/// Button to close the connection to [scannedDevice].
-class DisconnectWidget extends ConsumerWidget {
-  final ScannedDevice scannedDevice;
-
-  const DisconnectWidget(this.scannedDevice, {super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return const TextButton(
-      onPressed: null,
-      child: (Text('Disconnect')),
-    );
   }
 }
 
