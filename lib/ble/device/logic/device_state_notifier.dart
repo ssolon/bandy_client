@@ -11,10 +11,24 @@ class DeviceNotifier extends StateNotifier<DeviceState> with UiLoggy {
   /// Base constructor expects StateNotifier use_cases to
   /// read its usecases and also defines inital state
   DeviceNotifier(this.device) : super(const DeviceState.initial()) {
-    loggy.debug("CTOR for deviceId=${device.deviceId}");
+    connect();
+  }
 
+  bool get isConnected => connectionState == BlueConnectionState.connected;
+
+  void connect() {
     _setupHandlers(true);
     QuickBlue.connect(device.deviceId);
+  }
+
+  void disconnect() {
+    if (isConnected) {
+      //TODO This disabling seems to permanently disable the notifications.
+      //TODO Bug? Or something else needs to be done -- look at it.
+      // QuickBlue.setNotifiable(device.deviceId, fitnessServiceUUID,
+      // resistanceCharacteristicUUID, BleInputProperty.disabled);
+      QuickBlue.disconnect(device.deviceId);
+    }
   }
 
   void _setupHandlers(bool setIt) {
@@ -60,13 +74,5 @@ class DeviceNotifier extends StateNotifier<DeviceState> with UiLoggy {
     super.dispose();
     disconnect();
     _setupHandlers(false);
-  }
-
-  bool get isConnected => connectionState == BlueConnectionState.connected;
-
-  void disconnect() {
-    if (isConnected) {
-      QuickBlue.disconnect(device.deviceId);
-    }
   }
 }
