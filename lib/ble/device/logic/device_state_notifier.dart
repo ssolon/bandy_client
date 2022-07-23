@@ -63,7 +63,7 @@ class DeviceNotifier extends StateNotifier<DeviceState> with UiLoggy {
   void _valueHandler(
       String deviceId, String characteristicId, Uint8List value) {
     ByteData byteData = ByteData.sublistView(value);
-    double resistance = byteData.getUint16(0, Endian.little) / 10;
+    double resistance = byteData.getInt16(0, Endian.little) / 10;
     loggy.debug(
         "Value deviceId=$deviceId characteristicId=$characteristicId value=$resistance");
     state = DeviceState(reading: resistance);
