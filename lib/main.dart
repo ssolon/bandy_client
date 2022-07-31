@@ -2,6 +2,7 @@ import 'package:bandy_client/views/device_display.dart';
 import 'package:bandy_client/views/scanner_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_loggy/flutter_loggy.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,6 +13,13 @@ late final SharedPreferences sharedPreferences;
 
 const prefDefaultDeviceName = 'defaultDeviceName';
 const prefDefaultDeviceId = 'defaultDeviceId';
+
+// BLE stuff
+final fitnessServiceUUID = Uuid.parse("1826");
+final resistanceCharacteristicUUID =
+    Uuid.parse("a6351a0c-f7e0-11ec-b939-0242ac120002");
+
+final flutterReactiveBle = FlutterReactiveBle();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

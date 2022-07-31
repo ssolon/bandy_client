@@ -1,8 +1,9 @@
 import 'dart:async';
 
+import 'package:bandy_client/main.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loggy/loggy.dart';
-import 'package:quick_blue/quick_blue.dart';
 
 import 'scanned_device.dart';
 import 'scanner_state.dart';

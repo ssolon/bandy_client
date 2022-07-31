@@ -5,10 +5,13 @@ part 'device_state.freezed.dart';
 @freezed
 class DeviceState with _$DeviceState {
   /// Data is present state
-  const factory DeviceState({required double reading}) = Data;
+  const factory DeviceState({required int reading}) = Data;
 
   /// Initial/default state
   const factory DeviceState.initial() = Initial;
+
+  /// Device is trying to connect
+  const factory DeviceState.connecting() = Connecting;
 
   /// Device is connected
   const factory DeviceState.connected() = Connected;

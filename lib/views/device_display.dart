@@ -17,8 +17,9 @@ class DeviceDisplayWidget extends ConsumerWidget {
 
     // Get a value to be displayed -- non-value states just use zero
 
-    final newReading = device.map<double>((value) => value.reading,
-        initial: (arg) => 0.0,
+    final newReading = device.map<int>((value) => value.reading,
+        initial: (arg) => 0,
+        connecting: (value) => _handleConnecting(context, ref),
         connected: (arg) => _handleConnected(context, ref),
         disconnected: (arg) => _handleDisconnected(context, ref),
         error: (error) => _handleError(context, error.message));
@@ -35,10 +36,10 @@ class DeviceDisplayWidget extends ConsumerWidget {
     ]);
   }
 
-  Widget _updateValue(BuildContext context, double reading) {
+  Widget _updateValue(BuildContext context, int reading) {
     return Center(
         child: Text(
-      "${reading.round()}",
+      "$reading",
       style: Theme.of(context)
           .textTheme
           .displayLarge
@@ -46,11 +47,16 @@ class DeviceDisplayWidget extends ConsumerWidget {
     ));
   }
 
-  double _handleConnected(BuildContext context, WidgetRef ref) {
-    return 0.0;
+  int _handleConnecting(BuildContext context, WidgetRef ref) {
+    //TODO Handler somewhere else?
+    return 0;
   }
 
-  double _handleDisconnected(BuildContext context, WidgetRef ref) {
+  int _handleConnected(BuildContext context, WidgetRef ref) {
+    return 0;
+  }
+
+  int _handleDisconnected(BuildContext context, WidgetRef ref) {
     Timer.run(() => showDialog(
           context: context,
           barrierDismissible: false,
@@ -62,10 +68,10 @@ class DeviceDisplayWidget extends ConsumerWidget {
           ),
         ));
 
-    return 0.0;
+    return 0;
   }
 
-  double _handleError(BuildContext context, String? message) {
+  int _handleError(BuildContext context, String? message) {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -78,7 +84,7 @@ class DeviceDisplayWidget extends ConsumerWidget {
                   )
                 ]));
 
-    return 0.0;
+    return 0;
   }
 
   void _doDisconnect(WidgetRef ref) {

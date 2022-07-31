@@ -20,20 +20,21 @@ class ScannerStateNotifier extends StateNotifier<ScannerState> with UiLoggy {
   }
 
   startScanning() async {
-    if (!await QuickBlue.isBluetoothAvailable()) {
-      state = ScannerState.error(
-          scanning: scanning, message: "Bluetooth is not available");
-      return;
-    }
+    // TODO Add bluetooth status handling elsewhere
+    // if (!await flutterReactiveBle.) {
+    //   state = ScannerState.error(
+    //       scanning: scanning, message: "Bluetooth is not available");
+    //   return;
+    // }
 
     loggy.info("Start scanning");
 
-    QuickBlue.startScan();
     scanning = true;
     _devices = {};
     _updateState();
 
-    scanSubscription = QuickBlue.scanResultStream.listen(
+    scanSubscription = flutterReactiveBle
+        .scanForDevices(withServices: [fitnessServiceUUID]).listen(
       (event) => addOrUpdateDevice(event),
       onError: (error) {
         final message = "Error from scanner=$error";
@@ -49,18 +50,15 @@ class ScannerStateNotifier extends StateNotifier<ScannerState> with UiLoggy {
     if (scanning) {
       scanSubscription?.cancel();
       scanSubscription = null;
-      QuickBlue.stopScan();
       scanning = false;
       _updateState();
       loggy.info("Scanning stopped");
     }
   }
 
-  void addOrUpdateDevice(BlueScanResult scanResult) {
+  void addOrUpdateDevice(DiscoveredDevice scanResult) {
     final device = ScannedDevice(
-        deviceId: scanResult.deviceId,
-        name: scanResult.name,
-        rssi: scanResult.rssi);
+        deviceId: scanResult.id, name: scanResult.name, rssi: scanResult.rssi);
 
     _devices[device.deviceId] = device;
     _updateState();

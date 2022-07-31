@@ -18,8 +18,9 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$DeviceState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(double reading) $default, {
+    TResult Function(int reading) $default, {
     required TResult Function() initial,
+    required TResult Function() connecting,
     required TResult Function() connected,
     required TResult Function() disconnected,
     required TResult Function(String message) error,
@@ -27,8 +28,9 @@ mixin _$DeviceState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(double reading)? $default, {
+    TResult Function(int reading)? $default, {
     TResult Function()? initial,
+    TResult Function()? connecting,
     TResult Function()? connected,
     TResult Function()? disconnected,
     TResult Function(String message)? error,
@@ -36,8 +38,9 @@ mixin _$DeviceState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(double reading)? $default, {
+    TResult Function(int reading)? $default, {
     TResult Function()? initial,
+    TResult Function()? connecting,
     TResult Function()? connected,
     TResult Function()? disconnected,
     TResult Function(String message)? error,
@@ -48,6 +51,7 @@ mixin _$DeviceState {
   TResult map<TResult extends Object?>(
     TResult Function(Data value) $default, {
     required TResult Function(Initial value) initial,
+    required TResult Function(Connecting value) connecting,
     required TResult Function(Connected value) connected,
     required TResult Function(Disconnected value) disconnected,
     required TResult Function(Error value) error,
@@ -57,6 +61,7 @@ mixin _$DeviceState {
   TResult? mapOrNull<TResult extends Object?>(
     TResult Function(Data value)? $default, {
     TResult Function(Initial value)? initial,
+    TResult Function(Connecting value)? connecting,
     TResult Function(Connected value)? connected,
     TResult Function(Disconnected value)? disconnected,
     TResult Function(Error value)? error,
@@ -66,6 +71,7 @@ mixin _$DeviceState {
   TResult maybeMap<TResult extends Object?>(
     TResult Function(Data value)? $default, {
     TResult Function(Initial value)? initial,
+    TResult Function(Connecting value)? connecting,
     TResult Function(Connected value)? connected,
     TResult Function(Disconnected value)? disconnected,
     TResult Function(Error value)? error,
@@ -94,7 +100,7 @@ class _$DeviceStateCopyWithImpl<$Res> implements $DeviceStateCopyWith<$Res> {
 abstract class _$$DataCopyWith<$Res> {
   factory _$$DataCopyWith(_$Data value, $Res Function(_$Data) then) =
       __$$DataCopyWithImpl<$Res>;
-  $Res call({double reading});
+  $Res call({int reading});
 }
 
 /// @nodoc
@@ -114,7 +120,7 @@ class __$$DataCopyWithImpl<$Res> extends _$DeviceStateCopyWithImpl<$Res>
       reading: reading == freezed
           ? _value.reading
           : reading // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
     ));
   }
 }
@@ -125,7 +131,7 @@ class _$Data implements Data {
   const _$Data({required this.reading});
 
   @override
-  final double reading;
+  final int reading;
 
   @override
   String toString() {
@@ -152,8 +158,9 @@ class _$Data implements Data {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(double reading) $default, {
+    TResult Function(int reading) $default, {
     required TResult Function() initial,
+    required TResult Function() connecting,
     required TResult Function() connected,
     required TResult Function() disconnected,
     required TResult Function(String message) error,
@@ -164,8 +171,9 @@ class _$Data implements Data {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(double reading)? $default, {
+    TResult Function(int reading)? $default, {
     TResult Function()? initial,
+    TResult Function()? connecting,
     TResult Function()? connected,
     TResult Function()? disconnected,
     TResult Function(String message)? error,
@@ -176,8 +184,9 @@ class _$Data implements Data {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(double reading)? $default, {
+    TResult Function(int reading)? $default, {
     TResult Function()? initial,
+    TResult Function()? connecting,
     TResult Function()? connected,
     TResult Function()? disconnected,
     TResult Function(String message)? error,
@@ -194,6 +203,7 @@ class _$Data implements Data {
   TResult map<TResult extends Object?>(
     TResult Function(Data value) $default, {
     required TResult Function(Initial value) initial,
+    required TResult Function(Connecting value) connecting,
     required TResult Function(Connected value) connected,
     required TResult Function(Disconnected value) disconnected,
     required TResult Function(Error value) error,
@@ -206,6 +216,7 @@ class _$Data implements Data {
   TResult? mapOrNull<TResult extends Object?>(
     TResult Function(Data value)? $default, {
     TResult Function(Initial value)? initial,
+    TResult Function(Connecting value)? connecting,
     TResult Function(Connected value)? connected,
     TResult Function(Disconnected value)? disconnected,
     TResult Function(Error value)? error,
@@ -218,6 +229,7 @@ class _$Data implements Data {
   TResult maybeMap<TResult extends Object?>(
     TResult Function(Data value)? $default, {
     TResult Function(Initial value)? initial,
+    TResult Function(Connecting value)? connecting,
     TResult Function(Connected value)? connected,
     TResult Function(Disconnected value)? disconnected,
     TResult Function(Error value)? error,
@@ -231,9 +243,9 @@ class _$Data implements Data {
 }
 
 abstract class Data implements DeviceState {
-  const factory Data({required final double reading}) = _$Data;
+  const factory Data({required final int reading}) = _$Data;
 
-  double get reading;
+  int get reading;
   @JsonKey(ignore: true)
   _$$DataCopyWith<_$Data> get copyWith => throw _privateConstructorUsedError;
 }
@@ -276,8 +288,9 @@ class _$Initial implements Initial {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(double reading) $default, {
+    TResult Function(int reading) $default, {
     required TResult Function() initial,
+    required TResult Function() connecting,
     required TResult Function() connected,
     required TResult Function() disconnected,
     required TResult Function(String message) error,
@@ -288,8 +301,9 @@ class _$Initial implements Initial {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(double reading)? $default, {
+    TResult Function(int reading)? $default, {
     TResult Function()? initial,
+    TResult Function()? connecting,
     TResult Function()? connected,
     TResult Function()? disconnected,
     TResult Function(String message)? error,
@@ -300,8 +314,9 @@ class _$Initial implements Initial {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(double reading)? $default, {
+    TResult Function(int reading)? $default, {
     TResult Function()? initial,
+    TResult Function()? connecting,
     TResult Function()? connected,
     TResult Function()? disconnected,
     TResult Function(String message)? error,
@@ -318,6 +333,7 @@ class _$Initial implements Initial {
   TResult map<TResult extends Object?>(
     TResult Function(Data value) $default, {
     required TResult Function(Initial value) initial,
+    required TResult Function(Connecting value) connecting,
     required TResult Function(Connected value) connected,
     required TResult Function(Disconnected value) disconnected,
     required TResult Function(Error value) error,
@@ -330,6 +346,7 @@ class _$Initial implements Initial {
   TResult? mapOrNull<TResult extends Object?>(
     TResult Function(Data value)? $default, {
     TResult Function(Initial value)? initial,
+    TResult Function(Connecting value)? connecting,
     TResult Function(Connected value)? connected,
     TResult Function(Disconnected value)? disconnected,
     TResult Function(Error value)? error,
@@ -342,6 +359,7 @@ class _$Initial implements Initial {
   TResult maybeMap<TResult extends Object?>(
     TResult Function(Data value)? $default, {
     TResult Function(Initial value)? initial,
+    TResult Function(Connecting value)? connecting,
     TResult Function(Connected value)? connected,
     TResult Function(Disconnected value)? disconnected,
     TResult Function(Error value)? error,
@@ -356,6 +374,134 @@ class _$Initial implements Initial {
 
 abstract class Initial implements DeviceState {
   const factory Initial() = _$Initial;
+}
+
+/// @nodoc
+abstract class _$$ConnectingCopyWith<$Res> {
+  factory _$$ConnectingCopyWith(
+          _$Connecting value, $Res Function(_$Connecting) then) =
+      __$$ConnectingCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$ConnectingCopyWithImpl<$Res> extends _$DeviceStateCopyWithImpl<$Res>
+    implements _$$ConnectingCopyWith<$Res> {
+  __$$ConnectingCopyWithImpl(
+      _$Connecting _value, $Res Function(_$Connecting) _then)
+      : super(_value, (v) => _then(v as _$Connecting));
+
+  @override
+  _$Connecting get _value => super._value as _$Connecting;
+}
+
+/// @nodoc
+
+class _$Connecting implements Connecting {
+  const _$Connecting();
+
+  @override
+  String toString() {
+    return 'DeviceState.connecting()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$Connecting);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(int reading) $default, {
+    required TResult Function() initial,
+    required TResult Function() connecting,
+    required TResult Function() connected,
+    required TResult Function() disconnected,
+    required TResult Function(String message) error,
+  }) {
+    return connecting();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult Function(int reading)? $default, {
+    TResult Function()? initial,
+    TResult Function()? connecting,
+    TResult Function()? connected,
+    TResult Function()? disconnected,
+    TResult Function(String message)? error,
+  }) {
+    return connecting?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(int reading)? $default, {
+    TResult Function()? initial,
+    TResult Function()? connecting,
+    TResult Function()? connected,
+    TResult Function()? disconnected,
+    TResult Function(String message)? error,
+    required TResult orElse(),
+  }) {
+    if (connecting != null) {
+      return connecting();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(Data value) $default, {
+    required TResult Function(Initial value) initial,
+    required TResult Function(Connecting value) connecting,
+    required TResult Function(Connected value) connected,
+    required TResult Function(Disconnected value) disconnected,
+    required TResult Function(Error value) error,
+  }) {
+    return connecting(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult Function(Data value)? $default, {
+    TResult Function(Initial value)? initial,
+    TResult Function(Connecting value)? connecting,
+    TResult Function(Connected value)? connected,
+    TResult Function(Disconnected value)? disconnected,
+    TResult Function(Error value)? error,
+  }) {
+    return connecting?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(Data value)? $default, {
+    TResult Function(Initial value)? initial,
+    TResult Function(Connecting value)? connecting,
+    TResult Function(Connected value)? connected,
+    TResult Function(Disconnected value)? disconnected,
+    TResult Function(Error value)? error,
+    required TResult orElse(),
+  }) {
+    if (connecting != null) {
+      return connecting(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class Connecting implements DeviceState {
+  const factory Connecting() = _$Connecting;
 }
 
 /// @nodoc
@@ -398,8 +544,9 @@ class _$Connected implements Connected {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(double reading) $default, {
+    TResult Function(int reading) $default, {
     required TResult Function() initial,
+    required TResult Function() connecting,
     required TResult Function() connected,
     required TResult Function() disconnected,
     required TResult Function(String message) error,
@@ -410,8 +557,9 @@ class _$Connected implements Connected {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(double reading)? $default, {
+    TResult Function(int reading)? $default, {
     TResult Function()? initial,
+    TResult Function()? connecting,
     TResult Function()? connected,
     TResult Function()? disconnected,
     TResult Function(String message)? error,
@@ -422,8 +570,9 @@ class _$Connected implements Connected {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(double reading)? $default, {
+    TResult Function(int reading)? $default, {
     TResult Function()? initial,
+    TResult Function()? connecting,
     TResult Function()? connected,
     TResult Function()? disconnected,
     TResult Function(String message)? error,
@@ -440,6 +589,7 @@ class _$Connected implements Connected {
   TResult map<TResult extends Object?>(
     TResult Function(Data value) $default, {
     required TResult Function(Initial value) initial,
+    required TResult Function(Connecting value) connecting,
     required TResult Function(Connected value) connected,
     required TResult Function(Disconnected value) disconnected,
     required TResult Function(Error value) error,
@@ -452,6 +602,7 @@ class _$Connected implements Connected {
   TResult? mapOrNull<TResult extends Object?>(
     TResult Function(Data value)? $default, {
     TResult Function(Initial value)? initial,
+    TResult Function(Connecting value)? connecting,
     TResult Function(Connected value)? connected,
     TResult Function(Disconnected value)? disconnected,
     TResult Function(Error value)? error,
@@ -464,6 +615,7 @@ class _$Connected implements Connected {
   TResult maybeMap<TResult extends Object?>(
     TResult Function(Data value)? $default, {
     TResult Function(Initial value)? initial,
+    TResult Function(Connecting value)? connecting,
     TResult Function(Connected value)? connected,
     TResult Function(Disconnected value)? disconnected,
     TResult Function(Error value)? error,
@@ -520,8 +672,9 @@ class _$Disconnected implements Disconnected {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(double reading) $default, {
+    TResult Function(int reading) $default, {
     required TResult Function() initial,
+    required TResult Function() connecting,
     required TResult Function() connected,
     required TResult Function() disconnected,
     required TResult Function(String message) error,
@@ -532,8 +685,9 @@ class _$Disconnected implements Disconnected {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(double reading)? $default, {
+    TResult Function(int reading)? $default, {
     TResult Function()? initial,
+    TResult Function()? connecting,
     TResult Function()? connected,
     TResult Function()? disconnected,
     TResult Function(String message)? error,
@@ -544,8 +698,9 @@ class _$Disconnected implements Disconnected {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(double reading)? $default, {
+    TResult Function(int reading)? $default, {
     TResult Function()? initial,
+    TResult Function()? connecting,
     TResult Function()? connected,
     TResult Function()? disconnected,
     TResult Function(String message)? error,
@@ -562,6 +717,7 @@ class _$Disconnected implements Disconnected {
   TResult map<TResult extends Object?>(
     TResult Function(Data value) $default, {
     required TResult Function(Initial value) initial,
+    required TResult Function(Connecting value) connecting,
     required TResult Function(Connected value) connected,
     required TResult Function(Disconnected value) disconnected,
     required TResult Function(Error value) error,
@@ -574,6 +730,7 @@ class _$Disconnected implements Disconnected {
   TResult? mapOrNull<TResult extends Object?>(
     TResult Function(Data value)? $default, {
     TResult Function(Initial value)? initial,
+    TResult Function(Connecting value)? connecting,
     TResult Function(Connected value)? connected,
     TResult Function(Disconnected value)? disconnected,
     TResult Function(Error value)? error,
@@ -586,6 +743,7 @@ class _$Disconnected implements Disconnected {
   TResult maybeMap<TResult extends Object?>(
     TResult Function(Data value)? $default, {
     TResult Function(Initial value)? initial,
+    TResult Function(Connecting value)? connecting,
     TResult Function(Connected value)? connected,
     TResult Function(Disconnected value)? disconnected,
     TResult Function(Error value)? error,
@@ -665,8 +823,9 @@ class _$Error implements Error {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(double reading) $default, {
+    TResult Function(int reading) $default, {
     required TResult Function() initial,
+    required TResult Function() connecting,
     required TResult Function() connected,
     required TResult Function() disconnected,
     required TResult Function(String message) error,
@@ -677,8 +836,9 @@ class _$Error implements Error {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(double reading)? $default, {
+    TResult Function(int reading)? $default, {
     TResult Function()? initial,
+    TResult Function()? connecting,
     TResult Function()? connected,
     TResult Function()? disconnected,
     TResult Function(String message)? error,
@@ -689,8 +849,9 @@ class _$Error implements Error {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(double reading)? $default, {
+    TResult Function(int reading)? $default, {
     TResult Function()? initial,
+    TResult Function()? connecting,
     TResult Function()? connected,
     TResult Function()? disconnected,
     TResult Function(String message)? error,
@@ -707,6 +868,7 @@ class _$Error implements Error {
   TResult map<TResult extends Object?>(
     TResult Function(Data value) $default, {
     required TResult Function(Initial value) initial,
+    required TResult Function(Connecting value) connecting,
     required TResult Function(Connected value) connected,
     required TResult Function(Disconnected value) disconnected,
     required TResult Function(Error value) error,
@@ -719,6 +881,7 @@ class _$Error implements Error {
   TResult? mapOrNull<TResult extends Object?>(
     TResult Function(Data value)? $default, {
     TResult Function(Initial value)? initial,
+    TResult Function(Connecting value)? connecting,
     TResult Function(Connected value)? connected,
     TResult Function(Disconnected value)? disconnected,
     TResult Function(Error value)? error,
@@ -731,6 +894,7 @@ class _$Error implements Error {
   TResult maybeMap<TResult extends Object?>(
     TResult Function(Data value)? $default, {
     TResult Function(Initial value)? initial,
+    TResult Function(Connecting value)? connecting,
     TResult Function(Connected value)? connected,
     TResult Function(Disconnected value)? disconnected,
     TResult Function(Error value)? error,
