@@ -53,9 +53,22 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   build_runner: ^2.2.0
   freezed: ^2.1.0+1
+  flutter_launcher_icons_maker: ^0.10.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+
+flutter_icons:
+  image_path: "assets/images/bandy.png"
+#  adaptive_icon_foreground: "assets/images/shopping_cart.png"
+#  adaptive_icon_background: "#ffff00"
+  image_path_ios: "assets/images/bandy_ios.png"
+  android: true
+  ios: true
+  macos: true
+  windows: true
+  web: true
+  remove_alpha_ios: true
 
 # The following section is specific to Flutter packages.
 flutter:

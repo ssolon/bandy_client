@@ -51,12 +51,16 @@ class DeviceNotifier extends StateNotifier<DeviceState> with UiLoggy {
   void _serviceHandler(String deviceId, String serviceId) {
     loggy.debug("Service discovered deviceId=$deviceId serviceId=$serviceId");
     if (deviceId == device.deviceId && serviceId == fitnessServiceUUID) {
-      // Prime the pump by getting the current value
-      QuickBlue.readValue(
-          device.deviceId, fitnessServiceUUID, resistanceCharacteristicUUID);
       loggy.debug("Setup notify");
       QuickBlue.setNotifiable(device.deviceId, fitnessServiceUUID,
           resistanceCharacteristicUUID, BleInputProperty.notification);
+      // TODO This blows up (sometimes?) with an unknown characteristic.
+      //      It appears that the characteristic hasn't been processed yet?
+      //      Some better way or just give up since in real use a value will
+      //      come soon enough.
+      // Prime the pump by getting the current value
+      // QuickBlue.readValue(
+      // device.deviceId, fitnessServiceUUID, resistanceCharacteristicUUID);
     }
   }
 
