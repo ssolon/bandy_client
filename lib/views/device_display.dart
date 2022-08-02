@@ -8,70 +8,114 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'value_display.dart';
 
-class DeviceDisplayWidget extends ConsumerWidget {
+class DeviceDisplayWidget extends ConsumerStatefulWidget {
   final ScannedDevice scannedDevice;
 
   const DeviceDisplayWidget(this.scannedDevice, {super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final connectionState = ref.watch(connectionProvider(scannedDevice));
+  ConsumerState<DeviceDisplayWidget> createState() =>
+      _DeviceDisplayWidgetState();
+}
+
+class _DeviceDisplayWidgetState extends ConsumerState<DeviceDisplayWidget> {
+  BuildContext? popupContext;
+
+  @override
+  Widget build(BuildContext context) {
+    final connectionState = ref.watch(connectionProvider(widget.scannedDevice));
 
     // We only care about handling disconnected and erros
-    connectionState.maybeMap<int>(null,
-        initial: (arg) => 0, // Doesn't mattmer
-        disconnected: (arg) => _handleDisconnected(context, ref),
-        error: (error) => _handleError(context, error.message),
-        orElse: () => 0); // Don't care
+    connectionState.maybeMap<void>(null,
+        initial: (_) {}, // Doesn't mattmer
+        connecting: (_) => Timer.run(() => _connectingDialog(context)),
+        connected: (_) => Timer.run(() => _handleConnected()),
+        disconnected: (_) => Timer.run(() => _handleDisconnected(context, ref)),
+        error: (error) => Timer.run(() => _handleError(context, error.message)),
+        orElse: () {}); // Don't care
 
     return Column(children: [
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Text("${scannedDevice.name} (${scannedDevice.deviceId})"),
+        Text("${widget.scannedDevice.name} (${widget.scannedDevice.deviceId})"),
         TextButton(
           onPressed: () => _doDisconnect(ref),
           child: const Text("Disconnect"),
         )
       ]),
-      ValueDisplayWidget(scannedDevice),
+      ValueDisplayWidget(widget.scannedDevice),
     ]);
   }
 
-  int _handleDisconnected(BuildContext context, WidgetRef ref) {
-    Timer.run(() => showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) => AlertDialog(
-            actions: [
-              ConnectButton(scannedDevice, ref),
-            ],
-            title: Text("Disconnected from ${scannedDevice.name}"),
-          ),
-        ));
-
-    return 0;
+  /// Just get rid of any popup
+  void _handleConnected() {
+    _dismissPopup();
   }
 
-  int _handleError(BuildContext context, String? message) {
+  /// Auto-connect always (for now)
+  void _handleDisconnected(BuildContext context, WidgetRef ref) {
+    ref.read(connectionProvider(widget.scannedDevice).notifier).connect();
+    // Timer.run(() => _connectingDialog(context));
+  }
+
+  void _connectingDialog(BuildContext context) async {
+    _dismissPopup(); // Only one at a time (for now)
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          popupContext = context; // So we can be dismissed
+          return AlertDialog(
+              title: Text("Connecting to ${widget.scannedDevice.name}"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    popupContext = null; // since we're popping ourself
+                    Navigator.pop(context); // should trigger disconnected popup
+                  },
+                  child: const Text("Cancel"),
+                )
+              ],
+              content: const AspectRatio(
+                aspectRatio: 1.0,
+                child: CircularProgressIndicator.adaptive(),
+              ));
+        });
+  }
+
+  void _handleError(BuildContext context, String? message) {
     // TODO We should ignore the GAT errors which seem to happen when
     // disconnected and probably several others but for now we'll just
     // display them until we can figure out which to ignore.
+    _dismissPopup();
     showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-                title: const Text('Error'),
-                content: Text("Error: ${message ?? "Unknown error"}"),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('OK'),
-                  )
-                ]));
+      context: context,
+      builder: (context) {
+        popupContext = context;
+        return AlertDialog(
+            title: const Text('Error'),
+            content: Text("Error: ${message ?? "Unknown error"}"),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK'),
+              )
+            ]);
+      },
+    );
+  }
 
-    return 0;
+  // Dismiss popup, if there
+  _dismissPopup() {
+    if (popupContext != null) {
+      Navigator.pop(popupContext!);
+      popupContext = null;
+    }
   }
 
   void _doDisconnect(WidgetRef ref) {
-    ref.read(deviceNotifierProvider(scannedDevice).notifier).disconnect();
+    ref
+        .read(deviceNotifierProvider(widget.scannedDevice).notifier)
+        .disconnect();
   }
 }
 

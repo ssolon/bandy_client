@@ -19,4 +19,9 @@ class ConnectionNotifier extends StateNotifier<DeviceState> {
       }
     });
   }
+
+  /// Connect to device
+  void connect() {
+    ref.read(deviceNotifierProvider(device).notifier).connect();
+  }
 }
