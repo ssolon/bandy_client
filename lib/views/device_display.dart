@@ -6,6 +6,8 @@ import 'package:bandy_client/ble/scanner/logic/scanned_device.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'value_display.dart';
+
 class DeviceDisplayWidget extends ConsumerWidget {
   final ScannedDevice scannedDevice;
 
@@ -13,16 +15,14 @@ class DeviceDisplayWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final device = ref.watch(deviceNotifierProvider(scannedDevice));
+    final connectionState = ref.watch(connectionProvider(scannedDevice));
 
-    // Get a value to be displayed -- non-value states just use zero
-
-    final newReading = device.map<int>((value) => value.reading,
-        initial: (arg) => 0,
-        connecting: (value) => _handleConnecting(context, ref),
-        connected: (arg) => _handleConnected(context, ref),
+    // We only care about handling disconnected and erros
+    connectionState.maybeMap<int>(null,
+        initial: (arg) => 0, // Doesn't mattmer
         disconnected: (arg) => _handleDisconnected(context, ref),
-        error: (error) => _handleError(context, error.message));
+        error: (error) => _handleError(context, error.message),
+        orElse: () => 0); // Don't care
 
     return Column(children: [
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -32,28 +32,8 @@ class DeviceDisplayWidget extends ConsumerWidget {
           child: const Text("Disconnect"),
         )
       ]),
-      _updateValue(context, newReading),
+      ValueDisplayWidget(scannedDevice),
     ]);
-  }
-
-  Widget _updateValue(BuildContext context, int reading) {
-    return Center(
-        child: Text(
-      "$reading",
-      style: Theme.of(context)
-          .textTheme
-          .displayLarge
-          ?.copyWith(fontWeight: FontWeight.bold),
-    ));
-  }
-
-  int _handleConnecting(BuildContext context, WidgetRef ref) {
-    //TODO Handler somewhere else?
-    return 0;
-  }
-
-  int _handleConnected(BuildContext context, WidgetRef ref) {
-    return 0;
   }
 
   int _handleDisconnected(BuildContext context, WidgetRef ref) {
@@ -72,6 +52,9 @@ class DeviceDisplayWidget extends ConsumerWidget {
   }
 
   int _handleError(BuildContext context, String? message) {
+    // TODO We should ignore the GAT errors which seem to happen when
+    // disconnected and probably several others but for now we'll just
+    // display them until we can figure out which to ignore.
     showDialog(
         context: context,
         builder: (context) => AlertDialog(

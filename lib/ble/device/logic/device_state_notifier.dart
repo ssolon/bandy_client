@@ -34,7 +34,7 @@ class DeviceNotifier extends StateNotifier<DeviceState> with UiLoggy {
       loggy.debug("connectionStream=$event");
       switch (event.connectionState) {
         case DeviceConnectionState.connecting:
-          state = DeviceState.connecting();
+          state = const DeviceState.connecting();
           break;
 
         case DeviceConnectionState.connected:
@@ -63,9 +63,15 @@ class DeviceNotifier extends StateNotifier<DeviceState> with UiLoggy {
   }
 
   void disconnect() {
-    // TODO Will we get a "disconnected" event in stream? Probably not!
+    // Avoid error on notification stream by cancelling it first
+    resistanceSubscription?.cancel();
+
+    // Will shutdown the connection (not sure if there's another way)
     connectionSubscription?.cancel();
     connectionSubscription = null;
+
+    // Notify that we've disconnected since we've cancelled the connectionStream
+    state = const DeviceState.disconnected();
   }
 
   // void _connectionHandler(String deviceId, BlueConnectionState newState) {
@@ -83,8 +89,8 @@ class DeviceNotifier extends StateNotifier<DeviceState> with UiLoggy {
   /// with them.
   _discoverServices() async {
     final services = await flutterReactiveBle.discoverServices(device.deviceId);
-    for (final element in services) {
-      loggy.debug(element.toString());
+    for (final service in services) {
+      loggy.debug(serviceToString(service));
     }
 
     // Subscribe to get the values
@@ -125,5 +131,17 @@ class DeviceNotifier extends StateNotifier<DeviceState> with UiLoggy {
   void dispose() {
     super.dispose();
     disconnect();
+  }
+
+  String serviceToString(DiscoveredService service) {
+    String res = "serviceId=${service.serviceId}"
+        "${service.characteristics.map((e) => "\n    characteristicId=${e.characteristicId}"
+            "${e.isIndicatable ? ' indicatable' : ''}"
+            "${e.isNotifiable ? ' notifiable' : ''}"
+            "${e.isReadable ? ' readable' : ''}"
+            "${e.isWritableWithResponse ? ' writableWithResponse' : ''}"
+            "${e.isWritableWithoutResponse ? ' writable' : ''}").toList(growable: false).join()}";
+
+    return res;
   }
 }
