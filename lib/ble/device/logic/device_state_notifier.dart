@@ -15,9 +15,7 @@ class DeviceNotifier extends StateNotifier<DeviceState> with UiLoggy {
 
   /// Base constructor expects StateNotifier use_cases to
   /// read its usecases and also defines inital state
-  DeviceNotifier(this.device) : super(const DeviceState.initial()) {
-    connect();
-  }
+  DeviceNotifier(this.device) : super(const DeviceState.initial());
 
   bool get isConnected => deviceState == const DeviceState.connected();
 
