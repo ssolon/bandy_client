@@ -21,6 +21,11 @@ class DeviceDisplayWidget extends ConsumerStatefulWidget {
 class _DeviceDisplayWidgetState extends ConsumerState<DeviceDisplayWidget> {
   BuildContext? popupContext;
 
+  // Automatically reconnect when disconnected. Initially set to true is set
+  // to false when user explicitly disconnects and then back to true when
+  // when we reconnect.
+  bool autoReconnect = true;
+
   @override
   Widget build(BuildContext context) {
     final connectionState = ref.watch(connectionProvider(widget.scannedDevice));
@@ -53,12 +58,27 @@ class _DeviceDisplayWidgetState extends ConsumerState<DeviceDisplayWidget> {
 
   /// Auto-connect always (for now)
   void _handleDisconnected(BuildContext context, WidgetRef ref) {
-    ref.read(connectionProvider(widget.scannedDevice).notifier).connect();
-    // Timer.run(() => _connectingDialog(context));
+    if (autoReconnect) {
+      ref.read(connectionProvider(widget.scannedDevice).notifier).connect();
+    } else {
+      popupContext = context;
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => AlertDialog(
+          actions: [
+            ConnectButton(widget.scannedDevice, ref),
+          ],
+          title: Text("Disconnected from ${widget.scannedDevice.name}"),
+        ),
+      );
+    }
   }
 
   void _connectingDialog(BuildContext context) async {
     _dismissPopup(); // Only one at a time (for now)
+    autoReconnect = true;
+
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -112,7 +132,9 @@ class _DeviceDisplayWidgetState extends ConsumerState<DeviceDisplayWidget> {
     }
   }
 
+  // Disconnect and turn off autoReconnect
   void _doDisconnect(WidgetRef ref) {
+    autoReconnect = false;
     ref
         .read(deviceNotifierProvider(widget.scannedDevice).notifier)
         .disconnect();
