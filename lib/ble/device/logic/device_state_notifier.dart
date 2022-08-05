@@ -25,7 +25,7 @@ class DeviceNotifier extends StateNotifier<DeviceState> with UiLoggy {
 
     final connectStream = flutterReactiveBle.connectToDevice(
       id: device.deviceId,
-      connectionTimeout: const Duration(minutes: 5),
+      // connectionTimeout: const Duration(minutes: 5),
     );
 
     connectionSubscription = connectStream.listen((event) {
