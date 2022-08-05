@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bandy_client/ble/device/logic/device_provider.dart';
 import 'package:bandy_client/ble/device/logic/device_state.dart';
 import 'package:bandy_client/ble/scanner/logic/scanned_device.dart';
+import 'package:bandy_client/views/rep_display.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -48,6 +49,7 @@ class _DeviceDisplayWidgetState extends ConsumerState<DeviceDisplayWidget> {
         )
       ]),
       ValueDisplayWidget(widget.scannedDevice),
+      RepDisplayWidget(widget.scannedDevice),
     ]);
   }
 
