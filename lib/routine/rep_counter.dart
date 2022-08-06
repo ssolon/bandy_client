@@ -29,11 +29,10 @@ const repHysteresis = 0.10; // 10%
 
 /// Counts and reports on the reps
 ///
-/// When the value falls to [breakpointPercentage] of the maximum value we've
+/// When the value falls to [repMaxValuePercentage] of the maximum value we've
 /// seen we count a rep.
 ///
 class RepCounterNotifier extends StateNotifier<RepCount> with UiLoggy {
-  final breakpointPercentage = 0.1; // 10% for breakpoint
   int maxValue = 0;
   int count = 0;
 
