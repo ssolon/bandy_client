@@ -22,7 +22,7 @@ final repCounterStateProvider =
         (ref, scannedDevice) => RepCounterNotifier(ref, scannedDevice));
 
 /// Percentage of [maxValue] to be considered a rep
-const repMaxValuePercentage = 0.25; // 24%
+const repMaxValuePercentage = 0.50; // 24%
 
 /// Hysteresis percentage to be considered a new rep to reset
 const repHysteresis = 0.10; // 10%
