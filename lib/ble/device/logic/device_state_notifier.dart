@@ -1,6 +1,6 @@
 part of 'device_provider.dart';
 
-final fitnessServiceUUID = Uuid([0x1826]);
+final fitnessServiceUUID = Uuid.parse('1826');
 final resistanceCharacteristicUUID =
     Uuid.parse("a6351a0c-f7e0-11ec-b939-0242ac120002");
 
