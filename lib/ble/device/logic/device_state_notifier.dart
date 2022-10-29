@@ -3,6 +3,8 @@ part of 'device_provider.dart';
 final fitnessServiceUUID = Uuid.parse('1826');
 final resistanceCharacteristicUUID =
     Uuid.parse("a6351a0c-f7e0-11ec-b939-0242ac120002");
+final button1CharacteristicUUID =
+    Uuid.parse("5b0d3458-d6f5-4ac4-936b-18654e9db83b");
 
 /// Defines all the Device logic the app will use
 class DeviceNotifier extends StateNotifier<DeviceState> with UiLoggy {
@@ -12,6 +14,7 @@ class DeviceNotifier extends StateNotifier<DeviceState> with UiLoggy {
   ConnectionStateUpdate? connectionStateUpdate;
   StreamSubscription? connectionSubscription;
   StreamSubscription? resistanceSubscription;
+  StreamSubscription? button1Subscription;
 
   /// Base constructor expects StateNotifier use_cases to
   /// read its usecases and also defines inital state
@@ -63,6 +66,10 @@ class DeviceNotifier extends StateNotifier<DeviceState> with UiLoggy {
   void disconnect() {
     // Avoid error on notification stream by cancelling it first
     resistanceSubscription?.cancel();
+    resistanceSubscription = null;
+
+    button1Subscription?.cancel();
+    button1Subscription = null;
 
     // Will shutdown the connection (not sure if there's another way)
     connectionSubscription?.cancel();
@@ -91,7 +98,7 @@ class DeviceNotifier extends StateNotifier<DeviceState> with UiLoggy {
       loggy.debug(serviceToString(service));
     }
 
-    // Subscribe to get the values
+    // Subscribe to get the resistance values
     final characteristic = QualifiedCharacteristic(
         characteristicId: resistanceCharacteristicUUID,
         serviceId: fitnessServiceUUID,
@@ -99,8 +106,16 @@ class DeviceNotifier extends StateNotifier<DeviceState> with UiLoggy {
     final resistanceStream =
         flutterReactiveBle.subscribeToCharacteristic(characteristic);
     resistanceSubscription = resistanceStream.listen(_valueHandler);
-  }
 
+    // Subscribe to get button1 notifications
+    final button1Characteristic = QualifiedCharacteristic(
+        characteristicId: button1CharacteristicUUID,
+        serviceId: fitnessServiceUUID,
+        deviceId: device.deviceId);
+    final button1Stream =
+        flutterReactiveBle.subscribeToCharacteristic(button1Characteristic);
+    button1Subscription = button1Stream.listen(_button1Handler);
+  }
   // void _serviceHandler(String deviceId, String serviceId) {
   //   loggy.debug("Service discovered deviceId=$deviceId serviceId=$serviceId");
   //   if (deviceId == device.deviceId && serviceId == fitnessServiceUUID) {
@@ -123,6 +138,11 @@ class DeviceNotifier extends StateNotifier<DeviceState> with UiLoggy {
     final resistance = (ints[0] / 10).round();
     loggy.debug("Value=$resistance");
     state = DeviceState(reading: resistance);
+  }
+
+  void _button1Handler(_) {
+    loggy.debug("Button1 notification");
+    state = const DeviceState.button1Clicked();
   }
 
   @override

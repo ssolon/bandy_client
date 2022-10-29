@@ -11,6 +11,7 @@ import 'device_state.dart';
 part 'device_state_notifier.dart';
 part 'connection_state_notifier.dart';
 part 'value_state_notifier.dart';
+part 'button1_state_notifier.dart';
 
 /// Provider to use the DeviceStateNotifier
 final deviceNotifierProvider =
@@ -27,6 +28,11 @@ final connectionProvider = StateNotifierProvider.family<ConnectionNotifier,
 final valueProvider =
     StateNotifierProvider.family<ValueNotifier, int, ScannedDevice>(
         (ref, scannedDevice) => ValueNotifier(ref, scannedDevice));
+
+/// Provider for button clicks
+final button1ClickedProvider =
+    StateNotifierProvider.family<Button1Notifier, int, ScannedDevice>(
+        (ref, scannedDevice) => Button1Notifier(ref, scannedDevice));
 
 /// Repositories Providers
 /// TODO: Create Repositories Providers

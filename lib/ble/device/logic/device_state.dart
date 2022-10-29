@@ -7,6 +7,9 @@ class DeviceState with _$DeviceState {
   /// Data is present state
   const factory DeviceState({required int reading}) = Data;
 
+  /// Button1 has been clicked
+  const factory DeviceState.button1Clicked() = Button1Clicked;
+
   /// Initial/default state
   const factory DeviceState.initial() = Initial;
 

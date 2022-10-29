@@ -19,6 +19,7 @@ mixin _$DeviceState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(int reading) $default, {
+    required TResult Function() button1Clicked,
     required TResult Function() initial,
     required TResult Function() connecting,
     required TResult Function() connected,
@@ -29,6 +30,7 @@ mixin _$DeviceState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(int reading)? $default, {
+    TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
     TResult Function()? connected,
@@ -39,6 +41,7 @@ mixin _$DeviceState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(int reading)? $default, {
+    TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
     TResult Function()? connected,
@@ -50,6 +53,7 @@ mixin _$DeviceState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
     TResult Function(Data value) $default, {
+    required TResult Function(Button1Clicked value) button1Clicked,
     required TResult Function(Initial value) initial,
     required TResult Function(Connecting value) connecting,
     required TResult Function(Connected value) connected,
@@ -60,6 +64,7 @@ mixin _$DeviceState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
     TResult Function(Data value)? $default, {
+    TResult Function(Button1Clicked value)? button1Clicked,
     TResult Function(Initial value)? initial,
     TResult Function(Connecting value)? connecting,
     TResult Function(Connected value)? connected,
@@ -70,6 +75,7 @@ mixin _$DeviceState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
     TResult Function(Data value)? $default, {
+    TResult Function(Button1Clicked value)? button1Clicked,
     TResult Function(Initial value)? initial,
     TResult Function(Connecting value)? connecting,
     TResult Function(Connected value)? connected,
@@ -159,6 +165,7 @@ class _$Data implements Data {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(int reading) $default, {
+    required TResult Function() button1Clicked,
     required TResult Function() initial,
     required TResult Function() connecting,
     required TResult Function() connected,
@@ -172,6 +179,7 @@ class _$Data implements Data {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(int reading)? $default, {
+    TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
     TResult Function()? connected,
@@ -185,6 +193,7 @@ class _$Data implements Data {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(int reading)? $default, {
+    TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
     TResult Function()? connected,
@@ -202,6 +211,7 @@ class _$Data implements Data {
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
     TResult Function(Data value) $default, {
+    required TResult Function(Button1Clicked value) button1Clicked,
     required TResult Function(Initial value) initial,
     required TResult Function(Connecting value) connecting,
     required TResult Function(Connected value) connected,
@@ -215,6 +225,7 @@ class _$Data implements Data {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
     TResult Function(Data value)? $default, {
+    TResult Function(Button1Clicked value)? button1Clicked,
     TResult Function(Initial value)? initial,
     TResult Function(Connecting value)? connecting,
     TResult Function(Connected value)? connected,
@@ -228,6 +239,7 @@ class _$Data implements Data {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
     TResult Function(Data value)? $default, {
+    TResult Function(Button1Clicked value)? button1Clicked,
     TResult Function(Initial value)? initial,
     TResult Function(Connecting value)? connecting,
     TResult Function(Connected value)? connected,
@@ -248,6 +260,141 @@ abstract class Data implements DeviceState {
   int get reading;
   @JsonKey(ignore: true)
   _$$DataCopyWith<_$Data> get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$Button1ClickedCopyWith<$Res> {
+  factory _$$Button1ClickedCopyWith(
+          _$Button1Clicked value, $Res Function(_$Button1Clicked) then) =
+      __$$Button1ClickedCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$Button1ClickedCopyWithImpl<$Res>
+    extends _$DeviceStateCopyWithImpl<$Res>
+    implements _$$Button1ClickedCopyWith<$Res> {
+  __$$Button1ClickedCopyWithImpl(
+      _$Button1Clicked _value, $Res Function(_$Button1Clicked) _then)
+      : super(_value, (v) => _then(v as _$Button1Clicked));
+
+  @override
+  _$Button1Clicked get _value => super._value as _$Button1Clicked;
+}
+
+/// @nodoc
+
+class _$Button1Clicked implements Button1Clicked {
+  const _$Button1Clicked();
+
+  @override
+  String toString() {
+    return 'DeviceState.button1Clicked()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$Button1Clicked);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(int reading) $default, {
+    required TResult Function() button1Clicked,
+    required TResult Function() initial,
+    required TResult Function() connecting,
+    required TResult Function() connected,
+    required TResult Function() disconnected,
+    required TResult Function(String message) error,
+  }) {
+    return button1Clicked();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult Function(int reading)? $default, {
+    TResult Function()? button1Clicked,
+    TResult Function()? initial,
+    TResult Function()? connecting,
+    TResult Function()? connected,
+    TResult Function()? disconnected,
+    TResult Function(String message)? error,
+  }) {
+    return button1Clicked?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(int reading)? $default, {
+    TResult Function()? button1Clicked,
+    TResult Function()? initial,
+    TResult Function()? connecting,
+    TResult Function()? connected,
+    TResult Function()? disconnected,
+    TResult Function(String message)? error,
+    required TResult orElse(),
+  }) {
+    if (button1Clicked != null) {
+      return button1Clicked();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(Data value) $default, {
+    required TResult Function(Button1Clicked value) button1Clicked,
+    required TResult Function(Initial value) initial,
+    required TResult Function(Connecting value) connecting,
+    required TResult Function(Connected value) connected,
+    required TResult Function(Disconnected value) disconnected,
+    required TResult Function(Error value) error,
+  }) {
+    return button1Clicked(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult Function(Data value)? $default, {
+    TResult Function(Button1Clicked value)? button1Clicked,
+    TResult Function(Initial value)? initial,
+    TResult Function(Connecting value)? connecting,
+    TResult Function(Connected value)? connected,
+    TResult Function(Disconnected value)? disconnected,
+    TResult Function(Error value)? error,
+  }) {
+    return button1Clicked?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(Data value)? $default, {
+    TResult Function(Button1Clicked value)? button1Clicked,
+    TResult Function(Initial value)? initial,
+    TResult Function(Connecting value)? connecting,
+    TResult Function(Connected value)? connected,
+    TResult Function(Disconnected value)? disconnected,
+    TResult Function(Error value)? error,
+    required TResult orElse(),
+  }) {
+    if (button1Clicked != null) {
+      return button1Clicked(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class Button1Clicked implements DeviceState {
+  const factory Button1Clicked() = _$Button1Clicked;
 }
 
 /// @nodoc
@@ -289,6 +436,7 @@ class _$Initial implements Initial {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(int reading) $default, {
+    required TResult Function() button1Clicked,
     required TResult Function() initial,
     required TResult Function() connecting,
     required TResult Function() connected,
@@ -302,6 +450,7 @@ class _$Initial implements Initial {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(int reading)? $default, {
+    TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
     TResult Function()? connected,
@@ -315,6 +464,7 @@ class _$Initial implements Initial {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(int reading)? $default, {
+    TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
     TResult Function()? connected,
@@ -332,6 +482,7 @@ class _$Initial implements Initial {
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
     TResult Function(Data value) $default, {
+    required TResult Function(Button1Clicked value) button1Clicked,
     required TResult Function(Initial value) initial,
     required TResult Function(Connecting value) connecting,
     required TResult Function(Connected value) connected,
@@ -345,6 +496,7 @@ class _$Initial implements Initial {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
     TResult Function(Data value)? $default, {
+    TResult Function(Button1Clicked value)? button1Clicked,
     TResult Function(Initial value)? initial,
     TResult Function(Connecting value)? connecting,
     TResult Function(Connected value)? connected,
@@ -358,6 +510,7 @@ class _$Initial implements Initial {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
     TResult Function(Data value)? $default, {
+    TResult Function(Button1Clicked value)? button1Clicked,
     TResult Function(Initial value)? initial,
     TResult Function(Connecting value)? connecting,
     TResult Function(Connected value)? connected,
@@ -417,6 +570,7 @@ class _$Connecting implements Connecting {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(int reading) $default, {
+    required TResult Function() button1Clicked,
     required TResult Function() initial,
     required TResult Function() connecting,
     required TResult Function() connected,
@@ -430,6 +584,7 @@ class _$Connecting implements Connecting {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(int reading)? $default, {
+    TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
     TResult Function()? connected,
@@ -443,6 +598,7 @@ class _$Connecting implements Connecting {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(int reading)? $default, {
+    TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
     TResult Function()? connected,
@@ -460,6 +616,7 @@ class _$Connecting implements Connecting {
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
     TResult Function(Data value) $default, {
+    required TResult Function(Button1Clicked value) button1Clicked,
     required TResult Function(Initial value) initial,
     required TResult Function(Connecting value) connecting,
     required TResult Function(Connected value) connected,
@@ -473,6 +630,7 @@ class _$Connecting implements Connecting {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
     TResult Function(Data value)? $default, {
+    TResult Function(Button1Clicked value)? button1Clicked,
     TResult Function(Initial value)? initial,
     TResult Function(Connecting value)? connecting,
     TResult Function(Connected value)? connected,
@@ -486,6 +644,7 @@ class _$Connecting implements Connecting {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
     TResult Function(Data value)? $default, {
+    TResult Function(Button1Clicked value)? button1Clicked,
     TResult Function(Initial value)? initial,
     TResult Function(Connecting value)? connecting,
     TResult Function(Connected value)? connected,
@@ -545,6 +704,7 @@ class _$Connected implements Connected {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(int reading) $default, {
+    required TResult Function() button1Clicked,
     required TResult Function() initial,
     required TResult Function() connecting,
     required TResult Function() connected,
@@ -558,6 +718,7 @@ class _$Connected implements Connected {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(int reading)? $default, {
+    TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
     TResult Function()? connected,
@@ -571,6 +732,7 @@ class _$Connected implements Connected {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(int reading)? $default, {
+    TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
     TResult Function()? connected,
@@ -588,6 +750,7 @@ class _$Connected implements Connected {
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
     TResult Function(Data value) $default, {
+    required TResult Function(Button1Clicked value) button1Clicked,
     required TResult Function(Initial value) initial,
     required TResult Function(Connecting value) connecting,
     required TResult Function(Connected value) connected,
@@ -601,6 +764,7 @@ class _$Connected implements Connected {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
     TResult Function(Data value)? $default, {
+    TResult Function(Button1Clicked value)? button1Clicked,
     TResult Function(Initial value)? initial,
     TResult Function(Connecting value)? connecting,
     TResult Function(Connected value)? connected,
@@ -614,6 +778,7 @@ class _$Connected implements Connected {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
     TResult Function(Data value)? $default, {
+    TResult Function(Button1Clicked value)? button1Clicked,
     TResult Function(Initial value)? initial,
     TResult Function(Connecting value)? connecting,
     TResult Function(Connected value)? connected,
@@ -673,6 +838,7 @@ class _$Disconnected implements Disconnected {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(int reading) $default, {
+    required TResult Function() button1Clicked,
     required TResult Function() initial,
     required TResult Function() connecting,
     required TResult Function() connected,
@@ -686,6 +852,7 @@ class _$Disconnected implements Disconnected {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(int reading)? $default, {
+    TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
     TResult Function()? connected,
@@ -699,6 +866,7 @@ class _$Disconnected implements Disconnected {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(int reading)? $default, {
+    TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
     TResult Function()? connected,
@@ -716,6 +884,7 @@ class _$Disconnected implements Disconnected {
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
     TResult Function(Data value) $default, {
+    required TResult Function(Button1Clicked value) button1Clicked,
     required TResult Function(Initial value) initial,
     required TResult Function(Connecting value) connecting,
     required TResult Function(Connected value) connected,
@@ -729,6 +898,7 @@ class _$Disconnected implements Disconnected {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
     TResult Function(Data value)? $default, {
+    TResult Function(Button1Clicked value)? button1Clicked,
     TResult Function(Initial value)? initial,
     TResult Function(Connecting value)? connecting,
     TResult Function(Connected value)? connected,
@@ -742,6 +912,7 @@ class _$Disconnected implements Disconnected {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
     TResult Function(Data value)? $default, {
+    TResult Function(Button1Clicked value)? button1Clicked,
     TResult Function(Initial value)? initial,
     TResult Function(Connecting value)? connecting,
     TResult Function(Connected value)? connected,
@@ -824,6 +995,7 @@ class _$Error implements Error {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(int reading) $default, {
+    required TResult Function() button1Clicked,
     required TResult Function() initial,
     required TResult Function() connecting,
     required TResult Function() connected,
@@ -837,6 +1009,7 @@ class _$Error implements Error {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(int reading)? $default, {
+    TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
     TResult Function()? connected,
@@ -850,6 +1023,7 @@ class _$Error implements Error {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(int reading)? $default, {
+    TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
     TResult Function()? connected,
@@ -867,6 +1041,7 @@ class _$Error implements Error {
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
     TResult Function(Data value) $default, {
+    required TResult Function(Button1Clicked value) button1Clicked,
     required TResult Function(Initial value) initial,
     required TResult Function(Connecting value) connecting,
     required TResult Function(Connected value) connected,
@@ -880,6 +1055,7 @@ class _$Error implements Error {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
     TResult Function(Data value)? $default, {
+    TResult Function(Button1Clicked value)? button1Clicked,
     TResult Function(Initial value)? initial,
     TResult Function(Connecting value)? connecting,
     TResult Function(Connected value)? connected,
@@ -893,6 +1069,7 @@ class _$Error implements Error {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
     TResult Function(Data value)? $default, {
+    TResult Function(Button1Clicked value)? button1Clicked,
     TResult Function(Initial value)? initial,
     TResult Function(Connecting value)? connecting,
     TResult Function(Connected value)? connected,
