@@ -26,7 +26,7 @@ final connectionProvider = StateNotifierProvider.family<ConnectionNotifier,
 
 /// Provider to provide only values that change
 final valueProvider =
-    StateNotifierProvider.family<ValueNotifier, int, ScannedDevice>(
+    StateNotifierProvider.family<ValueNotifier, Instant, ScannedDevice>(
         (ref, scannedDevice) => ValueNotifier(ref, scannedDevice));
 
 /// Provider for button clicks

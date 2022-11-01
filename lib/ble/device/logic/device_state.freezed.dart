@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$DeviceState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(int reading) $default, {
+    TResult Function(Instant instant) $default, {
     required TResult Function() button1Clicked,
     required TResult Function() initial,
     required TResult Function() connecting,
@@ -29,7 +29,7 @@ mixin _$DeviceState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(int reading)? $default, {
+    TResult Function(Instant instant)? $default, {
     TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
@@ -40,7 +40,7 @@ mixin _$DeviceState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(int reading)? $default, {
+    TResult Function(Instant instant)? $default, {
     TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
@@ -106,7 +106,7 @@ class _$DeviceStateCopyWithImpl<$Res> implements $DeviceStateCopyWith<$Res> {
 abstract class _$$DataCopyWith<$Res> {
   factory _$$DataCopyWith(_$Data value, $Res Function(_$Data) then) =
       __$$DataCopyWithImpl<$Res>;
-  $Res call({int reading});
+  $Res call({Instant instant});
 }
 
 /// @nodoc
@@ -120,13 +120,13 @@ class __$$DataCopyWithImpl<$Res> extends _$DeviceStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? reading = freezed,
+    Object? instant = freezed,
   }) {
     return _then(_$Data(
-      reading: reading == freezed
-          ? _value.reading
-          : reading // ignore: cast_nullable_to_non_nullable
-              as int,
+      instant: instant == freezed
+          ? _value.instant
+          : instant // ignore: cast_nullable_to_non_nullable
+              as Instant,
     ));
   }
 }
@@ -134,14 +134,14 @@ class __$$DataCopyWithImpl<$Res> extends _$DeviceStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$Data implements Data {
-  const _$Data({required this.reading});
+  const _$Data({required this.instant});
 
   @override
-  final int reading;
+  final Instant instant;
 
   @override
   String toString() {
-    return 'DeviceState(reading: $reading)';
+    return 'DeviceState(instant: $instant)';
   }
 
   @override
@@ -149,12 +149,12 @@ class _$Data implements Data {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$Data &&
-            const DeepCollectionEquality().equals(other.reading, reading));
+            const DeepCollectionEquality().equals(other.instant, instant));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(reading));
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(instant));
 
   @JsonKey(ignore: true)
   @override
@@ -164,7 +164,7 @@ class _$Data implements Data {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(int reading) $default, {
+    TResult Function(Instant instant) $default, {
     required TResult Function() button1Clicked,
     required TResult Function() initial,
     required TResult Function() connecting,
@@ -172,13 +172,13 @@ class _$Data implements Data {
     required TResult Function() disconnected,
     required TResult Function(String message) error,
   }) {
-    return $default(reading);
+    return $default(instant);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(int reading)? $default, {
+    TResult Function(Instant instant)? $default, {
     TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
@@ -186,13 +186,13 @@ class _$Data implements Data {
     TResult Function()? disconnected,
     TResult Function(String message)? error,
   }) {
-    return $default?.call(reading);
+    return $default?.call(instant);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(int reading)? $default, {
+    TResult Function(Instant instant)? $default, {
     TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
@@ -202,7 +202,7 @@ class _$Data implements Data {
     required TResult orElse(),
   }) {
     if ($default != null) {
-      return $default(reading);
+      return $default(instant);
     }
     return orElse();
   }
@@ -255,9 +255,9 @@ class _$Data implements Data {
 }
 
 abstract class Data implements DeviceState {
-  const factory Data({required final int reading}) = _$Data;
+  const factory Data({required final Instant instant}) = _$Data;
 
-  int get reading;
+  Instant get instant;
   @JsonKey(ignore: true)
   _$$DataCopyWith<_$Data> get copyWith => throw _privateConstructorUsedError;
 }
@@ -303,7 +303,7 @@ class _$Button1Clicked implements Button1Clicked {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(int reading) $default, {
+    TResult Function(Instant instant) $default, {
     required TResult Function() button1Clicked,
     required TResult Function() initial,
     required TResult Function() connecting,
@@ -317,7 +317,7 @@ class _$Button1Clicked implements Button1Clicked {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(int reading)? $default, {
+    TResult Function(Instant instant)? $default, {
     TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
@@ -331,7 +331,7 @@ class _$Button1Clicked implements Button1Clicked {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(int reading)? $default, {
+    TResult Function(Instant instant)? $default, {
     TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
@@ -435,7 +435,7 @@ class _$Initial implements Initial {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(int reading) $default, {
+    TResult Function(Instant instant) $default, {
     required TResult Function() button1Clicked,
     required TResult Function() initial,
     required TResult Function() connecting,
@@ -449,7 +449,7 @@ class _$Initial implements Initial {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(int reading)? $default, {
+    TResult Function(Instant instant)? $default, {
     TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
@@ -463,7 +463,7 @@ class _$Initial implements Initial {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(int reading)? $default, {
+    TResult Function(Instant instant)? $default, {
     TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
@@ -569,7 +569,7 @@ class _$Connecting implements Connecting {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(int reading) $default, {
+    TResult Function(Instant instant) $default, {
     required TResult Function() button1Clicked,
     required TResult Function() initial,
     required TResult Function() connecting,
@@ -583,7 +583,7 @@ class _$Connecting implements Connecting {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(int reading)? $default, {
+    TResult Function(Instant instant)? $default, {
     TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
@@ -597,7 +597,7 @@ class _$Connecting implements Connecting {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(int reading)? $default, {
+    TResult Function(Instant instant)? $default, {
     TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
@@ -703,7 +703,7 @@ class _$Connected implements Connected {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(int reading) $default, {
+    TResult Function(Instant instant) $default, {
     required TResult Function() button1Clicked,
     required TResult Function() initial,
     required TResult Function() connecting,
@@ -717,7 +717,7 @@ class _$Connected implements Connected {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(int reading)? $default, {
+    TResult Function(Instant instant)? $default, {
     TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
@@ -731,7 +731,7 @@ class _$Connected implements Connected {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(int reading)? $default, {
+    TResult Function(Instant instant)? $default, {
     TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
@@ -837,7 +837,7 @@ class _$Disconnected implements Disconnected {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(int reading) $default, {
+    TResult Function(Instant instant) $default, {
     required TResult Function() button1Clicked,
     required TResult Function() initial,
     required TResult Function() connecting,
@@ -851,7 +851,7 @@ class _$Disconnected implements Disconnected {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(int reading)? $default, {
+    TResult Function(Instant instant)? $default, {
     TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
@@ -865,7 +865,7 @@ class _$Disconnected implements Disconnected {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(int reading)? $default, {
+    TResult Function(Instant instant)? $default, {
     TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
@@ -994,7 +994,7 @@ class _$Error implements Error {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(int reading) $default, {
+    TResult Function(Instant instant) $default, {
     required TResult Function() button1Clicked,
     required TResult Function() initial,
     required TResult Function() connecting,
@@ -1008,7 +1008,7 @@ class _$Error implements Error {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(int reading)? $default, {
+    TResult Function(Instant instant)? $default, {
     TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,
@@ -1022,7 +1022,7 @@ class _$Error implements Error {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(int reading)? $default, {
+    TResult Function(Instant instant)? $default, {
     TResult Function()? button1Clicked,
     TResult Function()? initial,
     TResult Function()? connecting,

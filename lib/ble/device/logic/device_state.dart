@@ -2,10 +2,16 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'device_state.freezed.dart';
 
+class Instant {
+  final int reading;
+  final DateTime when;
+  const Instant({required this.reading, required this.when});
+}
+
 @freezed
 class DeviceState with _$DeviceState {
   /// Data is present state
-  const factory DeviceState({required int reading}) = Data;
+  const factory DeviceState({required Instant instant}) = Data;
 
   /// Button1 has been clicked
   const factory DeviceState.button1Clicked() = Button1Clicked;

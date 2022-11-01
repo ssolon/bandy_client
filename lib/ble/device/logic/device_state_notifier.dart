@@ -137,7 +137,8 @@ class DeviceNotifier extends StateNotifier<DeviceState> with UiLoggy {
     final ints = bytes.buffer.asInt16List();
     final resistance = (ints[0] / 10).round();
     loggy.debug("Value=$resistance");
-    state = DeviceState(reading: resistance);
+    state = DeviceState(
+        instant: Instant(reading: resistance, when: DateTime.now()));
   }
 
   void _button1Handler(_) {

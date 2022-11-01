@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:math';
 
 import 'package:bandy_client/ble/device/logic/device_provider.dart';
+import 'package:bandy_client/ble/device/logic/device_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loggy/loggy.dart';
 
@@ -41,26 +42,28 @@ class RepCounterNotifier extends StateNotifier<RepCount> with UiLoggy {
 
   RepCounterNotifier(Ref ref, ScannedDevice device)
       : super(const RepCount.zero()) {
-    ref.listen(valueProvider(device), (int? previous, int next) {
-      final goingUp = next > (previous ?? 0);
+    ref.listen(valueProvider(device), (Instant? previous, Instant next) {
+      final goingUp = next.reading > (previous?.reading ?? 0);
 
       if (goingUp) {
         // Going up -- just keep track
-        maxValue = max(maxValue, next);
+        maxValue = max(maxValue, next.reading);
 
         // Introduce some hysteresis on the way up for reset
         if (reported) {
-          if (next > reportedValue * repHysteresis) {
+          if (next.reading > reportedValue * repHysteresis) {
             // reset
             reported = false;
-            maxValue = next;
+            maxValue = next.reading;
           }
         }
       }
 
-      if (!goingUp && !reported && next < maxValue * repMaxValuePercentage) {
+      if (!goingUp &&
+          !reported &&
+          next.reading < maxValue * repMaxValuePercentage) {
         // going down and crossed breakpoint
-        reportedValue = next;
+        reportedValue = next.reading;
         reported = true;
         state = RepCount(++count, maxValue); // notify
       }
