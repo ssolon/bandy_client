@@ -32,6 +32,10 @@ migrate_working_dir/
 .pub/
 /build/
 
+# Some people say we shouldn't checkin generated artifacts
+*.g.dart
+*.freezed.dart
+
 # Web related
 lib/generated_plugin_registrant.dart
 
