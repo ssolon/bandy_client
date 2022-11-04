@@ -11,11 +11,11 @@ class ValueDisplayWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final reading = ref.watch(valueProvider(device));
+    final instant = ref.watch(valueProvider(device));
 
     return Center(
         child: Text(
-      "$reading",
+      "${instant.reading}",
       style: Theme.of(context)
           .textTheme
           .displayLarge
