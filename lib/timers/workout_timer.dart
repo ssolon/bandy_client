@@ -6,7 +6,6 @@ part 'workout_timer.g.dart';
 
 @riverpod
 class WorkoutTimerNotifier extends _$WorkoutTimerNotifier {
-  Duration current = Duration.zero;
   Timer? timer;
 
   @override
@@ -15,20 +14,17 @@ class WorkoutTimerNotifier extends _$WorkoutTimerNotifier {
       timer?.cancel();
     });
 
-    reset();
-
-    return current;
+    return reset();
   }
 
   /// Reset, or initialize, our timer.
-  void reset() {
+  Duration reset() {
     timer?.cancel();
-    current = Duration.zero;
+    state = Duration.zero;
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      current += const Duration(seconds: 1);
-      state = current;
+      state += const Duration(seconds: 1);
     });
 
-    state = current;
+    return state;
   }
 }
