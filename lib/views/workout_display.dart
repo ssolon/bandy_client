@@ -39,9 +39,13 @@ class TimerDisplayWidget extends ConsumerWidget {
       child: GestureDetector(
         onLongPress: () =>
             ref.read(workoutTimerNotifierProvider.notifier).reset(),
-        child: Text(
-          formatTimer(value),
-          textAlign: TextAlign.right,
+        child: Tooltip(
+          triggerMode: TooltipTriggerMode.tap,
+          message: 'Long press to reset timer',
+          child: Text(
+            formatTimer(value),
+            textAlign: TextAlign.right,
+          ),
         ),
       ),
     );
