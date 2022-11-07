@@ -1,4 +1,5 @@
 import 'package:bandy_client/timers/workout_timer.dart';
+import 'package:bandy_client/views/exercise_display.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -13,15 +14,20 @@ class WorkoutWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Row(
+      child: Column(
         children: [
-          Expanded(
-            child: Text(
-              routineName,
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  routineName,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+              const TimerDisplayWidget(),
+            ],
           ),
-          const TimerDisplayWidget(),
+          const ExerciseDisplayWidget(),
         ],
       ),
     );
