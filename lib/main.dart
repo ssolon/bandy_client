@@ -1,5 +1,6 @@
 import 'package:bandy_client/views/device_display.dart';
 import 'package:bandy_client/views/scanner_page.dart';
+import 'package:bandy_client/views/workout_display.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_loggy/flutter_loggy.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
@@ -96,16 +97,24 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
         ),
-        body: device == null
-            ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const <Widget>[
-                    Text('No Bandy device selected. Tap scan to find one'),
-                  ],
-                ),
-              )
-            : DeviceDisplayWidget(defaultDevice!));
+        body: Column(
+          children: [
+            const WorkoutWidget(),
+            Expanded(
+              child: device == null
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const <Widget>[
+                          Text(
+                              'No Bandy device selected. Tap scan to find one'),
+                        ],
+                      ),
+                    )
+                  : DeviceDisplayWidget(defaultDevice!),
+            ),
+          ],
+        ));
   }
 
   _gotoScanner(BuildContext context) async {
