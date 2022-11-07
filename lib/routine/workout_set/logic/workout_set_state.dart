@@ -4,7 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'workout_set_state.freezed.dart';
 
 @freezed
-abstract class WorkoutSetState with _$WorkoutSetState {
+class WorkoutSetState with _$WorkoutSetState {
   /// Data is present state
   const factory WorkoutSetState({required List<RepCount> reps}) = Data;
 
