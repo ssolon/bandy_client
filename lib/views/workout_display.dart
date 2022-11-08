@@ -1,5 +1,6 @@
 import 'package:bandy_client/timers/workout_timer.dart';
 import 'package:bandy_client/views/exercise_display.dart';
+import 'package:bandy_client/workout_session/workout_session_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -34,24 +35,40 @@ class WorkoutWidget extends ConsumerWidget {
   }
 }
 
+/// If a session hasn't started display start button otherwise show the timer.
 class TimerDisplayWidget extends ConsumerWidget {
   const TimerDisplayWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final value = ref.watch(workoutTimerNotifierProvider);
+    final session = ref.watch(workoutSessionNotifierProvider);
+    final duration = ref.watch(workoutTimerNotifierProvider);
 
     return Expanded(
-      child: GestureDetector(
-        onLongPress: () =>
-            ref.read(workoutTimerNotifierProvider.notifier).reset(),
-        child: Tooltip(
-          triggerMode: TooltipTriggerMode.tap,
-          message: 'Long press to reset timer',
-          child: Text(
-            formatTimer(value),
-            textAlign: TextAlign.right,
-          ),
+      child: session.maybeMap(
+        (sessionData) => _timer(duration, ref),
+        orElse: () => _timer(duration, ref), // Shouldn't happen here
+        // TODO Log error?
+
+        // Show start button to start a new session
+        initial: (value) => ElevatedButton(
+            child: const Text('Start Session'),
+            onPressed: () =>
+                ref.read(workoutSessionNotifierProvider.notifier).start()),
+      ),
+    );
+  }
+
+  _timer(duration, ref) {
+    return GestureDetector(
+      onLongPress: () =>
+          ref.read(workoutTimerNotifierProvider.notifier).reset(),
+      child: Tooltip(
+        triggerMode: TooltipTriggerMode.tap,
+        message: 'Long press to reset timer',
+        child: Text(
+          formatTimer(duration),
+          textAlign: TextAlign.right,
         ),
       ),
     );
