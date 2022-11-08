@@ -1,4 +1,4 @@
-import 'package:bandy_client/exercise/current_exercise_state.dart';
+import 'package:bandy_client/exercise/current/current_exercise_state.dart';
 import 'package:bandy_client/exercise/exercise_dummys.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

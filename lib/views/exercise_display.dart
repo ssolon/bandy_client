@@ -1,9 +1,9 @@
-import 'package:bandy_client/exercise/current_exercise_notifier.dart';
-import 'package:bandy_client/exercise/exercise_list_notifier.dart';
+import 'package:bandy_client/exercise/current/current_exercise_notifier.dart';
+import 'package:bandy_client/exercise/list/exercise_list_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../exercise/exercise_list_state.dart';
+import '../exercise/list/exercise_list_state.dart';
 
 class ExerciseDisplayWidget extends ConsumerWidget {
   const ExerciseDisplayWidget({super.key});
