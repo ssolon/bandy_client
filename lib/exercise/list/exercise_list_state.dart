@@ -1,11 +1,12 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:uuid/uuid.dart';
 
 part 'exercise_list_state.freezed.dart';
 
 @freezed
 class ExerciseListItem with _$ExerciseListItem {
-  const factory ExerciseListItem({required String id, required String name}) =
-      _ExerciseListItem;
+  const factory ExerciseListItem(
+      {required UuidValue id, required String name}) = _ExerciseListItem;
 }
 
 @freezed

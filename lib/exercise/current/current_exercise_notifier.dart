@@ -1,6 +1,7 @@
 import 'package:bandy_client/exercise/current/current_exercise_state.dart';
 import 'package:bandy_client/exercise/exercise_dummys.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:uuid/uuid.dart';
 
 part 'current_exercise_notifier.g.dart';
 
@@ -11,7 +12,7 @@ class CurrentExerciseNotifier extends _$CurrentExerciseNotifier {
     return CurrentExerciseState.initial();
   }
 
-  void setExerciseById(String? id) {
+  void setExerciseById(UuidValue? id) {
     if (id == null) {
       state = CurrentExerciseState.initial();
     } else {

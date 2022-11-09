@@ -15,6 +15,6 @@ class WorkoutSessionNotifier extends _$WorkoutSessionNotifier {
   /// Create a new session starting now
   void start() {
     state = WorkoutSessionState(
-        id: const Uuid().toString(), starting: DateTime.now(), sets: []);
+        id: const Uuid(), starting: DateTime.now(), sets: []);
   }
 }

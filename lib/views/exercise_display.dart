@@ -2,6 +2,7 @@ import 'package:bandy_client/exercise/current/current_exercise_notifier.dart';
 import 'package:bandy_client/exercise/list/exercise_list_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:uuid/uuid.dart';
 
 import '../exercise/list/exercise_list_state.dart';
 
@@ -16,7 +17,7 @@ class ExerciseDisplayWidget extends ConsumerWidget {
     final List<ExerciseListItem> exercises =
         value.maybeWhen((items) => items, orElse: () => []);
 
-    return DropdownButton<String>(
+    return DropdownButton<UuidValue>(
       hint: exercises.isNotEmpty
           ? const Text('Select an exercise')
           : const Text('No exercises available'),

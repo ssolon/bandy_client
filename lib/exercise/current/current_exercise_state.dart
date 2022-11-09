@@ -1,10 +1,12 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:uuid/uuid.dart';
 
 part 'current_exercise_state.freezed.dart';
 
 @freezed
 class CurrentExerciseState with _$CurrentExerciseState {
-  factory CurrentExerciseState({required String id, required String name}) =
+  // TODO Add exercise type
+  factory CurrentExerciseState({required UuidValue id, required String name}) =
       Data;
 
   factory CurrentExerciseState.initial() = Initial;
