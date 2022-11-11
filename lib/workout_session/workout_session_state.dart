@@ -7,9 +7,14 @@ part 'workout_session_state.freezed.dart';
 @freezed
 class WorkoutSessionState with _$WorkoutSessionState {
   factory WorkoutSessionState(
-      {required Uuid id,
+      {required DateTime starting,
+      required List<WorkoutSetState> sets}) = InProgress;
+
+  factory WorkoutSessionState.completed(
+      {Uuid? id,
       required DateTime starting,
-      required List<WorkoutSetState> sets}) = Data;
+      required DateTime ending,
+      required List<WorkoutSetState> sets}) = Completed;
 
   factory WorkoutSessionState.initial() = Initial;
   factory WorkoutSessionState.loading() = Loading;

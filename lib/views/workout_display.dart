@@ -46,15 +46,28 @@ class TimerDisplayWidget extends ConsumerWidget {
 
     return Expanded(
       child: session.maybeMap(
-        (sessionData) => _timer(duration, ref),
-        orElse: () => _timer(duration, ref), // Shouldn't happen here
-        // TODO Log error?
-
+        (sessionData) => Row(
+          children: [
+            ElevatedButton(
+                onPressed: () =>
+                    ref.read(workoutSessionNotifierProvider.notifier).finish(),
+                child: const Text('Finish')),
+            Expanded(child: _timer(duration, ref)),
+          ],
+        ),
+        completed: (value) => Row(children: [
+          ElevatedButton(
+              onPressed: () =>
+                  ref.read(workoutSessionNotifierProvider.notifier).initial(),
+              child: const Text('New Session')),
+        ]),
         // Show start button to start a new session
         initial: (value) => ElevatedButton(
             child: const Text('Start Session'),
             onPressed: () =>
                 ref.read(workoutSessionNotifierProvider.notifier).start()),
+        error: (value) => Text("ERROR: ${value.message}"), // TODO better
+        orElse: () => Text("ERROR: Wrong session state ${session.runtimeType}"),
       ),
     );
   }
