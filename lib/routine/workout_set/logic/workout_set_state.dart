@@ -6,7 +6,8 @@ part 'workout_set_state.freezed.dart';
 @freezed
 class WorkoutSetState with _$WorkoutSetState {
   /// Data is present state
-  const factory WorkoutSetState({required List<RepCount> reps}) = Data;
+  const factory WorkoutSetState(
+      {required String setName, required List<RepCount> reps}) = Data;
 
   /// Initial/default state
   const factory WorkoutSetState.initial() = Initial;

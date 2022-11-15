@@ -26,37 +26,33 @@ class RepListWidgetState extends ConsumerState<RepListWidget> {
   Widget build(BuildContext context) {
     final reps = ref
         .watch(workoutSetNotifierProvider(widget.device))
-        .maybeWhen((reps) => reps, orElse: () => List<RepCount>.empty());
+        .maybeWhen((name, reps) => reps, orElse: () => List<RepCount>.empty());
 
     _displayReps = _sortAscending ? reps : reps.reversed;
 
-    return Expanded(
-      child: SingleChildScrollView(
-        child: DataTable(
-            columns: [
-              DataColumn(
-                label: const Text("Rep"),
-                numeric: true,
-                onSort: (columnIndex, ascending) {
-                  if (columnIndex == 0) {
-                    setState(() {
-                      _sortAscending = !_sortAscending;
-                    });
-                  }
-                },
+    return DataTable(
+        columns: [
+          DataColumn(
+            label: const Text("Rep"),
+            numeric: true,
+            onSort: (columnIndex, ascending) {
+              if (columnIndex == 0) {
+                setState(() {
+                  _sortAscending = !_sortAscending;
+                });
+              }
+            },
+          ),
+          const DataColumn(
+              label: Text(
+                'Max\nResistance',
+                textAlign: TextAlign.center,
               ),
-              const DataColumn(
-                  label: Text(
-                    'Max\nResistance',
-                    textAlign: TextAlign.center,
-                  ),
-                  numeric: true),
-            ],
-            sortAscending: _sortAscending,
-            sortColumnIndex: 0,
-            rows: [for (final l in _displayReps) _makeRepRow(l)]),
-      ),
-    );
+              numeric: true),
+        ],
+        sortAscending: _sortAscending,
+        sortColumnIndex: 0,
+        rows: [for (final l in _displayReps) _makeRepRow(l)]);
   }
 
   _makeRepRow(RepCount rep) {
