@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../routine/workout_set/logic/workout_set_notifier.dart';
 import '../routine/workout_set/logic/workout_set_state.dart';
 
+/// Show current set and all sets in the session (if any)
 class WorkoutSetsWidget extends ConsumerStatefulWidget {
   final ScannedDevice device;
 
@@ -47,9 +48,29 @@ class WorkoutSetDisplay extends StatelessWidget {
                     alignment: Alignment.topLeft,
                     padding: const EdgeInsets.all(8.0),
                     color: Colors.grey,
-                    child: Text(setName,
-                        textAlign: TextAlign.left,
-                        style: Theme.of(context).textTheme.headlineSmall),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(setName,
+                              textAlign: TextAlign.start,
+                              style: Theme.of(context).textTheme.headlineSmall),
+                        ),
+                        Expanded(
+                          child: Text(
+                            "10 (5+5)",
+                            style: Theme.of(context).textTheme.headline6,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            "${reps.length}",
+                            style: Theme.of(context).textTheme.headline6,
+                            textAlign: TextAlign.end,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   RepListWidget(device),
                 ],
