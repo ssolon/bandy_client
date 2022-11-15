@@ -1,6 +1,7 @@
 import 'package:bandy_client/ble/scanner/logic/scanned_device.dart';
 import 'package:bandy_client/exercise/current/current_exercise_notifier.dart';
 import 'package:bandy_client/views/rep_list_display.dart';
+import 'package:bandy_client/workout_session/workout_session_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -22,8 +23,17 @@ class _WorkoutSetsWidgetState extends ConsumerState<WorkoutSetsWidget> {
   @override
   Widget build(BuildContext context) {
     final workoutSet = ref.watch(workoutSetNotifierProvider(widget.device));
+    final workoutSession = ref.watch(workoutSessionNotifierProvider);
 
-    return WorkoutSetDisplay(workoutSet, widget.device);
+    return workoutSession.maybeWhen(
+      (starting, sets) {
+        // session is active
+        return WorkoutSetDisplay(workoutSet, widget.device);
+      },
+      error: (message) => Text("Error: $message"),
+      orElse: () => Text("Start session to record",
+          style: Theme.of(context).textTheme.titleLarge),
+    );
   }
 }
 
