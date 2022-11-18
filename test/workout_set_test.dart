@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bandy_client/ble/scanner/logic/scanned_device.dart';
 import 'package:bandy_client/exercise/current/current_exercise_notifier.dart';
 import 'package:bandy_client/exercise/exercise_dummys.dart';
@@ -64,6 +66,12 @@ void main() {
         workoutSet = next;
       });
 
+      void addRep(int count, int maxValue) async {
+        (container.read(repCounterStateProvider(d).notifier)
+                as FakeRepCounterNotifier)
+            .notifyRep(count, maxValue);
+      }
+
       // For some reason this read is needed but the pump works for subsequent
       // Maybe the notifier isn't initialized until something references it?
       workoutSet = container.read(workoutSetNotifierProvider(d));
@@ -78,9 +86,7 @@ void main() {
         // Create and check two reps
       });
       test('Add first rep', () async {
-        (container.read(repCounterStateProvider(d).notifier)
-                as FakeRepCounterNotifier)
-            .notifyRep(1, 10);
+        addRep(1, 10);
 
         await container.pump();
 
@@ -97,9 +103,7 @@ void main() {
       });
 
       test('Add second rep', () async {
-        (container.read(repCounterStateProvider(d).notifier)
-                as FakeRepCounterNotifier)
-            .notifyRep(2, 20);
+        addRep(2, 20);
 
         await container.pump();
 
@@ -122,9 +126,7 @@ void main() {
         await container.pump();
 
         // For now we don't switch set until we get the next rep
-        (container.read(repCounterStateProvider(d).notifier)
-                as FakeRepCounterNotifier)
-            .notifyRep(1, 100);
+        addRep(1, 100);
 
         await container.pump();
 
@@ -146,9 +148,7 @@ void main() {
             .setExercise(dummyExerciseList[0]);
 
         // For now we don't switch set until we get the next rep
-        (container.read(repCounterStateProvider(d).notifier)
-                as FakeRepCounterNotifier)
-            .notifyRep(1, 1000);
+        addRep(1, 1000);
 
         await container.pump();
 
