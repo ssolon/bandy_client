@@ -12,7 +12,7 @@ class ExerciseListNotifier extends _$ExerciseListNotifier {
     // TODO Replace dummy items (obviously)
     return ExerciseListState(items: [
       for (final e in dummyExercises.entries)
-        ExerciseListItem(id: e.key, name: e.value)
+        ExerciseListItem(id: e.key, name: e.value.name)
     ]);
   }
 }

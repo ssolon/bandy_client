@@ -1,7 +1,9 @@
 import 'package:bandy_client/ble/device/logic/device_provider.dart';
 import 'package:bandy_client/ble/scanner/logic/scanned_device.dart';
 import 'package:bandy_client/exercise/current/current_exercise_notifier.dart';
+import 'package:bandy_client/exercise/exercise.dart';
 import 'package:bandy_client/routine/rep_counter.dart';
+import 'package:bandy_client/workout_session/workout_session_notifier.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../exercise/current/current_exercise_state.dart';
@@ -12,18 +14,19 @@ part 'workout_set_notifier.g.dart';
 @riverpod
 class WorkoutSetNotifier extends _$WorkoutSetNotifier {
   late final ScannedDevice device;
+
   List<RepCount> reps = [];
   int setCount = 1;
 
-  CurrentExerciseState? exercise;
+  Exercise? currentExercise;
 
   @override
   WorkoutSetState build(ScannedDevice d) {
     device = d;
     ref.listen(
       currentExerciseNotifierProvider,
-      (previous, next) {
-        // Reset set when (if) exercise changes
+      (previous, CurrentExerciseState next) {
+        setCurrentExercise(next.whenOrNull((exercise) => exercise));
       },
     );
     ref.listen(repCounterStateProvider(device),
@@ -33,7 +36,7 @@ class WorkoutSetNotifier extends _$WorkoutSetNotifier {
         // TODO Use Rep to indicate?
       } else {
         reps.add(next);
-        state = WorkoutSetState(setName: "Set $setCount", reps: reps);
+        state = _createState();
       }
     });
 
@@ -49,10 +52,52 @@ class WorkoutSetNotifier extends _$WorkoutSetNotifier {
     return const WorkoutSetState.initial();
   }
 
+  /// Handle changing the current exercise by ending the current set
+  /// and starting a new set
+  void setCurrentExercise(Exercise? nextExercise) {
+    if (currentExercise != nextExercise) {
+      endSet();
+      currentExercise = nextExercise;
+      setCount = _computeSetCount();
+      state = _createState();
+    }
+  }
+
+  /// Figure out the set count for the current exercise by looking at the
+  /// current session and counting the sets for the [currentExercise].
+  int _computeSetCount() {
+    // TODO use the session to figure out the set count
+    // TODO for now we always start at 1.
+    final session = ref.read(workoutSessionNotifierProvider);
+    return session.maybeMap(
+      (s) {
+        return s.sets.fold(
+                0,
+                (int previousValue, element) => element.maybeMap(
+                      (v) => v.exercise == currentExercise
+                          ? previousValue + 1
+                          : previousValue,
+                      orElse: () => previousValue,
+                    )) +
+            1;
+      },
+      orElse: () => 1,
+    );
+  }
+
+  /// Update the state using the current values
+  WorkoutSetState _createState() {
+    return WorkoutSetState(
+        exercise: currentExercise, setNumber: setCount, reps: reps);
+  }
+
+  /// Complete the current set, recording it if there are any reps
   void endSet() {
+    if (reps.isNotEmpty) {
+      ref.read(workoutSessionNotifierProvider.notifier).addSet(_createState());
+    }
+
     reps = [];
-    setCount++;
-    // TODO Add to the session
-    // TODO Handle multiple sets
+    setCount++; // Assume no change to the exercise
   }
 }

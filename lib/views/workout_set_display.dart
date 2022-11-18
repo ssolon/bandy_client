@@ -1,5 +1,5 @@
 import 'package:bandy_client/ble/scanner/logic/scanned_device.dart';
-import 'package:bandy_client/exercise/current/current_exercise_notifier.dart';
+import 'package:bandy_client/exercise/exercise.dart';
 import 'package:bandy_client/views/rep_list_display.dart';
 import 'package:bandy_client/workout_session/workout_session_notifier.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +48,7 @@ class WorkoutSetDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return workoutSet.maybeWhen(
-      (setName, reps) {
+      (exercise, setNumber, reps) {
         return Expanded(
           child: ListView(
             children: [
@@ -61,7 +61,7 @@ class WorkoutSetDisplay extends StatelessWidget {
                     child: Row(
                       children: [
                         Expanded(
-                          child: Text(setName,
+                          child: Text(_setName(exercise, setNumber),
                               textAlign: TextAlign.start,
                               style: Theme.of(context).textTheme.headlineSmall),
                         ),
@@ -92,5 +92,10 @@ class WorkoutSetDisplay extends StatelessWidget {
       error: (message) => Text("Error: $message"),
       orElse: () => const Text("No workout session"),
     );
+  }
+
+  /// Create a name to display for the set
+  String _setName(Exercise? exercise, int setNumber) {
+    return "${exercise?.name ?? ''}#$setNumber";
   }
 }

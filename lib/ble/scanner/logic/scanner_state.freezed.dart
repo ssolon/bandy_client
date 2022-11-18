@@ -27,10 +27,10 @@ mixin _$ScannerState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(bool scanning, List<ScannedDevice> devices)? $default, {
-    TResult Function(bool scanning)? initial,
-    TResult Function(bool scanning)? loading,
-    TResult Function(bool scanning, String message)? error,
+    TResult? Function(bool scanning, List<ScannedDevice> devices)? $default, {
+    TResult? Function(bool scanning)? initial,
+    TResult? Function(bool scanning)? loading,
+    TResult? Function(bool scanning, String message)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -52,10 +52,10 @@ mixin _$ScannerState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(Data value)? $default, {
-    TResult Function(Initial value)? initial,
-    TResult Function(Loading value)? loading,
-    TResult Function(Error value)? error,
+    TResult? Function(Data value)? $default, {
+    TResult? Function(Initial value)? initial,
+    TResult? Function(Loading value)? loading,
+    TResult? Function(Error value)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -77,28 +77,32 @@ mixin _$ScannerState {
 abstract class $ScannerStateCopyWith<$Res> {
   factory $ScannerStateCopyWith(
           ScannerState value, $Res Function(ScannerState) then) =
-      _$ScannerStateCopyWithImpl<$Res>;
+      _$ScannerStateCopyWithImpl<$Res, ScannerState>;
+  @useResult
   $Res call({bool scanning});
 }
 
 /// @nodoc
-class _$ScannerStateCopyWithImpl<$Res> implements $ScannerStateCopyWith<$Res> {
+class _$ScannerStateCopyWithImpl<$Res, $Val extends ScannerState>
+    implements $ScannerStateCopyWith<$Res> {
   _$ScannerStateCopyWithImpl(this._value, this._then);
 
-  final ScannerState _value;
   // ignore: unused_field
-  final $Res Function(ScannerState) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? scanning = freezed,
+    Object? scanning = null,
   }) {
     return _then(_value.copyWith(
-      scanning: scanning == freezed
+      scanning: null == scanning
           ? _value.scanning
           : scanning // ignore: cast_nullable_to_non_nullable
               as bool,
-    ));
+    ) as $Val);
   }
 }
 
@@ -107,29 +111,29 @@ abstract class _$$DataCopyWith<$Res> implements $ScannerStateCopyWith<$Res> {
   factory _$$DataCopyWith(_$Data value, $Res Function(_$Data) then) =
       __$$DataCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({bool scanning, List<ScannedDevice> devices});
 }
 
 /// @nodoc
-class __$$DataCopyWithImpl<$Res> extends _$ScannerStateCopyWithImpl<$Res>
+class __$$DataCopyWithImpl<$Res>
+    extends _$ScannerStateCopyWithImpl<$Res, _$Data>
     implements _$$DataCopyWith<$Res> {
   __$$DataCopyWithImpl(_$Data _value, $Res Function(_$Data) _then)
-      : super(_value, (v) => _then(v as _$Data));
+      : super(_value, _then);
 
-  @override
-  _$Data get _value => super._value as _$Data;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? scanning = freezed,
-    Object? devices = freezed,
+    Object? scanning = null,
+    Object? devices = null,
   }) {
     return _then(_$Data(
-      scanning: scanning == freezed
+      scanning: null == scanning
           ? _value.scanning
           : scanning // ignore: cast_nullable_to_non_nullable
               as bool,
-      devices: devices == freezed
+      devices: null == devices
           ? _value._devices
           : devices // ignore: cast_nullable_to_non_nullable
               as List<ScannedDevice>,
@@ -164,18 +168,18 @@ class _$Data implements Data {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$Data &&
-            const DeepCollectionEquality().equals(other.scanning, scanning) &&
+            (identical(other.scanning, scanning) ||
+                other.scanning == scanning) &&
             const DeepCollectionEquality().equals(other._devices, _devices));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(scanning),
-      const DeepCollectionEquality().hash(_devices));
+      runtimeType, scanning, const DeepCollectionEquality().hash(_devices));
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$DataCopyWith<_$Data> get copyWith =>
       __$$DataCopyWithImpl<_$Data>(this, _$identity);
 
@@ -193,10 +197,10 @@ class _$Data implements Data {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(bool scanning, List<ScannedDevice> devices)? $default, {
-    TResult Function(bool scanning)? initial,
-    TResult Function(bool scanning)? loading,
-    TResult Function(bool scanning, String message)? error,
+    TResult? Function(bool scanning, List<ScannedDevice> devices)? $default, {
+    TResult? Function(bool scanning)? initial,
+    TResult? Function(bool scanning)? loading,
+    TResult? Function(bool scanning, String message)? error,
   }) {
     return $default?.call(scanning, devices);
   }
@@ -230,10 +234,10 @@ class _$Data implements Data {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(Data value)? $default, {
-    TResult Function(Initial value)? initial,
-    TResult Function(Loading value)? loading,
-    TResult Function(Error value)? error,
+    TResult? Function(Data value)? $default, {
+    TResult? Function(Initial value)? initial,
+    TResult? Function(Loading value)? loading,
+    TResult? Function(Error value)? error,
   }) {
     return $default?.call(this);
   }
@@ -272,24 +276,24 @@ abstract class _$$InitialCopyWith<$Res> implements $ScannerStateCopyWith<$Res> {
   factory _$$InitialCopyWith(_$Initial value, $Res Function(_$Initial) then) =
       __$$InitialCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({bool scanning});
 }
 
 /// @nodoc
-class __$$InitialCopyWithImpl<$Res> extends _$ScannerStateCopyWithImpl<$Res>
+class __$$InitialCopyWithImpl<$Res>
+    extends _$ScannerStateCopyWithImpl<$Res, _$Initial>
     implements _$$InitialCopyWith<$Res> {
   __$$InitialCopyWithImpl(_$Initial _value, $Res Function(_$Initial) _then)
-      : super(_value, (v) => _then(v as _$Initial));
+      : super(_value, _then);
 
-  @override
-  _$Initial get _value => super._value as _$Initial;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? scanning = freezed,
+    Object? scanning = null,
   }) {
     return _then(_$Initial(
-      scanning: scanning == freezed
+      scanning: null == scanning
           ? _value.scanning
           : scanning // ignore: cast_nullable_to_non_nullable
               as bool,
@@ -316,15 +320,16 @@ class _$Initial implements Initial {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$Initial &&
-            const DeepCollectionEquality().equals(other.scanning, scanning));
+            (identical(other.scanning, scanning) ||
+                other.scanning == scanning));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(scanning));
+  int get hashCode => Object.hash(runtimeType, scanning);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$InitialCopyWith<_$Initial> get copyWith =>
       __$$InitialCopyWithImpl<_$Initial>(this, _$identity);
 
@@ -342,10 +347,10 @@ class _$Initial implements Initial {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(bool scanning, List<ScannedDevice> devices)? $default, {
-    TResult Function(bool scanning)? initial,
-    TResult Function(bool scanning)? loading,
-    TResult Function(bool scanning, String message)? error,
+    TResult? Function(bool scanning, List<ScannedDevice> devices)? $default, {
+    TResult? Function(bool scanning)? initial,
+    TResult? Function(bool scanning)? loading,
+    TResult? Function(bool scanning, String message)? error,
   }) {
     return initial?.call(scanning);
   }
@@ -379,10 +384,10 @@ class _$Initial implements Initial {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(Data value)? $default, {
-    TResult Function(Initial value)? initial,
-    TResult Function(Loading value)? loading,
-    TResult Function(Error value)? error,
+    TResult? Function(Data value)? $default, {
+    TResult? Function(Initial value)? initial,
+    TResult? Function(Loading value)? loading,
+    TResult? Function(Error value)? error,
   }) {
     return initial?.call(this);
   }
@@ -419,24 +424,24 @@ abstract class _$$LoadingCopyWith<$Res> implements $ScannerStateCopyWith<$Res> {
   factory _$$LoadingCopyWith(_$Loading value, $Res Function(_$Loading) then) =
       __$$LoadingCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({bool scanning});
 }
 
 /// @nodoc
-class __$$LoadingCopyWithImpl<$Res> extends _$ScannerStateCopyWithImpl<$Res>
+class __$$LoadingCopyWithImpl<$Res>
+    extends _$ScannerStateCopyWithImpl<$Res, _$Loading>
     implements _$$LoadingCopyWith<$Res> {
   __$$LoadingCopyWithImpl(_$Loading _value, $Res Function(_$Loading) _then)
-      : super(_value, (v) => _then(v as _$Loading));
+      : super(_value, _then);
 
-  @override
-  _$Loading get _value => super._value as _$Loading;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? scanning = freezed,
+    Object? scanning = null,
   }) {
     return _then(_$Loading(
-      scanning: scanning == freezed
+      scanning: null == scanning
           ? _value.scanning
           : scanning // ignore: cast_nullable_to_non_nullable
               as bool,
@@ -463,15 +468,16 @@ class _$Loading implements Loading {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$Loading &&
-            const DeepCollectionEquality().equals(other.scanning, scanning));
+            (identical(other.scanning, scanning) ||
+                other.scanning == scanning));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(scanning));
+  int get hashCode => Object.hash(runtimeType, scanning);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$LoadingCopyWith<_$Loading> get copyWith =>
       __$$LoadingCopyWithImpl<_$Loading>(this, _$identity);
 
@@ -489,10 +495,10 @@ class _$Loading implements Loading {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(bool scanning, List<ScannedDevice> devices)? $default, {
-    TResult Function(bool scanning)? initial,
-    TResult Function(bool scanning)? loading,
-    TResult Function(bool scanning, String message)? error,
+    TResult? Function(bool scanning, List<ScannedDevice> devices)? $default, {
+    TResult? Function(bool scanning)? initial,
+    TResult? Function(bool scanning)? loading,
+    TResult? Function(bool scanning, String message)? error,
   }) {
     return loading?.call(scanning);
   }
@@ -526,10 +532,10 @@ class _$Loading implements Loading {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(Data value)? $default, {
-    TResult Function(Initial value)? initial,
-    TResult Function(Loading value)? loading,
-    TResult Function(Error value)? error,
+    TResult? Function(Data value)? $default, {
+    TResult? Function(Initial value)? initial,
+    TResult? Function(Loading value)? loading,
+    TResult? Function(Error value)? error,
   }) {
     return loading?.call(this);
   }
@@ -566,29 +572,29 @@ abstract class _$$ErrorCopyWith<$Res> implements $ScannerStateCopyWith<$Res> {
   factory _$$ErrorCopyWith(_$Error value, $Res Function(_$Error) then) =
       __$$ErrorCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({bool scanning, String message});
 }
 
 /// @nodoc
-class __$$ErrorCopyWithImpl<$Res> extends _$ScannerStateCopyWithImpl<$Res>
+class __$$ErrorCopyWithImpl<$Res>
+    extends _$ScannerStateCopyWithImpl<$Res, _$Error>
     implements _$$ErrorCopyWith<$Res> {
   __$$ErrorCopyWithImpl(_$Error _value, $Res Function(_$Error) _then)
-      : super(_value, (v) => _then(v as _$Error));
+      : super(_value, _then);
 
-  @override
-  _$Error get _value => super._value as _$Error;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? scanning = freezed,
-    Object? message = freezed,
+    Object? scanning = null,
+    Object? message = null,
   }) {
     return _then(_$Error(
-      scanning: scanning == freezed
+      scanning: null == scanning
           ? _value.scanning
           : scanning // ignore: cast_nullable_to_non_nullable
               as bool,
-      message: message == freezed
+      message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
@@ -618,18 +624,17 @@ class _$Error implements Error {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$Error &&
-            const DeepCollectionEquality().equals(other.scanning, scanning) &&
-            const DeepCollectionEquality().equals(other.message, message));
+            (identical(other.scanning, scanning) ||
+                other.scanning == scanning) &&
+            (identical(other.message, message) || other.message == message));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(scanning),
-      const DeepCollectionEquality().hash(message));
+  int get hashCode => Object.hash(runtimeType, scanning, message);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$ErrorCopyWith<_$Error> get copyWith =>
       __$$ErrorCopyWithImpl<_$Error>(this, _$identity);
 
@@ -647,10 +652,10 @@ class _$Error implements Error {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(bool scanning, List<ScannedDevice> devices)? $default, {
-    TResult Function(bool scanning)? initial,
-    TResult Function(bool scanning)? loading,
-    TResult Function(bool scanning, String message)? error,
+    TResult? Function(bool scanning, List<ScannedDevice> devices)? $default, {
+    TResult? Function(bool scanning)? initial,
+    TResult? Function(bool scanning)? loading,
+    TResult? Function(bool scanning, String message)? error,
   }) {
     return error?.call(scanning, message);
   }
@@ -684,10 +689,10 @@ class _$Error implements Error {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(Data value)? $default, {
-    TResult Function(Initial value)? initial,
-    TResult Function(Loading value)? loading,
-    TResult Function(Error value)? error,
+    TResult? Function(Data value)? $default, {
+    TResult? Function(Initial value)? initial,
+    TResult? Function(Loading value)? loading,
+    TResult? Function(Error value)? error,
   }) {
     return error?.call(this);
   }

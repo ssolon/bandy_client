@@ -26,7 +26,7 @@ class ExerciseDisplayWidget extends ConsumerWidget {
             .read(currentExerciseNotifierProvider.notifier)
             .setExerciseById(value);
       },
-      value: currentExercise.whenOrNull((id, name) => id),
+      value: currentExercise.whenOrNull((e) => e.id),
       items: [
         for (final e in exercises)
           DropdownMenuItem(value: e.id, child: Text(e.name)),

@@ -24,9 +24,9 @@ class RepListWidgetState extends ConsumerState<RepListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final reps = ref
-        .watch(workoutSetNotifierProvider(widget.device))
-        .maybeWhen((name, reps) => reps, orElse: () => List<RepCount>.empty());
+    final reps = ref.watch(workoutSetNotifierProvider(widget.device)).maybeWhen(
+        (uuid, name, reps) => reps,
+        orElse: () => List<RepCount>.empty());
 
     _displayReps = _sortAscending ? reps : reps.reversed;
 

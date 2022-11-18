@@ -29,13 +29,13 @@ mixin _$DeviceState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(Instant instant)? $default, {
-    TResult Function()? button1Clicked,
-    TResult Function()? initial,
-    TResult Function()? connecting,
-    TResult Function()? connected,
-    TResult Function()? disconnected,
-    TResult Function(String message)? error,
+    TResult? Function(Instant instant)? $default, {
+    TResult? Function()? button1Clicked,
+    TResult? Function()? initial,
+    TResult? Function()? connecting,
+    TResult? Function()? connected,
+    TResult? Function()? disconnected,
+    TResult? Function(String message)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -63,13 +63,13 @@ mixin _$DeviceState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(Data value)? $default, {
-    TResult Function(Button1Clicked value)? button1Clicked,
-    TResult Function(Initial value)? initial,
-    TResult Function(Connecting value)? connecting,
-    TResult Function(Connected value)? connected,
-    TResult Function(Disconnected value)? disconnected,
-    TResult Function(Error value)? error,
+    TResult? Function(Data value)? $default, {
+    TResult? Function(Button1Clicked value)? button1Clicked,
+    TResult? Function(Initial value)? initial,
+    TResult? Function(Connecting value)? connecting,
+    TResult? Function(Connected value)? connected,
+    TResult? Function(Disconnected value)? disconnected,
+    TResult? Function(Error value)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -90,40 +90,41 @@ mixin _$DeviceState {
 abstract class $DeviceStateCopyWith<$Res> {
   factory $DeviceStateCopyWith(
           DeviceState value, $Res Function(DeviceState) then) =
-      _$DeviceStateCopyWithImpl<$Res>;
+      _$DeviceStateCopyWithImpl<$Res, DeviceState>;
 }
 
 /// @nodoc
-class _$DeviceStateCopyWithImpl<$Res> implements $DeviceStateCopyWith<$Res> {
+class _$DeviceStateCopyWithImpl<$Res, $Val extends DeviceState>
+    implements $DeviceStateCopyWith<$Res> {
   _$DeviceStateCopyWithImpl(this._value, this._then);
 
-  final DeviceState _value;
   // ignore: unused_field
-  final $Res Function(DeviceState) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 }
 
 /// @nodoc
 abstract class _$$DataCopyWith<$Res> {
   factory _$$DataCopyWith(_$Data value, $Res Function(_$Data) then) =
       __$$DataCopyWithImpl<$Res>;
+  @useResult
   $Res call({Instant instant});
 }
 
 /// @nodoc
-class __$$DataCopyWithImpl<$Res> extends _$DeviceStateCopyWithImpl<$Res>
+class __$$DataCopyWithImpl<$Res> extends _$DeviceStateCopyWithImpl<$Res, _$Data>
     implements _$$DataCopyWith<$Res> {
   __$$DataCopyWithImpl(_$Data _value, $Res Function(_$Data) _then)
-      : super(_value, (v) => _then(v as _$Data));
+      : super(_value, _then);
 
-  @override
-  _$Data get _value => super._value as _$Data;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? instant = freezed,
+    Object? instant = null,
   }) {
     return _then(_$Data(
-      instant: instant == freezed
+      instant: null == instant
           ? _value.instant
           : instant // ignore: cast_nullable_to_non_nullable
               as Instant,
@@ -149,15 +150,15 @@ class _$Data implements Data {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$Data &&
-            const DeepCollectionEquality().equals(other.instant, instant));
+            (identical(other.instant, instant) || other.instant == instant));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(instant));
+  int get hashCode => Object.hash(runtimeType, instant);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$DataCopyWith<_$Data> get copyWith =>
       __$$DataCopyWithImpl<_$Data>(this, _$identity);
 
@@ -178,13 +179,13 @@ class _$Data implements Data {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(Instant instant)? $default, {
-    TResult Function()? button1Clicked,
-    TResult Function()? initial,
-    TResult Function()? connecting,
-    TResult Function()? connected,
-    TResult Function()? disconnected,
-    TResult Function(String message)? error,
+    TResult? Function(Instant instant)? $default, {
+    TResult? Function()? button1Clicked,
+    TResult? Function()? initial,
+    TResult? Function()? connecting,
+    TResult? Function()? connected,
+    TResult? Function()? disconnected,
+    TResult? Function(String message)? error,
   }) {
     return $default?.call(instant);
   }
@@ -224,13 +225,13 @@ class _$Data implements Data {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(Data value)? $default, {
-    TResult Function(Button1Clicked value)? button1Clicked,
-    TResult Function(Initial value)? initial,
-    TResult Function(Connecting value)? connecting,
-    TResult Function(Connected value)? connected,
-    TResult Function(Disconnected value)? disconnected,
-    TResult Function(Error value)? error,
+    TResult? Function(Data value)? $default, {
+    TResult? Function(Button1Clicked value)? button1Clicked,
+    TResult? Function(Initial value)? initial,
+    TResult? Function(Connecting value)? connecting,
+    TResult? Function(Connected value)? connected,
+    TResult? Function(Disconnected value)? disconnected,
+    TResult? Function(Error value)? error,
   }) {
     return $default?.call(this);
   }
@@ -271,14 +272,11 @@ abstract class _$$Button1ClickedCopyWith<$Res> {
 
 /// @nodoc
 class __$$Button1ClickedCopyWithImpl<$Res>
-    extends _$DeviceStateCopyWithImpl<$Res>
+    extends _$DeviceStateCopyWithImpl<$Res, _$Button1Clicked>
     implements _$$Button1ClickedCopyWith<$Res> {
   __$$Button1ClickedCopyWithImpl(
       _$Button1Clicked _value, $Res Function(_$Button1Clicked) _then)
-      : super(_value, (v) => _then(v as _$Button1Clicked));
-
-  @override
-  _$Button1Clicked get _value => super._value as _$Button1Clicked;
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -317,13 +315,13 @@ class _$Button1Clicked implements Button1Clicked {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(Instant instant)? $default, {
-    TResult Function()? button1Clicked,
-    TResult Function()? initial,
-    TResult Function()? connecting,
-    TResult Function()? connected,
-    TResult Function()? disconnected,
-    TResult Function(String message)? error,
+    TResult? Function(Instant instant)? $default, {
+    TResult? Function()? button1Clicked,
+    TResult? Function()? initial,
+    TResult? Function()? connecting,
+    TResult? Function()? connected,
+    TResult? Function()? disconnected,
+    TResult? Function(String message)? error,
   }) {
     return button1Clicked?.call();
   }
@@ -363,13 +361,13 @@ class _$Button1Clicked implements Button1Clicked {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(Data value)? $default, {
-    TResult Function(Button1Clicked value)? button1Clicked,
-    TResult Function(Initial value)? initial,
-    TResult Function(Connecting value)? connecting,
-    TResult Function(Connected value)? connected,
-    TResult Function(Disconnected value)? disconnected,
-    TResult Function(Error value)? error,
+    TResult? Function(Data value)? $default, {
+    TResult? Function(Button1Clicked value)? button1Clicked,
+    TResult? Function(Initial value)? initial,
+    TResult? Function(Connecting value)? connecting,
+    TResult? Function(Connected value)? connected,
+    TResult? Function(Disconnected value)? disconnected,
+    TResult? Function(Error value)? error,
   }) {
     return button1Clicked?.call(this);
   }
@@ -404,13 +402,11 @@ abstract class _$$InitialCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$InitialCopyWithImpl<$Res> extends _$DeviceStateCopyWithImpl<$Res>
+class __$$InitialCopyWithImpl<$Res>
+    extends _$DeviceStateCopyWithImpl<$Res, _$Initial>
     implements _$$InitialCopyWith<$Res> {
   __$$InitialCopyWithImpl(_$Initial _value, $Res Function(_$Initial) _then)
-      : super(_value, (v) => _then(v as _$Initial));
-
-  @override
-  _$Initial get _value => super._value as _$Initial;
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -449,13 +445,13 @@ class _$Initial implements Initial {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(Instant instant)? $default, {
-    TResult Function()? button1Clicked,
-    TResult Function()? initial,
-    TResult Function()? connecting,
-    TResult Function()? connected,
-    TResult Function()? disconnected,
-    TResult Function(String message)? error,
+    TResult? Function(Instant instant)? $default, {
+    TResult? Function()? button1Clicked,
+    TResult? Function()? initial,
+    TResult? Function()? connecting,
+    TResult? Function()? connected,
+    TResult? Function()? disconnected,
+    TResult? Function(String message)? error,
   }) {
     return initial?.call();
   }
@@ -495,13 +491,13 @@ class _$Initial implements Initial {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(Data value)? $default, {
-    TResult Function(Button1Clicked value)? button1Clicked,
-    TResult Function(Initial value)? initial,
-    TResult Function(Connecting value)? connecting,
-    TResult Function(Connected value)? connected,
-    TResult Function(Disconnected value)? disconnected,
-    TResult Function(Error value)? error,
+    TResult? Function(Data value)? $default, {
+    TResult? Function(Button1Clicked value)? button1Clicked,
+    TResult? Function(Initial value)? initial,
+    TResult? Function(Connecting value)? connecting,
+    TResult? Function(Connected value)? connected,
+    TResult? Function(Disconnected value)? disconnected,
+    TResult? Function(Error value)? error,
   }) {
     return initial?.call(this);
   }
@@ -537,14 +533,12 @@ abstract class _$$ConnectingCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$ConnectingCopyWithImpl<$Res> extends _$DeviceStateCopyWithImpl<$Res>
+class __$$ConnectingCopyWithImpl<$Res>
+    extends _$DeviceStateCopyWithImpl<$Res, _$Connecting>
     implements _$$ConnectingCopyWith<$Res> {
   __$$ConnectingCopyWithImpl(
       _$Connecting _value, $Res Function(_$Connecting) _then)
-      : super(_value, (v) => _then(v as _$Connecting));
-
-  @override
-  _$Connecting get _value => super._value as _$Connecting;
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -583,13 +577,13 @@ class _$Connecting implements Connecting {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(Instant instant)? $default, {
-    TResult Function()? button1Clicked,
-    TResult Function()? initial,
-    TResult Function()? connecting,
-    TResult Function()? connected,
-    TResult Function()? disconnected,
-    TResult Function(String message)? error,
+    TResult? Function(Instant instant)? $default, {
+    TResult? Function()? button1Clicked,
+    TResult? Function()? initial,
+    TResult? Function()? connecting,
+    TResult? Function()? connected,
+    TResult? Function()? disconnected,
+    TResult? Function(String message)? error,
   }) {
     return connecting?.call();
   }
@@ -629,13 +623,13 @@ class _$Connecting implements Connecting {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(Data value)? $default, {
-    TResult Function(Button1Clicked value)? button1Clicked,
-    TResult Function(Initial value)? initial,
-    TResult Function(Connecting value)? connecting,
-    TResult Function(Connected value)? connected,
-    TResult Function(Disconnected value)? disconnected,
-    TResult Function(Error value)? error,
+    TResult? Function(Data value)? $default, {
+    TResult? Function(Button1Clicked value)? button1Clicked,
+    TResult? Function(Initial value)? initial,
+    TResult? Function(Connecting value)? connecting,
+    TResult? Function(Connected value)? connected,
+    TResult? Function(Disconnected value)? disconnected,
+    TResult? Function(Error value)? error,
   }) {
     return connecting?.call(this);
   }
@@ -671,14 +665,12 @@ abstract class _$$ConnectedCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$ConnectedCopyWithImpl<$Res> extends _$DeviceStateCopyWithImpl<$Res>
+class __$$ConnectedCopyWithImpl<$Res>
+    extends _$DeviceStateCopyWithImpl<$Res, _$Connected>
     implements _$$ConnectedCopyWith<$Res> {
   __$$ConnectedCopyWithImpl(
       _$Connected _value, $Res Function(_$Connected) _then)
-      : super(_value, (v) => _then(v as _$Connected));
-
-  @override
-  _$Connected get _value => super._value as _$Connected;
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -717,13 +709,13 @@ class _$Connected implements Connected {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(Instant instant)? $default, {
-    TResult Function()? button1Clicked,
-    TResult Function()? initial,
-    TResult Function()? connecting,
-    TResult Function()? connected,
-    TResult Function()? disconnected,
-    TResult Function(String message)? error,
+    TResult? Function(Instant instant)? $default, {
+    TResult? Function()? button1Clicked,
+    TResult? Function()? initial,
+    TResult? Function()? connecting,
+    TResult? Function()? connected,
+    TResult? Function()? disconnected,
+    TResult? Function(String message)? error,
   }) {
     return connected?.call();
   }
@@ -763,13 +755,13 @@ class _$Connected implements Connected {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(Data value)? $default, {
-    TResult Function(Button1Clicked value)? button1Clicked,
-    TResult Function(Initial value)? initial,
-    TResult Function(Connecting value)? connecting,
-    TResult Function(Connected value)? connected,
-    TResult Function(Disconnected value)? disconnected,
-    TResult Function(Error value)? error,
+    TResult? Function(Data value)? $default, {
+    TResult? Function(Button1Clicked value)? button1Clicked,
+    TResult? Function(Initial value)? initial,
+    TResult? Function(Connecting value)? connecting,
+    TResult? Function(Connected value)? connected,
+    TResult? Function(Disconnected value)? disconnected,
+    TResult? Function(Error value)? error,
   }) {
     return connected?.call(this);
   }
@@ -805,14 +797,12 @@ abstract class _$$DisconnectedCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$DisconnectedCopyWithImpl<$Res> extends _$DeviceStateCopyWithImpl<$Res>
+class __$$DisconnectedCopyWithImpl<$Res>
+    extends _$DeviceStateCopyWithImpl<$Res, _$Disconnected>
     implements _$$DisconnectedCopyWith<$Res> {
   __$$DisconnectedCopyWithImpl(
       _$Disconnected _value, $Res Function(_$Disconnected) _then)
-      : super(_value, (v) => _then(v as _$Disconnected));
-
-  @override
-  _$Disconnected get _value => super._value as _$Disconnected;
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -851,13 +841,13 @@ class _$Disconnected implements Disconnected {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(Instant instant)? $default, {
-    TResult Function()? button1Clicked,
-    TResult Function()? initial,
-    TResult Function()? connecting,
-    TResult Function()? connected,
-    TResult Function()? disconnected,
-    TResult Function(String message)? error,
+    TResult? Function(Instant instant)? $default, {
+    TResult? Function()? button1Clicked,
+    TResult? Function()? initial,
+    TResult? Function()? connecting,
+    TResult? Function()? connected,
+    TResult? Function()? disconnected,
+    TResult? Function(String message)? error,
   }) {
     return disconnected?.call();
   }
@@ -897,13 +887,13 @@ class _$Disconnected implements Disconnected {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(Data value)? $default, {
-    TResult Function(Button1Clicked value)? button1Clicked,
-    TResult Function(Initial value)? initial,
-    TResult Function(Connecting value)? connecting,
-    TResult Function(Connected value)? connected,
-    TResult Function(Disconnected value)? disconnected,
-    TResult Function(Error value)? error,
+    TResult? Function(Data value)? $default, {
+    TResult? Function(Button1Clicked value)? button1Clicked,
+    TResult? Function(Initial value)? initial,
+    TResult? Function(Connecting value)? connecting,
+    TResult? Function(Connected value)? connected,
+    TResult? Function(Disconnected value)? disconnected,
+    TResult? Function(Error value)? error,
   }) {
     return disconnected?.call(this);
   }
@@ -935,24 +925,24 @@ abstract class Disconnected implements DeviceState {
 abstract class _$$ErrorCopyWith<$Res> {
   factory _$$ErrorCopyWith(_$Error value, $Res Function(_$Error) then) =
       __$$ErrorCopyWithImpl<$Res>;
+  @useResult
   $Res call({String message});
 }
 
 /// @nodoc
-class __$$ErrorCopyWithImpl<$Res> extends _$DeviceStateCopyWithImpl<$Res>
+class __$$ErrorCopyWithImpl<$Res>
+    extends _$DeviceStateCopyWithImpl<$Res, _$Error>
     implements _$$ErrorCopyWith<$Res> {
   __$$ErrorCopyWithImpl(_$Error _value, $Res Function(_$Error) _then)
-      : super(_value, (v) => _then(v as _$Error));
+      : super(_value, _then);
 
-  @override
-  _$Error get _value => super._value as _$Error;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? message = freezed,
+    Object? message = null,
   }) {
     return _then(_$Error(
-      message == freezed
+      null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
@@ -979,15 +969,15 @@ class _$Error implements Error {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$Error &&
-            const DeepCollectionEquality().equals(other.message, message));
+            (identical(other.message, message) || other.message == message));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(message));
+  int get hashCode => Object.hash(runtimeType, message);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$ErrorCopyWith<_$Error> get copyWith =>
       __$$ErrorCopyWithImpl<_$Error>(this, _$identity);
 
@@ -1008,13 +998,13 @@ class _$Error implements Error {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(Instant instant)? $default, {
-    TResult Function()? button1Clicked,
-    TResult Function()? initial,
-    TResult Function()? connecting,
-    TResult Function()? connected,
-    TResult Function()? disconnected,
-    TResult Function(String message)? error,
+    TResult? Function(Instant instant)? $default, {
+    TResult? Function()? button1Clicked,
+    TResult? Function()? initial,
+    TResult? Function()? connecting,
+    TResult? Function()? connected,
+    TResult? Function()? disconnected,
+    TResult? Function(String message)? error,
   }) {
     return error?.call(message);
   }
@@ -1054,13 +1044,13 @@ class _$Error implements Error {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(Data value)? $default, {
-    TResult Function(Button1Clicked value)? button1Clicked,
-    TResult Function(Initial value)? initial,
-    TResult Function(Connecting value)? connecting,
-    TResult Function(Connected value)? connected,
-    TResult Function(Disconnected value)? disconnected,
-    TResult Function(Error value)? error,
+    TResult? Function(Data value)? $default, {
+    TResult? Function(Button1Clicked value)? button1Clicked,
+    TResult? Function(Initial value)? initial,
+    TResult? Function(Connecting value)? connecting,
+    TResult? Function(Connected value)? connected,
+    TResult? Function(Disconnected value)? disconnected,
+    TResult? Function(Error value)? error,
   }) {
     return error?.call(this);
   }
