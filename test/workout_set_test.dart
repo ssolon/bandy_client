@@ -35,6 +35,7 @@ void main() {
     "Exercise provider test",
     () async {
       final container = ProviderContainer();
+      addTearDown(container.dispose);
 
       final exercises = container
           .read(exerciseListNotifierProvider)
