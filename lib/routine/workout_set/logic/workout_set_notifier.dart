@@ -66,8 +66,6 @@ class WorkoutSetNotifier extends _$WorkoutSetNotifier {
   /// Figure out the set count for the current exercise by looking at the
   /// current session and counting the sets for the [currentExercise].
   int _computeSetCount() {
-    // TODO use the session to figure out the set count
-    // TODO for now we always start at 1.
     final session = ref.read(workoutSessionNotifierProvider);
     return session.maybeMap(
       (s) {

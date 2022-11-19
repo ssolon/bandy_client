@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:bandy_client/ble/scanner/logic/scanned_device.dart';
 import 'package:bandy_client/exercise/current/current_exercise_notifier.dart';
 import 'package:bandy_client/exercise/exercise_dummys.dart';
@@ -8,6 +6,7 @@ import 'package:bandy_client/exercise/list/exercise_list_state.dart';
 import 'package:bandy_client/routine/rep_counter.dart';
 import 'package:bandy_client/routine/workout_set/logic/workout_set_notifier.dart';
 import 'package:bandy_client/routine/workout_set/logic/workout_set_state.dart';
+import 'package:bandy_client/workout_session/workout_session_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -51,9 +50,8 @@ void main() {
   );
 
   group('WorkoutSet tests', () {
-    group('No exercise', () {
+    group('Integration Tests', () {
       // We use the same container for everything in this group
-      // Violates independence of unit tests -- but we always do
 
       final container = ProviderContainer(overrides: [
         repCounterStateProvider
@@ -66,15 +64,37 @@ void main() {
         workoutSet = next;
       });
 
+      /// Utility function to add a rep
       void addRep(int count, int maxValue) async {
         (container.read(repCounterStateProvider(d).notifier)
                 as FakeRepCounterNotifier)
             .notifyRep(count, maxValue);
       }
 
-      // For some reason this read is needed but the pump works for subsequent
-      // Maybe the notifier isn't initialized until something references it?
-      workoutSet = container.read(workoutSetNotifierProvider(d));
+      test('Setup session', () async {
+        // Need an active session for these tests
+        expect(
+            container.read(workoutSessionNotifierProvider).maybeMap(
+                (value) => false,
+                initial: (value) => true,
+                orElse: () => false),
+            isTrue,
+            reason: 'Session starts at initial');
+
+        container.read(workoutSessionNotifierProvider.notifier).start();
+        await container.pump();
+
+        expect(
+            container
+                .read(workoutSessionNotifierProvider)
+                .maybeMap((value) => true, orElse: () => false),
+            isTrue,
+            reason: 'Session inProgress');
+
+        // For some reason this read is needed but the pump works for subsequent
+        // Maybe the notifier isn't initialized until something references it?
+        workoutSet = container.read(workoutSetNotifierProvider(d));
+      });
 
       test('Initial state values', () async {
         workoutSet.maybeMap(
@@ -149,7 +169,6 @@ void main() {
 
         // For now we don't switch set until we get the next rep
         addRep(1, 1000);
-
         await container.pump();
 
         workoutSet.maybeWhen(
@@ -161,6 +180,88 @@ void main() {
             expect(reps[0].count, 1,
                 reason: 'Exercise change resets rep count');
             expect(reps[0].maxValue, 1000);
+          },
+          orElse: () => fail('Should still have valid WorkoutSetState.data'),
+        );
+      });
+
+      test('Add another rep to same exercise', () async {
+        addRep(2, 2000);
+        await container.pump();
+
+        workoutSet.maybeWhen(
+          (exercise, setNumber, reps) {
+            expect(exercise?.id, dummyExerciseList[0].id,
+                reason: 'Current exercise id');
+            expect(setNumber, 1, reason: 'Still same set for exercise[0]');
+            expect(reps.length, 2, reason: 'Added second rep');
+            expect(reps[0].count, 1, reason: 'First rep count unchanged');
+            expect(reps[0].maxValue, 1000, reason: 'First rep max unchanged');
+            expect(reps[1].count, 2, reason: 'Second rep count');
+          },
+          orElse: () => fail(
+              "Should still have valid WorkoutSetState.data ${workoutSet.runtimeType}"),
+        );
+      });
+
+      test('Change exercise again', () async {
+        container
+            .read(currentExerciseNotifierProvider.notifier)
+            .setExercise(dummyExerciseList[1]);
+        addRep(1, 10);
+        await container.pump();
+
+        workoutSet.maybeWhen(
+          (exercise, setNumber, reps) {
+            expect(exercise?.id, dummyExerciseList[1].id,
+                reason: 'Current exercise id');
+            expect(setNumber, 1, reason: 'Exercise change resets set counter');
+            expect(reps.length, 1, reason: 'Exercise change resets reps');
+            expect(reps[0].count, 1,
+                reason: 'Exercise change resets rep count');
+            expect(reps[0].maxValue, 10);
+          },
+          orElse: () => fail('Should still have valid WorkoutSetState.data'),
+        );
+      });
+
+      test('Back to previous exercise', () async {
+        container
+            .read(currentExerciseNotifierProvider.notifier)
+            .setExercise(dummyExerciseList[0]);
+
+        addRep(1, 100);
+        await container.pump();
+
+        workoutSet.maybeWhen(
+          (exercise, setNumber, reps) {
+            expect(exercise?.id, dummyExerciseList[0].id,
+                reason: 'Current exercise id');
+            expect(setNumber, 2,
+                reason: 'Exercise change back continues set count');
+            expect(reps.length, 1, reason: 'Exercise change resets reps');
+            expect(reps[0].count, 1,
+                reason: 'Exercise change resets rep count');
+            expect(reps[0].maxValue, 100, reason: 'maxValue');
+          },
+          orElse: () => fail('Should still have valid WorkoutSetState.data'),
+        );
+      });
+      test('One more rep for good measure', () async {
+        addRep(2, 200);
+        await container.pump();
+
+        workoutSet.maybeWhen(
+          (exercise, setNumber, reps) {
+            expect(exercise?.id, dummyExerciseList[0].id,
+                reason: 'Current exercise id');
+            expect(setNumber, 2,
+                reason: 'Exercise change back continues set count');
+            expect(reps.length, 2, reason: 'Added a rep');
+            expect(reps[0].count, 1, reason: 'Unchanged first rep count');
+            expect(reps[0].maxValue, 100, reason: 'Unchanged first rep max');
+            expect(reps[1].count, 2, reason: 'Second rep count');
+            expect(reps[1].maxValue, 200, reason: 'Second rep max');
           },
           orElse: () => fail('Should still have valid WorkoutSetState.data'),
         );

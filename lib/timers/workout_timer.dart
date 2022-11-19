@@ -5,8 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'workout_timer.g.dart';
 
-// TODO This probably shouldn't be autodispose (if it is) -- check generate stuff
-@riverpod
+@Riverpod(keepAlive: true)
 class WorkoutTimerNotifier extends _$WorkoutTimerNotifier {
   Timer? timer;
 

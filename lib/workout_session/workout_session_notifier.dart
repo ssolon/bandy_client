@@ -6,9 +6,10 @@ import 'workout_session_state.dart';
 
 part 'workout_session_notifier.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class WorkoutSessionNotifier extends _$WorkoutSessionNotifier {
   Uuid? currentSessionId;
+  List<WorkoutSetState> sets = [];
 
   @override
   WorkoutSessionState build() {
@@ -22,16 +23,20 @@ class WorkoutSessionNotifier extends _$WorkoutSessionNotifier {
 
   /// Create a new session starting now
   void start() {
-    state = WorkoutSessionState(starting: DateTime.now(), sets: []);
+    sets = [];
+    state = WorkoutSessionState(starting: DateTime.now(), sets: sets);
   }
 
   /// Add a set to this session
-  /// TODO Implement this
   void addSet(WorkoutSetState workoutSet) {
     workoutSet.maybeMap((set) {
-      state.maybeMap((value) => null, orElse: () {});
+      state.maybeMap((inProgress) {
+        sets.add(set);
+        state = inProgress.copyWith(sets: sets);
+      }, orElse: () {});
     }, orElse: () {
       // Ignore anything other than Data
+      // TODO Some sort of warning logging/display
     });
   }
 
