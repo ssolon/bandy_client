@@ -2,6 +2,7 @@ import 'package:bandy_client/ble/scanner/logic/scanned_device.dart';
 import 'package:bandy_client/exercise/exercise.dart';
 import 'package:bandy_client/views/rep_list_display.dart';
 import 'package:bandy_client/workout_session/workout_session_notifier.dart';
+import 'package:bandy_client/workout_session/workout_session_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -28,7 +29,7 @@ class _WorkoutSetsWidgetState extends ConsumerState<WorkoutSetsWidget> {
     return workoutSession.maybeWhen(
       (starting, sets) {
         // session is active
-        return WorkoutSetDisplay(workoutSet, widget.device);
+        return WorkoutSetDisplay(workoutSet, workoutSession, widget.device);
       },
       error: (message) => Text("Error: $message"),
       orElse: () => Text("Start session to record",
@@ -40,62 +41,78 @@ class _WorkoutSetsWidgetState extends ConsumerState<WorkoutSetsWidget> {
 /// Display a single workout set
 class WorkoutSetDisplay extends StatelessWidget {
   final WorkoutSetState workoutSet;
+  final WorkoutSessionState workoutSession;
   final ScannedDevice device;
 
-  const WorkoutSetDisplay(this.workoutSet, this.device, {Key? key})
+  const WorkoutSetDisplay(this.workoutSet, this.workoutSession, this.device,
+      {Key? key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return workoutSet.maybeWhen(
-      (exercise, setNumber, reps) {
-        return Expanded(
-          child: ListView(
-            children: [
-              Column(
-                children: [
-                  Container(
-                    alignment: Alignment.topLeft,
-                    padding: const EdgeInsets.all(8.0),
-                    color: Colors.grey,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(_setName(exercise, setNumber),
-                              textAlign: TextAlign.start,
-                              style: Theme.of(context).textTheme.headlineSmall),
-                        ),
-                        Expanded(
-                          child: Text(
-                            "10 (5+5)",
-                            style: Theme.of(context).textTheme.headline6,
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        Expanded(
-                          child: Text(
-                            "${reps.length}",
-                            style: Theme.of(context).textTheme.headline6,
-                            textAlign: TextAlign.end,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  RepListWidget(device),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-      error: (message) => Text("Error: $message"),
-      orElse: () => const Text("No workout session"),
+    final currentSet = workoutSet.maybeMap((set) => set, orElse: () => null);
+    final historicSets = workoutSession.maybeWhen((starting, sets) => sets,
+        orElse: () => <WorkoutSetState>[]);
+
+    return Expanded(
+      child: ListView(
+        children: [
+          if (currentSet != null) currentSetDisplay(currentSet, context),
+          for (final s in historicSets.reversed) historySetDisplay(s, context),
+        ],
+      ),
     );
   }
 
-  /// Create a name to display for the set
+  /// Create a name to display for the set based on the [exercise], if any
   String _setName(Exercise? exercise, int setNumber) {
     return "${exercise?.name ?? ''}#$setNumber";
+  }
+
+  /// Display the current set
+  Widget currentSetDisplay(currentSet, context) {
+    return Column(
+      children: [
+        setHeader(currentSet, context),
+        RepListWidget(device),
+      ],
+    );
+  }
+
+  /// Display a historic set
+  Widget historySetDisplay(historySet, context) {
+    return setHeader(historySet, context);
+  }
+
+  /// Generate a header for a set
+  Widget setHeader(theSet, context) {
+    return Container(
+      alignment: Alignment.topLeft,
+      padding: const EdgeInsets.all(8.0),
+      color: Colors.grey,
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(_setName(theSet.exercise, theSet.setNumber),
+                textAlign: TextAlign.start,
+                style: Theme.of(context).textTheme.headlineSmall),
+          ),
+          Expanded(
+            child: Text(
+              "Effort", //"10 (5+5)",
+              style: Theme.of(context).textTheme.headline6,
+              textAlign: TextAlign.center,
+            ),
+          ),
+          Expanded(
+            child: Text(
+              "${theSet.reps.length}",
+              style: Theme.of(context).textTheme.headline6,
+              textAlign: TextAlign.end,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
