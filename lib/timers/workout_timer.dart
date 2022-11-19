@@ -1,12 +1,15 @@
 import 'dart:async';
 
 import 'package:bandy_client/workout_session/workout_session_notifier.dart';
+import 'package:loggy/loggy.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../workout_session/workout_session_state.dart';
 
 part 'workout_timer.g.dart';
 
 @Riverpod(keepAlive: true)
-class WorkoutTimerNotifier extends _$WorkoutTimerNotifier {
+class WorkoutTimerNotifier extends _$WorkoutTimerNotifier with UiLoggy {
   Timer? timer;
 
   @override
@@ -15,9 +18,25 @@ class WorkoutTimerNotifier extends _$WorkoutTimerNotifier {
       timer?.cancel();
     });
 
-    // Reset when something changes on the session
-    // TODO More logic here to handle different conditions?
-    ref.listen(workoutSessionNotifierProvider, (previous, next) => reset());
+    // Start when we go to inProgress and stop when going from inProgress.
+    ref.listen(workoutSessionNotifierProvider,
+        (WorkoutSessionState? previous, WorkoutSessionState next) {
+      loggy.debug("WorkoutSessionChange prev=$previous next=$next");
+      final prevInProgess = previous?.mapOrNull((value) => true) != null;
+
+      next.mapOrNull(
+        (value) {
+          // next inProgress
+          if (!prevInProgess) {
+            reset(); // start
+          }
+        },
+        completed: (value) {
+          timer?.cancel(); // stop timer on completed
+          timer = null;
+        },
+      );
+    });
 
     return reset();
   }
