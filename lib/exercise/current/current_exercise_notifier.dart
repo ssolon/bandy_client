@@ -24,7 +24,9 @@ class CurrentExerciseNotifier extends _$CurrentExerciseNotifier {
     }
   }
 
-  void setExercise(Exercise exercise) {
-    state = CurrentExerciseState(exercise: exercise);
+  void setExercise(Exercise? exercise) {
+    state = exercise == null
+        ? CurrentExerciseState.initial()
+        : CurrentExerciseState(exercise: exercise);
   }
 }

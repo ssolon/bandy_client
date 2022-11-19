@@ -6,6 +6,8 @@ import 'package:uuid/uuid.dart';
 
 import '../exercise/list/exercise_list_state.dart';
 
+final nullExerciseId = UuidValue(Uuid.NAMESPACE_NIL);
+
 class ExerciseDisplayWidget extends ConsumerWidget {
   const ExerciseDisplayWidget({super.key});
 
@@ -24,10 +26,15 @@ class ExerciseDisplayWidget extends ConsumerWidget {
       onChanged: (value) {
         ref
             .read(currentExerciseNotifierProvider.notifier)
-            .setExerciseById(value);
+            .setExerciseById(value == nullExerciseId ? null : value);
       },
       value: currentExercise.whenOrNull((e) => e.id),
       items: [
+        DropdownMenuItem(
+            value: nullExerciseId,
+            child: const Text('None',
+                style: TextStyle(
+                    color: Colors.grey, fontStyle: FontStyle.italic))),
         for (final e in exercises)
           DropdownMenuItem(value: e.id, child: Text(e.name)),
       ],

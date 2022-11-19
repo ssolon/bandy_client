@@ -18,7 +18,7 @@ class FakeRepCounterNotifier extends RepCounterNotifier {
   FakeRepCounterNotifier(Ref ref, ScannedDevice device) : super(ref, device);
 
   /// Report a rep explicitly
-  // TODO This should just be part of [RepCounterNotifier]?
+  // TODO Should this just be part of [RepCounterNotifier]?
   void notifyRep(int count, int maxValue) {
     state = RepCount(count, maxValue);
   }
@@ -263,6 +263,28 @@ void main() {
             expect(reps[0].maxValue, 100, reason: 'Unchanged first rep max');
             expect(reps[1].count, 2, reason: 'Second rep count');
             expect(reps[1].maxValue, 200, reason: 'Second rep max');
+          },
+          orElse: () => fail('Should still have valid WorkoutSetState.data'),
+        );
+      });
+
+      test('Back to no exercise', () async {
+        container
+            .read(currentExerciseNotifierProvider.notifier)
+            .setExercise(null);
+
+        await container.pump();
+
+        addRep(1, 11);
+        await container.pump();
+
+        workoutSet.maybeWhen(
+          (exercise, setNumber, reps) {
+            expect(exercise?.id, isNull, reason: 'No exericse');
+            expect(setNumber, 3, reason: 'Third set of no exercise');
+            expect(reps.length, 1, reason: 'First rep');
+            expect(reps[0].count, 1, reason: 'First rep');
+            expect(reps[0].maxValue, 11, reason: 'First rep maxValue');
           },
           orElse: () => fail('Should still have valid WorkoutSetState.data'),
         );
