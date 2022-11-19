@@ -71,17 +71,23 @@ class WorkoutSetDisplay extends StatelessWidget {
 
   /// Display the current set
   Widget currentSetDisplay(currentSet, context) {
-    return Column(
-      children: [
-        setHeader(currentSet, context),
-        RepListWidget(device),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          setHeader(currentSet, context),
+          RepListWidget(device),
+        ],
+      ),
     );
   }
 
   /// Display a historic set
   Widget historySetDisplay(historySet, context) {
-    return setHeader(historySet, context);
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: setHeader(historySet, context),
+    );
   }
 
   /// Generate a header for a set
