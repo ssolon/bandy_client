@@ -20,7 +20,7 @@ class FakeRepCounterNotifier extends RepCounterNotifier {
   /// Report a rep explicitly
   // TODO Should this just be part of [RepCounterNotifier]?
   void notifyRep(int count, int maxValue) {
-    state = RepCount(count, maxValue);
+    state = RepCount(count, maxValue, Rep([]));
   }
 }
 

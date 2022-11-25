@@ -21,7 +21,6 @@ class WorkoutTimerNotifier extends _$WorkoutTimerNotifier with UiLoggy {
     // Start when we go to inProgress and stop when going from inProgress.
     ref.listen(workoutSessionNotifierProvider,
         (WorkoutSessionState? previous, WorkoutSessionState next) {
-      loggy.debug("WorkoutSessionChange prev=$previous next=$next");
       final prevInProgess = previous?.mapOrNull((value) => true) != null;
 
       next.mapOrNull(
