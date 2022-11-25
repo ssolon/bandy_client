@@ -35,31 +35,16 @@ final repCounterStateProvider =
     StateNotifierProvider.family<RepCounterNotifier, RepCount, ScannedDevice>(
         (ref, scannedDevice) => RepCounterNotifier(ref, scannedDevice));
 
-/// Percentage of [_maxValue] to be considered a rep
-const repMaxValuePercentage = 0.50; // 24%
-
 /// Hysteresis percentage to be considered a new rep to reset
 const repHysteresis = 0.10; // 10%
 
+// TODO Not used but maybe we should?
 /// Minimum amount for first minimum (to reduce initial noise)
 const minHysteresis = 2;
 
 /// Counts and reports on the reps
 ///
-/// When the value falls to [repMaxValuePercentage] of the maximum value we've
-/// seen we count a rep.
-///
 class RepCounterNotifier extends StateNotifier<RepCount> with UiLoggy {
-  // int maxValue = 0;
-  // int? lastMin;
-  // int? currentMin;
-  // int count = 0;
-  // List<Instant> history = [];
-  // List<int> repMinIndexes = [];
-
-  // int reportedValue = 0;
-  // bool reported = false;
-
   InstantHandler handler = InstantHandler();
 
   RepCounterNotifier(Ref ref, ScannedDevice device) : super(RepCount.zero()) {
@@ -68,72 +53,13 @@ class RepCounterNotifier extends StateNotifier<RepCount> with UiLoggy {
       if (report != null) {
         state = report;
       }
-      // // Keep track of each Instant
-      // history.add(next);
-
-      // // Maintain absolute max
-      // maxValue = max(maxValue, next.reading);
-
-      // // Maintain min once we've moved enough so it's probably not noise
-
-      // if (lastMin == null) {
-      //   if (next.reading - minHysteresis > 0) {
-      //     lastMin = next.reading;
-      //   }
-      // } else {
-      //   lastMin = min(lastMin ?? next.reading, next.reading);
-      // }
-
-      // final goingUp = next.reading > (previous?.reading ?? 0);
-
-      // if (goingUp) {
-      //   // Going up -- just keep track of max
-
-      //   maxValue = max(maxValue, next.reading);
-
-      //   // Introduce some hysteresis on the way up for reset
-
-      //   if (reported) {
-      //     final baseMinValue = reportedValue - (lastMin ?? 0);
-      //     if (next.reading > baseMinValue * repHysteresis) {
-      //       // reset
-      //       reported = false;
-      //       maxValue = next.reading;
-      //       currentMin = null;
-
-      //       // Find the last minimum which will be the start of this rep
-
-      //     }
-      //   }
-      // } else {
-      //   // going down -- keep track of current min instant
-      //   if (next.reading < (maxValue * repHysteresis)) {
-      //     currentMin = min(currentMin ?? next.reading, next.reading);
-      //   }
-      // }
-
-      // if (!goingUp &&
-      //     !reported &&
-      //     next.reading < maxValue * repMaxValuePercentage) {
-      //   // going down and crossed breakpoint
-      //   reportedValue = next.reading;
-      //   reported = true;
-      //   state = RepCount(++count, maxValue, Rep(history)); // notify
-      // }
     });
   }
 
   void reset() {
     handler = InstantHandler();
-    // count = 0;
-    // state = RepCount.zero();
   }
 }
-
-// enum InstantState {
-//   startRep,
-//   endRep,
-// }
 
 /// Hold a reference to an Instant in a list of instants.
 class StoredInstant {
@@ -169,8 +95,6 @@ class InstantHandler {
   StoredInstant? _minInstant;
   StoredInstant? _repStartInstant;
 
-  // int? _minIndex;
-  // int? _minValue;
   int _maxValue = 0;
   Inflection lastTurn = Inflection.continues;
 
@@ -195,8 +119,6 @@ class InstantHandler {
 
     if (less) {
       _minInstant = saveTop();
-      // _minValue = topValue;
-      // _minIndex = _instants.length = 1;
     }
   }
 
@@ -295,6 +217,8 @@ class InstantHandler {
             : Inflection.turnDown;
   }
 
+  // TODO Not currently used but maybe it should be to make the rep detection
+  // more robust. Leaving it here for now.
   /// Look backwards and return the index of the last inflection point
   int lastMinInflectionPoint() {
     var reverseIndex = _instants.length;
