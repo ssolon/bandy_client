@@ -70,7 +70,7 @@ class WorkoutSetDisplay extends StatelessWidget {
   }
 
   /// Display the current set
-  Widget currentSetDisplay(currentSet, context) {
+  Widget currentSetDisplay(WorkoutSetState currentSet, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -83,10 +83,17 @@ class WorkoutSetDisplay extends StatelessWidget {
   }
 
   /// Display a historic set
-  Widget historySetDisplay(historySet, context) {
+  Widget historySetDisplay(WorkoutSetState historySet, BuildContext context) {
+    final reps = historySet.whenOrNull((exercise, setNumber, reps) => reps);
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: setHeader(historySet, context),
+      child: Column(
+        children: [
+          setHeader(historySet, context),
+          if (reps != null) RepListTableWidget(reps),
+        ],
+      ),
     );
   }
 

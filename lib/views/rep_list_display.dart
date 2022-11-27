@@ -4,16 +4,29 @@ import 'package:bandy_client/routine/workout_set/logic/workout_set_notifier.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class RepListWidget extends ConsumerStatefulWidget {
+class RepListWidget extends ConsumerWidget {
   final ScannedDevice device;
-
   const RepListWidget(this.device, {super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final reps = ref.watch(workoutSetNotifierProvider(device)).maybeWhen(
+        (uuid, name, reps) => reps,
+        orElse: () => List<RepCount>.empty());
+
+    return RepListTableWidget(reps);
+  }
+}
+
+class RepListTableWidget extends ConsumerStatefulWidget {
+  final List<RepCount> reps;
+  const RepListTableWidget(this.reps, {super.key});
 
   @override
   RepListWidgetState createState() => RepListWidgetState();
 }
 
-class RepListWidgetState extends ConsumerState<RepListWidget> {
+class RepListWidgetState extends ConsumerState<RepListTableWidget> {
   @override
   void initState() {
     super.initState();
@@ -24,11 +37,7 @@ class RepListWidgetState extends ConsumerState<RepListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final reps = ref.watch(workoutSetNotifierProvider(widget.device)).maybeWhen(
-        (uuid, name, reps) => reps,
-        orElse: () => List<RepCount>.empty());
-
-    _displayReps = _sortAscending ? reps : reps.reversed;
+    _displayReps = _sortAscending ? widget.reps : widget.reps.reversed;
 
     return DataTable(
         columns: [
