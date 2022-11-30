@@ -1,4 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:bandy_client/main.dart';
 import 'package:bandy_client/routine/workout_set/logic/workout_set_state.dart';
+import 'package:loggy/loggy.dart';
+import 'package:path/path.dart' as p;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
 
@@ -7,7 +13,7 @@ import 'workout_session_state.dart';
 part 'workout_session_notifier.g.dart';
 
 @Riverpod(keepAlive: true)
-class WorkoutSessionNotifier extends _$WorkoutSessionNotifier {
+class WorkoutSessionNotifier extends _$WorkoutSessionNotifier with UiLoggy {
   Uuid? currentSessionId;
   List<WorkoutSetState> sets = [];
 
@@ -31,6 +37,7 @@ class WorkoutSessionNotifier extends _$WorkoutSessionNotifier {
   void addSet(WorkoutSetState workoutSet) {
     workoutSet.maybeMap((set) {
       state.maybeMap((inProgress) {
+        setSave(set);
         sets.add(set);
         state = inProgress.copyWith(sets: sets);
       }, orElse: () {});
@@ -48,5 +55,17 @@ class WorkoutSessionNotifier extends _$WorkoutSessionNotifier {
       orElse: () => WorkoutSessionState.error(
           "Session cannot be finished (state = ${state.runtimeType})"),
     );
+  }
+
+  ///!!!! Temporary development code
+  // TODO REMOVE THIS !!!!
+  void setSave(WorkoutSetState set) {
+    final json = set.mapOrNull((value) => value.reps.map((e) => jsonEncode(e)));
+    if (json != null) {
+      final f =
+          File(p.join(storageDirectory!.path, "set${DateTime.now()}.json"));
+      f.writeAsStringSync(json.join('\n'));
+      loggy.debug(json);
+    }
   }
 }

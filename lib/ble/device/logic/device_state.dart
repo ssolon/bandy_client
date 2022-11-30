@@ -1,11 +1,17 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'device_state.freezed.dart';
+part 'device_state.g.dart';
 
+@JsonSerializable()
 class Instant {
   final int reading;
   final DateTime when;
   const Instant({required this.reading, required this.when});
+
+  factory Instant.fromJson(Map<String, dynamic> json) =>
+      _$InstantFromJson(json);
+  Map<String, dynamic> toJson() => _$InstantToJson(this);
 }
 
 @freezed

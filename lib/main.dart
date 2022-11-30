@@ -1,3 +1,8 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:bandy_client/repositories/db/init_bandy_db.dart';
+import 'package:bandy_client/repositories/db/kaleidalog_sqlite.dart';
 import 'package:bandy_client/views/device_display.dart';
 import 'package:bandy_client/views/scanner_page.dart';
 import 'package:bandy_client/views/workout_display.dart';
@@ -6,7 +11,9 @@ import 'package:flutter_loggy/flutter_loggy.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loggy/loggy.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:talker/talker.dart';
 
 import 'ble/scanner/logic/scanned_device.dart';
 
@@ -22,12 +29,40 @@ final resistanceCharacteristicUUID =
 
 final flutterReactiveBle = FlutterReactiveBle();
 
+late final Talker talker;
+late final Directory? storageDirectory;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   Loggy.initLoggy(logPrinter: const PrettyDeveloperPrinter());
+  talker = Talker(
+    loggerOutput: debugPrint,
+  );
+  talker.info('Talker initialized!!!!!!!!!');
   sharedPreferences = await SharedPreferences.getInstance();
 
-  runApp(const ProviderScope(child: MyApp()));
+  // Choose appropriate place to write a file so it's publicly available
+
+  storageDirectory = Platform.isAndroid
+      ? await getExternalStorageDirectory()
+      : await getApplicationSupportDirectory();
+
+  // TODO Handle unhandled error like this using talker?
+  // runZonedGuarded(
+  // () => runApp(const ProviderScope(child: MyApp())),
+  // (error, stack) {
+  // talker.handle(error, stack, 'Uncaught app exception');
+  // },
+  // );
+
+  // Setup the database here
+  final db = InitBandyDatabase();
+  await db.open();
+
+  runApp(ProviderScope(overrides: [
+    kaleidaLogDbProvider.overrideWithValue(db),
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

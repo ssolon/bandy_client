@@ -3,21 +3,30 @@ import 'dart:math';
 import 'package:bandy_client/ble/device/logic/device_provider.dart';
 import 'package:bandy_client/ble/device/logic/device_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:loggy/loggy.dart';
 
 import '../ble/scanner/logic/scanned_device.dart';
 
+part 'rep_counter.g.dart';
+
 /// A Rep is a list of instants.
+@JsonSerializable()
 class Rep {
   final List<Instant> instants;
 
-  Rep(List<Instant> i) : instants = List.unmodifiable(i);
+  Rep(this.instants); // : instants = List.unmodifiable(i);
 
   int get maxResistance => instants.fold(
       instants.isEmpty ? 0 : instants[0].reading,
       (previousValue, element) => max(previousValue, element.reading));
+
+  factory Rep.fromJson(Map<String, dynamic> json) => _$RepFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RepToJson(this);
 }
 
+@JsonSerializable()
 class RepCount {
   final int count;
   final int maxValue;
@@ -29,6 +38,10 @@ class RepCount {
       : count = 0,
         maxValue = 0,
         reps = Rep([]);
+
+  factory RepCount.fromJson(Map<String, dynamic> json) =>
+      _$RepCountFromJson(json);
+  Map<String, dynamic> toJson() => _$RepCountToJson(this);
 }
 
 final repCounterStateProvider =
