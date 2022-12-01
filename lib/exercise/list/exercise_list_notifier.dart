@@ -1,4 +1,3 @@
-import 'package:bandy_client/exercise/exercise_dummys.dart';
 import 'package:bandy_client/repositories/workout_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';

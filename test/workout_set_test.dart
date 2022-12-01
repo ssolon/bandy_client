@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bandy_client/ble/scanner/logic/scanned_device.dart';
 import 'package:bandy_client/exercise/current/current_exercise_notifier.dart';
 import 'package:bandy_client/exercise/exercise_dummys.dart';
@@ -30,17 +32,37 @@ final fakeRepCounterNotifierProvider =
 
 /// Exercises for testing
 
+class MockExerciseListNotifier extends ExerciseListNotifier {
+  @override
+  FutureOr<ExerciseListState> build() {
+    return ExerciseListState(items: [
+      for (final e in dummyExercises.entries)
+        ExerciseListItem(id: e.key, name: e.value.name)
+    ]);
+  }
+}
+
 void main() {
   test(
     "Exercise provider test",
     () async {
-      final container = ProviderContainer();
+      final container = ProviderContainer(overrides: [
+        exerciseListNotifierProvider
+            .overrideWith(() => MockExerciseListNotifier()),
+      ]);
       addTearDown(container.dispose);
 
-      final exercises = container
-          .read(exerciseListNotifierProvider)
-          .whenOrNull((items) => items);
-      expect(exercises, isNotNull, reason: 'Test exercises created');
+      final v = container.read(exerciseListNotifierProvider);
+      final exercisesData = v.whenOrNull(
+        data: (items) => items,
+        error: (error, stackTrace) => fail("Exercises fetch error=$error"),
+      );
+      expect(exercisesData, isNotNull, reason: 'Test exercises created');
+      final exercises = exercisesData!.maybeWhen(
+        (items) => items,
+        orElse: () =>
+            fail("ExercisesData invalid ${exercisesData.runtimeType}"),
+      );
       expect(exercises, isNotEmpty, reason: 'Have test exercises');
       expect(
           exercises,

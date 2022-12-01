@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:bandy_client/main.dart';
+// import 'package:bandy_client/main.dart';
 import 'package:bandy_client/routine/workout_set/logic/workout_set_state.dart';
 import 'package:loggy/loggy.dart';
 import 'package:path/path.dart' as p;
@@ -60,12 +60,12 @@ class WorkoutSessionNotifier extends _$WorkoutSessionNotifier with UiLoggy {
   ///!!!! Temporary development code
   // TODO REMOVE THIS !!!!
   void setSave(WorkoutSetState set) {
-    final json = set.mapOrNull((value) => value.reps.map((e) => jsonEncode(e)));
-    if (json != null) {
-      final f =
-          File(p.join(storageDirectory!.path, "set${DateTime.now()}.json"));
-      f.writeAsStringSync(json.join('\n'));
-      loggy.debug(json);
-    }
+    // final json = set.mapOrNull((value) => value.reps.map((e) => jsonEncode(e)));
+    // if (json != null) {
+    //   final f =
+    //       File(p.join(storageDirectory!.path, "set${DateTime.now()}.json"));
+    //   f.writeAsStringSync(json.join('\n'));
+    //   loggy.debug(json);
+    // }
   }
 }
