@@ -49,8 +49,8 @@ class KaleidaLogDb extends DB {
   open() async {
     final dbFile = File(dbName);
 
-    await Sqflite.devSetDebugModeOn();
-    await databaseFactory.debugSetLogLevel(sqfliteLogLevelVerbose);
+    // await Sqflite.devSetDebugModeOn();
+    // await databaseFactory.debugSetLogLevel(sqfliteLogLevelVerbose);
 
     if (await dbFile.exists()) {
       talker.info("Database $dbName already exists!!!!");

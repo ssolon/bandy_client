@@ -1,6 +1,5 @@
 import 'package:bandy_client/exercise/current/current_exercise_state.dart';
 import 'package:bandy_client/exercise/exercise.dart';
-import 'package:bandy_client/exercise/exercise_dummys.dart';
 import 'package:bandy_client/exercise/list/exercise_list_notifier.dart';
 import 'package:bandy_client/exercise/list/exercise_list_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
