@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:uuid/uuid.dart';
 
 final kaleidaLogDbProvider =
     Provider<DB>((_) => throw Exception('KaleidalogDB not initialized'));
@@ -31,12 +32,51 @@ abstract class DB {
 
     return executeQuery(sql, arguments);
   }
+
+  /// Create an event for the parameters created a UUID for the eventId if
+  /// not provided.
+  /// Returns eventId
+  Future<UuidValue> createEvent({
+    UuidValue? eventId,
+    required DateTime at,
+    required UuidValue eventTypeId,
+    UuidValue? parentId,
+    String? jsonDetails,
+  });
 }
 
 /// Kaleidalog specific database operations
 class KaleidaLogDb extends DB {
   late final String dbName;
   Database? _db;
+  final Uuid uuid = const Uuid();
+
+  // Table/field name names
+
+  static const tagsTable = "tags";
+  static const tagIdColumn = "tag_id";
+  static const tagNameColumn = "tag_name";
+  static const tagDescriptionColumn = "tag_description";
+
+  static const eventTypesTable = "event_types";
+  static const eventTypeIdColumn = "event_type_id";
+  static const eventTypeNameColumn = "event_type_name";
+  static const eventTypeDescriptionColumn = "event_type_description";
+  static const eventTypeDetailsColumn = "event_type_details";
+
+  static const eventsTable = "events";
+  static const eventIdColumn = "event_id";
+  static const eventAtColumn = "event_at";
+  static const eventParentIdColumn = "event_parent_id";
+  static const eventDetailsColumn = "event_details";
+
+  static const tagsForEventTable = "tags_for_event";
+
+  static const tagsForEventTypeTable = "tags_for_event_type";
+
+  static const userSettingsTable = "user_settings";
+  static const settingIdColumn = "setting_id";
+  static const settingsColumn = "settings";
 
   Database get db =>
       _db != null ? _db! : throw Exception("Uninitialized/closed database");
@@ -74,42 +114,42 @@ class KaleidaLogDb extends DB {
   /// Create the schema
   _createSchema(Database db, int version) async {
     const sql = '''
-    CREATE TABLE tags(
-      tag_id UUID PRIMARY KEY,
-      tag_name TEXT,
-      tag_description TEXT
+    CREATE TABLE $tagsTable(
+      $tagIdColumn UUID PRIMARY KEY,
+      $tagNameColumn TEXT,
+      $tagDescriptionColumn TEXT
     );
 
-    CREATE TABLE event_types(
-      event_type_id UUID PRIMARY KEY,
-      event_type_name TEXT NOT NULL,
-      event_type_description TEXT,
-      event_type_details JSON
+    CREATE TABLE $eventTypesTable(
+      $eventTypeIdColumn UUID PRIMARY KEY,
+      $eventTypeNameColumn TEXT NOT NULL,
+      $eventTypeDescriptionColumn TEXT,
+      $eventTypeDetailsColumn JSON
     );
 
-    CREATE TABLE events(
-      event_id UUID PRIMARY KEY,
-      event_at DATETIME NOT NULL,
-      event_type_id UUID NOT NULL,
-      event_parent_id UUID REFERENCES events(event_id),
-      event_details JSON
+    CREATE TABLE $eventsTable(
+      $eventIdColumn UUID PRIMARY KEY,
+      $eventAtColumn DATETIME NOT NULL,
+      $eventTypeIdColumn UUID NOT NULL REFERENCES $eventTypesTable($eventTypeIdColumn),
+      $eventParentIdColumn UUID REFERENCES $eventsTable($eventIdColumn),
+      $eventDetailsColumn JSON
       );
 
-    CREATE TABLE tags_for_event(
-      event_id UUID NOT NULL REFERENCES events(event_id),
-      tag_id UUID NOT NULL REFERENCES tags(tag_id),
-      PRIMARY KEY (event_id, tag_id)
+    CREATE TABLE $tagsForEventTable(
+      $eventIdColumn UUID NOT NULL REFERENCES $eventsTable($eventIdColumn),
+      $tagIdColumn UUID NOT NULL REFERENCES $tagsTable($tagIdColumn),
+      PRIMARY KEY ($eventIdColumn, $tagIdColumn)
     );
 
-    CREATE TABLE tags_for_event_type(
-      event_type_id UUID NOT NULL REFERENCES event_types(event_type_id),
-      tag_id UUID NOT NULL REFERENCES tags(tag_id),
-      PRIMARY KEY (event_type_id, tag_id)
+    CREATE TABLE $tagsForEventTypeTable(
+      $eventTypeIdColumn UUID NOT NULL REFERENCES $eventTypesTable($eventIdColumn),
+      $tagIdColumn UUID NOT NULL REFERENCES $tagsTable($tagIdColumn),
+      PRIMARY KEY ($eventTypeIdColumn, $tagIdColumn)
     );
 
-    CREATE TABLE user_settings(
-      setting_id UUID PRIMARY KEY,
-      settings TEXT
+    CREATE TABLE $userSettingsTable(
+      $settingIdColumn UUID PRIMARY KEY,
+      $settingsColumn TEXT
     );
     ''';
 
@@ -188,5 +228,26 @@ class KaleidaLogDb extends DB {
   @override
   Future<QueryResult> executeQuery(String sql, List<Object?> arguments) {
     return db.rawQuery(sql, arguments);
+  }
+
+  @override
+  Future<UuidValue> createEvent({
+    UuidValue? eventId,
+    DateTime? at,
+    required UuidValue eventTypeId,
+    UuidValue? parentId,
+    String? jsonDetails,
+  }) async {
+    final id = eventId?.uuid ?? uuid.v4();
+
+    db.insert(eventsTable, {
+      eventIdColumn: id,
+      eventAtColumn: (at ?? DateTime.now()).toIso8601String(),
+      eventTypeIdColumn: eventTypeId.uuid,
+      eventParentIdColumn: parentId?.uuid,
+      eventDetailsColumn: jsonDetails,
+    });
+
+    return UuidValue(id);
   }
 }

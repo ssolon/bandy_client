@@ -1,6 +1,11 @@
 import 'package:bandy_client/repositories/db/kaleidalog_sqlite.dart';
 import 'package:sqflite/sqflite.dart';
 
+const sessionTypeUUID = '6d2389ec-9840-44a7-acc9-121084930f20';
+const exerciseTypeUUID = '24dc325f-c97b-4a87-bfb6-f82c3616e511';
+const workoutSetTypeUUID = 'fe15ec3e-d3d2-4dca-b577-69ab090a1c78';
+const exerciseRepTypeUUID = '8f0ea171-22b8-4b37-8cfc-a03bd42187d0';
+
 class InitBandyDatabase extends KaleidaLogDb {
   InitBandyDatabase([super.databaseName]);
 
@@ -14,11 +19,6 @@ class InitBandyDatabase extends KaleidaLogDb {
     createTag(db, bandyTagUUID, 'bandy', null);
     createTag(db, exerciseTagUUID, 'exercise', null);
   }
-
-  static const sessionTypeUUID = '6d2389ec-9840-44a7-acc9-121084930f20';
-  static const exerciseTypeUUID = '24dc325f-c97b-4a87-bfb6-f82c3616e511';
-  static const workoutSetTypeUUID = 'fe15ec3e-d3d2-4dca-b577-69ab090a1c78';
-  static const exerciseRepTypeUUID = '8f0ea171-22b8-4b37-8cfc-a03bd42187d0';
 
   // Exercise events
 

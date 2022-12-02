@@ -11,7 +11,7 @@ class WorkoutSessionState with _$WorkoutSessionState {
       required List<WorkoutSetState> sets}) = InProgress;
 
   factory WorkoutSessionState.completed(
-      {Uuid? id,
+      {UuidValue? id,
       required DateTime starting,
       required DateTime ending,
       required List<WorkoutSetState> sets}) = Completed;

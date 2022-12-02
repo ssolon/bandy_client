@@ -32,7 +32,6 @@ class WorkoutSessionNotifier extends _$WorkoutSessionNotifier with UiLoggy {
   void addSet(WorkoutSetState workoutSet) {
     workoutSet.maybeMap((set) {
       state.maybeMap((inProgress) {
-        setSave(set);
         sets.add(set);
         state = inProgress.copyWith(sets: sets);
       }, orElse: () {});
@@ -50,17 +49,5 @@ class WorkoutSessionNotifier extends _$WorkoutSessionNotifier with UiLoggy {
       orElse: () => WorkoutSessionState.error(
           "Session cannot be finished (state = ${state.runtimeType})"),
     );
-  }
-
-  ///!!!! Temporary development code
-  // TODO REMOVE THIS !!!!
-  void setSave(WorkoutSetState set) {
-    // final json = set.mapOrNull((value) => value.reps.map((e) => jsonEncode(e)));
-    // if (json != null) {
-    //   final f =
-    //       File(p.join(storageDirectory!.path, "set${DateTime.now()}.json"));
-    //   f.writeAsStringSync(json.join('\n'));
-    //   loggy.debug(json);
-    // }
   }
 }
