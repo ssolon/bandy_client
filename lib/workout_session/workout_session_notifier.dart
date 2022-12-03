@@ -23,6 +23,7 @@ class WorkoutSessionNotifier extends _$WorkoutSessionNotifier with UiLoggy {
   }
 
   /// Create a new session starting now
+  // TODO Make sure everything resets when we start a new session
   void start() {
     sets = [];
     state = WorkoutSessionState(starting: DateTime.now(), sets: sets);
