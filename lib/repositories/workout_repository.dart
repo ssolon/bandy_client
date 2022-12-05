@@ -78,6 +78,10 @@ class WorkoutRepository {
       maybeStarting.match(() {}, // ignore empty sets (shouldn't happen)
           (starting) async {
         final details = json.encode({
+          if (workoutSet.exercise != null) ...{
+            'exercise': workoutSet.exercise!.name,
+            'exercise_id': workoutSet.exercise!.id,
+          },
           'count': repCounts.length,
           // TODO Add "effort" when we compute it
         });
