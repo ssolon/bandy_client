@@ -49,9 +49,10 @@ class TimerDisplayWidget extends ConsumerWidget {
         (sessionData) => Row(
           children: [
             ElevatedButton(
-                onPressed: () {
-                  // TODO Add confirmation dialog
-                  ref.read(workoutSessionNotifierProvider.notifier).finish();
+                onPressed: () async {
+                  if (await _confirmFinish(context) ?? false) {
+                    ref.read(workoutSessionNotifierProvider.notifier).finish();
+                  }
                 },
                 child: const Text('Finish')),
             Expanded(child: _timer(duration, ref)),
@@ -85,6 +86,27 @@ class TimerDisplayWidget extends ConsumerWidget {
           formatTimer(duration),
           textAlign: TextAlign.right,
         ),
+      ),
+    );
+  }
+
+  Future<bool?> _confirmFinish(BuildContext context) async {
+    return showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text("Confirm"),
+        content: const Text("Close this workout session?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Finish'),
+          )
+        ],
       ),
     );
   }
