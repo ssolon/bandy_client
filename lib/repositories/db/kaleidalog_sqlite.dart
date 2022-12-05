@@ -124,15 +124,15 @@ class KaleidaLogDb extends DB {
       $eventTypeIdColumn UUID PRIMARY KEY,
       $eventTypeNameColumn TEXT NOT NULL,
       $eventTypeDescriptionColumn TEXT,
-      $eventTypeDetailsColumn JSON
+      $eventTypeDetailsColumn TEXT
     );
 
     CREATE TABLE $eventsTable(
       $eventIdColumn UUID PRIMARY KEY,
-      $eventAtColumn DATETIME NOT NULL,
+      $eventAtColumn TIMESTAMP NOT NULL,
       $eventTypeIdColumn UUID NOT NULL REFERENCES $eventTypesTable($eventTypeIdColumn),
       $eventParentIdColumn UUID REFERENCES $eventsTable($eventIdColumn),
-      $eventDetailsColumn JSON
+      $eventDetailsColumn TEXT
       );
 
     CREATE TABLE $tagsForEventTable(

@@ -49,8 +49,10 @@ class TimerDisplayWidget extends ConsumerWidget {
         (sessionData) => Row(
           children: [
             ElevatedButton(
-                onPressed: () =>
-                    ref.read(workoutSessionNotifierProvider.notifier).finish(),
+                onPressed: () {
+                  // TODO Add confirmation dialog
+                  ref.read(workoutSessionNotifierProvider.notifier).finish();
+                },
                 child: const Text('Finish')),
             Expanded(child: _timer(duration, ref)),
           ],
