@@ -5,6 +5,7 @@ import 'package:bandy_client/repositories/db/kaleidalog_sqlite.dart';
 import 'package:bandy_client/views/device_display.dart';
 import 'package:bandy_client/views/scanner_page.dart';
 import 'package:bandy_client/views/workout_display.dart';
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_loggy/flutter_loggy.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
@@ -61,37 +62,49 @@ void main() async {
 
   runApp(ProviderScope(overrides: [
     kaleidaLogDbProvider.overrideWithValue(db),
-  ], child: const MyApp()));
+  ], child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
+
+  final routerDelegate = BeamerDelegate(
+    initialPath: '/exercise',
+    locationBuilder: RoutesLocationBuilder(
+      routes: {
+        '*': (context, state, data) => const ScaffoldWithBottomNavBar(),
+      },
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Bandy',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Bandy Home Page'),
+      routerDelegate: routerDelegate,
+      routeInformationParser: BeamerParser(),
+      backButtonDispatcher:
+          BeamerBackButtonDispatcher(delegate: routerDelegate),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+class ExercisePage extends StatefulWidget {
+  const ExercisePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<ExercisePage> createState() => _ExercisePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _ExercisePageState extends State<ExercisePage> {
   ScannedDevice? defaultDevice;
 
-  _MyHomePageState() {
+  _ExercisePageState() {
     defaultDevice = getDefaultDevice();
   }
 
@@ -127,21 +140,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: (value) {},
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.fitness_center),
-            label: 'Exercise',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.view_list),
-            label: 'Workout history',
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings), label: 'Settings'),
-        ],
-      ),
     );
   }
 
@@ -161,6 +159,155 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+class ScaffoldWithBottomNavBar extends StatefulWidget {
+  const ScaffoldWithBottomNavBar({Key? key}) : super(key: key);
+
+  @override
+  State<ScaffoldWithBottomNavBar> createState() =>
+      _ScaffoldWithBottomNavBarState();
+}
+
+class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
+  late int _currentIndex;
+
+  final _routerDelegates = [
+    BeamerDelegate(
+      initialPath: '/exercise',
+      locationBuilder: (RouteInformation routeInformation, _) {
+        if (routeInformation.location!.contains('/exercise')) {
+          return ExerciseLocation(routeInformation);
+        }
+        return NotFound(path: routeInformation.location!);
+      },
+    ),
+    BeamerDelegate(
+      initialPath: '/sessions',
+      locationBuilder: (RouteInformation routeInformation, _) {
+        if (routeInformation.location!.contains('/sessions')) {
+          return SessionsLocation(routeInformation);
+        }
+        return NotFound(path: routeInformation.location!);
+      },
+    ),
+    BeamerDelegate(
+      initialPath: '/settings',
+      locationBuilder: (RouteInformation routeInformation, _) {
+        if (routeInformation.location!.contains('/settings')) {
+          return SettingsLocation(routeInformation);
+        }
+        return NotFound(path: routeInformation.location!);
+      },
+    ),
+  ];
+
+  // update the _currentIndex if necessary
+  // TODO Does this work for three?
+  // TODO Needs more investigation
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final uriString = Beamer.of(context).configuration.location!;
+    _currentIndex = uriString.contains('/exercise') ? 0 : 1;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: IndexedStack(index: _currentIndex, children: [
+        Beamer(
+          routerDelegate: _routerDelegates[0],
+        ),
+        Beamer(
+          routerDelegate: _routerDelegates[1],
+        ),
+        Beamer(
+          routerDelegate: _routerDelegates[2],
+        ),
+      ]),
+
+      // use an IndexedStack to choose which child to show
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.fitness_center),
+            label: 'Exercise',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.view_list),
+            label: 'Workout history',
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.settings), label: 'Settings'),
+        ],
+        onTap: (index) {
+          if (index != _currentIndex) {
+            setState(() => _currentIndex = index);
+            _routerDelegates[_currentIndex].update(rebuild: false);
+          }
+        },
+      ),
+    );
+  }
+}
+
+class ExerciseLocation extends BeamLocation<BeamState> {
+  ExerciseLocation(super.routeInformation);
+
+  @override
+  List<BeamPage> buildPages(BuildContext context, BeamState state) => [
+        const BeamPage(
+          key: ValueKey('exercise'),
+          title: 'Exercise',
+          type: BeamPageType.noTransition,
+          child: ExercisePage(title: 'Exercise'),
+        ),
+      ];
+
+  @override
+  List<Pattern> get pathPatterns => ['/*'];
+}
+
+class SessionsLocation extends BeamLocation<BeamState> {
+  SessionsLocation(super.routeInformation);
+
+  @override
+  List<BeamPage> buildPages(BuildContext context, BeamState state) => [
+        const BeamPage(
+          key: ValueKey('sessions'),
+          title: 'Sessions',
+          type: BeamPageType.noTransition,
+          child: SessionsPage(),
+        ),
+        if (state.uri.pathSegments.length == 2)
+          const BeamPage(
+            key: ValueKey('sessions/session'),
+            title: 'Session',
+            child: SessionPage(),
+          )
+      ];
+
+  @override
+  List<Pattern> get pathPatterns => ['/*'];
+}
+
+class SettingsLocation extends BeamLocation<BeamState> {
+  SettingsLocation(super.routeInformation);
+
+  @override
+  List<BeamPage> buildPages(BuildContext context, BeamState state) => [
+        const BeamPage(
+          key: ValueKey('settings'),
+          title: 'Sessions',
+          type: BeamPageType.noTransition,
+          child: SettingsPage(),
+        ),
+      ];
+
+  @override
+  List<Pattern> get pathPatterns => ['/*'];
+}
+
 void saveDefaultDevice(ScannedDevice? device) {
   if (device != null) {
     sharedPreferences.setString(prefDefaultDeviceName, device.name);
@@ -175,4 +322,56 @@ ScannedDevice? getDefaultDevice() {
   return (name != null && id != null)
       ? ScannedDevice(deviceId: id, name: name)
       : null;
+}
+
+//TODO Move to separate files when we add something useful
+
+class SessionsPage extends StatelessWidget {
+  const SessionsPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Sessions'),
+      ),
+      body: Center(
+          child: TextButton(
+        child: const Text('Sessions'),
+        onPressed: () => Beamer.of(context).beamToNamed("/sessions/session"),
+      )),
+    );
+  }
+}
+
+class SessionPage extends StatelessWidget {
+  const SessionPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Session Details'),
+      ),
+      body: const Center(
+        child: Text('Session info'),
+      ),
+    );
+  }
+}
+
+class SettingsPage extends StatelessWidget {
+  const SettingsPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Settings'),
+      ),
+      body: const Center(
+        child: Text('Settings'),
+      ),
+    );
+  }
 }
