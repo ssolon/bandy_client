@@ -240,7 +240,6 @@ class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
     return Swipe(
       onSwipeLeft: () {
         if (baseIndex == 0) {
-          talker.info("Swipe to TalkerScreen");
           setState(() {
             baseIndex = 1;
           });
@@ -248,47 +247,50 @@ class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
       },
       onSwipeRight: () {
         if (baseIndex == 1) {
-          talker.info("Swipe from TalkerScreen");
           setState(() {
             baseIndex = 0;
           });
         }
       },
       child: IndexedStack(index: baseIndex, children: [
-        Scaffold(
-          body: IndexedStack(index: _currentIndex, children: [
-            Beamer(
-              routerDelegate: _routerDelegates[0],
-            ),
-            Beamer(
-              routerDelegate: _routerDelegates[1],
-            ),
-            Beamer(
-              routerDelegate: _routerDelegates[2],
-            ),
-          ]),
+        TalkerWrapper(
+          talker: talker,
+          options: const TalkerWrapperOptions(enableErrorAlerts: true),
+          child: Scaffold(
+            body: IndexedStack(index: _currentIndex, children: [
+              Beamer(
+                routerDelegate: _routerDelegates[0],
+              ),
+              Beamer(
+                routerDelegate: _routerDelegates[1],
+              ),
+              Beamer(
+                routerDelegate: _routerDelegates[2],
+              ),
+            ]),
 
-          // use an IndexedStack to choose which child to show
-          bottomNavigationBar: BottomNavigationBar(
-            currentIndex: _currentIndex,
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.fitness_center),
-                label: 'Exercise',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.view_list),
-                label: 'Workout history',
-              ),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.settings), label: 'Settings'),
-            ],
-            onTap: (index) {
-              if (index != _currentIndex) {
-                setState(() => _currentIndex = index);
-                _routerDelegates[_currentIndex].update(rebuild: false);
-              }
-            },
+            // use an IndexedStack to choose which child to show
+            bottomNavigationBar: BottomNavigationBar(
+              currentIndex: _currentIndex,
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.fitness_center),
+                  label: 'Exercise',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.view_list),
+                  label: 'Workout history',
+                ),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.settings), label: 'Settings'),
+              ],
+              onTap: (index) {
+                if (index != _currentIndex) {
+                  setState(() => _currentIndex = index);
+                  _routerDelegates[_currentIndex].update(rebuild: false);
+                }
+              },
+            ),
           ),
         ),
         Beamer(
