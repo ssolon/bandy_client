@@ -49,6 +49,8 @@ dependencies:
   fpdart: ^0.3.0
   sqflite: ^2.2.0+3
   beamer: ^1.5.3
+  talker_flutter: ^2.1.0+1
+  swipe: ^0.0.1
 
 dev_dependencies:
   flutter_test:

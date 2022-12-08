@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:bandy_client/repositories/db/init_bandy_db.dart';
@@ -6,6 +7,7 @@ import 'package:bandy_client/views/device_display.dart';
 import 'package:bandy_client/views/scanner_page.dart';
 import 'package:bandy_client/views/workout_display.dart';
 import 'package:beamer/beamer.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_loggy/flutter_loggy.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
@@ -13,7 +15,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:talker/talker.dart';
+import 'package:swipe/swipe.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 import 'ble/scanner/logic/scanned_device.dart';
 
@@ -60,9 +63,22 @@ void main() async {
   final db = InitBandyDatabase();
   await db.open();
 
-  runApp(ProviderScope(overrides: [
-    kaleidaLogDbProvider.overrideWithValue(db),
-  ], child: MyApp()));
+  PlatformDispatcher.instance.onError = (exception, stackTrace) {
+    talker.error("Error PlatformDispatcher.onError", exception, stackTrace);
+    return true;
+  };
+
+  FlutterError.onError =
+      (details) => talker.error("Caught by FlutterError=$details");
+
+  runZonedGuarded(
+    () => runApp(
+      ProviderScope(overrides: [
+        kaleidaLogDbProvider.overrideWithValue(db),
+      ], child: MyApp()),
+    ),
+    (error, stack) => talker.handle(error, stack, "From runZoneGuarded"),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -169,6 +185,7 @@ class ScaffoldWithBottomNavBar extends StatefulWidget {
 
 class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
   late int _currentIndex;
+  int baseIndex = 0;
 
   final _routerDelegates = [
     BeamerDelegate(
@@ -198,6 +215,14 @@ class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
         return NotFound(path: routeInformation.location!);
       },
     ),
+    BeamerDelegate(
+        initialPath: '/log',
+        locationBuilder: (RouteInformation routeInformation, _) {
+          if (routeInformation.location!.contains('/log')) {
+            return LogLocation(routeInformation);
+          }
+          return NotFound(path: routeInformation.location!);
+        }),
   ];
 
   // update the _currentIndex if necessary
@@ -212,43 +237,83 @@ class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: IndexedStack(index: _currentIndex, children: [
-        Beamer(
-          routerDelegate: _routerDelegates[0],
+    return Swipe(
+      onSwipeLeft: () {
+        if (baseIndex == 0) {
+          talker.info("Swipe to TalkerScreen");
+          setState(() {
+            baseIndex = 1;
+          });
+        }
+      },
+      onSwipeRight: () {
+        if (baseIndex == 1) {
+          talker.info("Swipe from TalkerScreen");
+          setState(() {
+            baseIndex = 0;
+          });
+        }
+      },
+      child: IndexedStack(index: baseIndex, children: [
+        Scaffold(
+          body: IndexedStack(index: _currentIndex, children: [
+            Beamer(
+              routerDelegate: _routerDelegates[0],
+            ),
+            Beamer(
+              routerDelegate: _routerDelegates[1],
+            ),
+            Beamer(
+              routerDelegate: _routerDelegates[2],
+            ),
+          ]),
+
+          // use an IndexedStack to choose which child to show
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: _currentIndex,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.fitness_center),
+                label: 'Exercise',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.view_list),
+                label: 'Workout history',
+              ),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.settings), label: 'Settings'),
+            ],
+            onTap: (index) {
+              if (index != _currentIndex) {
+                setState(() => _currentIndex = index);
+                _routerDelegates[_currentIndex].update(rebuild: false);
+              }
+            },
+          ),
         ),
         Beamer(
-          routerDelegate: _routerDelegates[1],
-        ),
-        Beamer(
-          routerDelegate: _routerDelegates[2],
+          routerDelegate: _routerDelegates[3],
         ),
       ]),
-
-      // use an IndexedStack to choose which child to show
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.fitness_center),
-            label: 'Exercise',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.view_list),
-            label: 'Workout history',
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings), label: 'Settings'),
-        ],
-        onTap: (index) {
-          if (index != _currentIndex) {
-            setState(() => _currentIndex = index);
-            _routerDelegates[_currentIndex].update(rebuild: false);
-          }
-        },
-      ),
     );
   }
+}
+
+class LogLocation extends BeamLocation<BeamState> {
+  LogLocation(super.routeInformation);
+
+  @override
+  List<BeamPage> buildPages(BuildContext context, BeamState state) => [
+        BeamPage(
+          key: const ValueKey('log'),
+          title: 'Log',
+          type: BeamPageType.slideRightTransition,
+          child: TalkerScreen(talker: talker),
+        ),
+      ];
+
+  @override
+  List<Pattern> get pathPatterns => ['/log'];
 }
 
 class ExerciseLocation extends BeamLocation<BeamState> {
@@ -283,6 +348,7 @@ class SessionsLocation extends BeamLocation<BeamState> {
           const BeamPage(
             key: ValueKey('sessions/session'),
             title: 'Session',
+            type: BeamPageType.slideRightTransition,
             child: SessionPage(),
           )
       ];
@@ -369,8 +435,14 @@ class SettingsPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Settings'),
       ),
-      body: const Center(
-        child: Text('Settings'),
+      body: Center(
+        child: ElevatedButton(
+          child: const Text('Throw exception!'),
+          onPressed: () async {
+            return Future.delayed(const Duration(),
+                () => throw (Exception("Dummy exception for testing")));
+          },
+        ),
       ),
     );
   }
