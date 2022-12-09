@@ -4,8 +4,8 @@ import 'package:bandy_client/exercise/exercise.dart';
 import 'package:bandy_client/main.dart';
 import 'package:bandy_client/repositories/db/init_bandy_db.dart';
 import 'package:bandy_client/repositories/db/kaleidalog_sqlite.dart';
-import 'package:bandy_client/workout_session/workout_session_notifier.dart';
-import 'package:bandy_client/workout_session/workout_session_state.dart';
+import 'package:bandy_client/workout_session/current/workout_session_notifier.dart';
+import 'package:bandy_client/workout_session/current/workout_session_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:uuid/uuid.dart';
@@ -34,6 +34,13 @@ class WorkoutRepository {
 
     // TODO DTO objects?
     return exercises;
+  }
+
+  /// Return all sessions
+  Future<QueryResult> getSessions() async {
+    final sessions = ref.read(kaleidaLogDbProvider).fetchSessions();
+
+    return sessions;
   }
 
   /// Persist [theWorkoutSession] to the persistence store.

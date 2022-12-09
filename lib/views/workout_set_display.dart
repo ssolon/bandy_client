@@ -1,8 +1,8 @@
 import 'package:bandy_client/ble/scanner/logic/scanned_device.dart';
 import 'package:bandy_client/exercise/exercise.dart';
 import 'package:bandy_client/views/rep_list_display.dart';
-import 'package:bandy_client/workout_session/workout_session_notifier.dart';
-import 'package:bandy_client/workout_session/workout_session_state.dart';
+import 'package:bandy_client/workout_session/current/workout_session_notifier.dart';
+import 'package:bandy_client/workout_session/current/workout_session_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

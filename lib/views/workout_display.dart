@@ -1,6 +1,6 @@
 import 'package:bandy_client/timers/workout_timer.dart';
 import 'package:bandy_client/views/exercise_display.dart';
-import 'package:bandy_client/workout_session/workout_session_notifier.dart';
+import 'package:bandy_client/workout_session/current/workout_session_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

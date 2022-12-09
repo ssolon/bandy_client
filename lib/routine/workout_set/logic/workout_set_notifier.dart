@@ -3,7 +3,7 @@ import 'package:bandy_client/ble/scanner/logic/scanned_device.dart';
 import 'package:bandy_client/exercise/current/current_exercise_notifier.dart';
 import 'package:bandy_client/exercise/exercise.dart';
 import 'package:bandy_client/routine/rep_counter.dart';
-import 'package:bandy_client/workout_session/workout_session_notifier.dart';
+import 'package:bandy_client/workout_session/current/workout_session_notifier.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../exercise/current/current_exercise_state.dart';

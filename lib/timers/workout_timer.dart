@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:bandy_client/workout_session/workout_session_notifier.dart';
+import 'package:bandy_client/workout_session/current/workout_session_notifier.dart';
 import 'package:loggy/loggy.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../workout_session/workout_session_state.dart';
+import '../workout_session/current/workout_session_state.dart';
 
 part 'workout_timer.g.dart';
 

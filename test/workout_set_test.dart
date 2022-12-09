@@ -8,7 +8,7 @@ import 'package:bandy_client/exercise/list/exercise_list_state.dart';
 import 'package:bandy_client/routine/rep_counter.dart';
 import 'package:bandy_client/routine/workout_set/logic/workout_set_notifier.dart';
 import 'package:bandy_client/routine/workout_set/logic/workout_set_state.dart';
-import 'package:bandy_client/workout_session/workout_session_notifier.dart';
+import 'package:bandy_client/workout_session/current/workout_session_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
