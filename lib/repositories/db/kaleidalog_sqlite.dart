@@ -12,6 +12,15 @@ final kaleidaLogDbProvider =
 
 typedef QueryResult = List<Map<String, Object?>>;
 
+enum DateOrder {
+  oldest('ASC'),
+  newest('DESC');
+
+  const DateOrder(this.order);
+
+  final String order;
+}
+
 /// All the methods that we'll need any database to provide
 abstract class DB {
   /// Execute [sql] using [arguments].
@@ -43,6 +52,21 @@ abstract class DB {
     UuidValue? parentId,
     String? jsonDetails,
   });
+
+  /// Fetch
+  // FIXME Make [order] work -- was getting an error passing parameters
+  Future<QueryResult> fetchSessions({DateOrder order = DateOrder.newest}) {
+    const sql = '''
+      SELECT e.event_id, et.event_type_name, e.event_at
+        FROM events e
+        JOIN event_types et USING(event_type_id)
+        JOIN tags_for_event_type tfet USING(event_type_id)
+        JOIN tags t USING(tag_id)
+      WHERE et.event_type_name = 'Session' AND t.tag_name = 'bandy'
+      ORDER BY e.event_at DESC''';
+
+    return executeQuery(sql, []); //['DESC']);
+  }
 }
 
 /// Kaleidalog specific database operations

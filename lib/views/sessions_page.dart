@@ -1,3 +1,5 @@
+import 'package:bandy_client/main.dart';
+import 'package:bandy_client/workout_session/list/workout_session_list_notifier.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,35 +12,70 @@ class SessionsPage extends ConsumerStatefulWidget {
 }
 
 class _SessionsPageState extends ConsumerState<SessionsPage> {
-  static final items = [
-    ['20221202 14:22', 'Session1'],
-    ['20221207 16:50', 'Session2'],
-    ['20221214 13:18', 'Session3'],
-  ];
+  int retry = 0;
+
   @override
   Widget build(BuildContext context) {
+    final sessions = ref.watch(workoutSessionListNotifierProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sessions'),
+        actions: [
+          // TODO Some sort of feedback on refresh
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            tooltip: 'Refresh',
+            onPressed: () => _refresh(),
+          ),
+        ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListView.builder(
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                final idIndex = index;
-                Beamer.of(context)
-                    .beamToNamed("/sessions/${items[idIndex][1]}");
-              },
-              child: Card(
-                child: ListTile(title: Text(items[index][0])),
-              ),
-            );
-          },
+      body: sessions.when(
+        error: _handleError,
+        loading: () => const CircularProgressIndicator(),
+        data: (data) => Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView.builder(
+            itemCount: data.items.length,
+            itemBuilder: (context, index) {
+              final session = data.items[index];
+              return GestureDetector(
+                onTap: () {
+                  Beamer.of(context)
+                      .beamToNamed("/sessions/${session.sessionId}");
+                },
+                child: Card(
+                  key: ValueKey(session.sessionId),
+                  child: ListTile(title: Text(session.sessionAt.toString())),
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
+  }
+
+  Widget? _handleError(Object error, StackTrace stackTrace) {
+    talker.handle(error, stackTrace);
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Text("Error fetching sessions=$error"),
+          ElevatedButton(
+            onPressed: () {
+              retry += 1;
+              _refresh();
+            },
+            child: Text('Retry ($retry tries)'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _refresh() {
+    ref.read(workoutSessionListNotifierProvider.notifier).fetch();
   }
 }

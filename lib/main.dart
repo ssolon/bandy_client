@@ -5,6 +5,7 @@ import 'package:bandy_client/repositories/db/init_bandy_db.dart';
 import 'package:bandy_client/repositories/db/kaleidalog_sqlite.dart';
 import 'package:bandy_client/views/device_display.dart';
 import 'package:bandy_client/views/scanner_page.dart';
+import 'package:bandy_client/views/sessions_page.dart';
 import 'package:bandy_client/views/workout_display.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter/foundation.dart';
@@ -332,31 +333,37 @@ class ExerciseLocation extends BeamLocation<BeamState> {
       ];
 
   @override
-  List<Pattern> get pathPatterns => ['/*'];
+  List<Pattern> get pathPatterns => ['/exercise'];
 }
 
 class SessionsLocation extends BeamLocation<BeamState> {
   SessionsLocation(super.routeInformation);
 
   @override
-  List<BeamPage> buildPages(BuildContext context, BeamState state) => [
-        const BeamPage(
-          key: ValueKey('sessions'),
-          title: 'Sessions',
-          type: BeamPageType.noTransition,
-          child: SessionsPage(),
-        ),
-        if (state.uri.pathSegments.length == 2)
-          const BeamPage(
-            key: ValueKey('sessions/session'),
-            title: 'Session',
-            type: BeamPageType.slideRightTransition,
-            child: SessionPage(),
-          )
-      ];
+  List<BeamPage> buildPages(BuildContext context, BeamState state) {
+    final pages = [
+      const BeamPage(
+        key: ValueKey('sessions'),
+        title: 'Sessions',
+        type: BeamPageType.noTransition,
+        child: SessionsPage(),
+      ),
+    ];
+
+    if (state.uri.pathSegments.length == 2) {
+      final id = state.uri.pathSegments[1];
+      pages.add(BeamPage(
+        key: ValueKey("sessions/$id"),
+        title: 'Session',
+        type: BeamPageType.slideRightTransition,
+        child: const SessionPage(),
+      ));
+    }
+    return pages;
+  }
 
   @override
-  List<Pattern> get pathPatterns => ['/*'];
+  List<Pattern> get pathPatterns => ['/sessions/:sessionId'];
 }
 
 class SettingsLocation extends BeamLocation<BeamState> {
@@ -373,7 +380,7 @@ class SettingsLocation extends BeamLocation<BeamState> {
       ];
 
   @override
-  List<Pattern> get pathPatterns => ['/*'];
+  List<Pattern> get pathPatterns => ['/settings'];
 }
 
 void saveDefaultDevice(ScannedDevice? device) {
@@ -392,37 +399,20 @@ ScannedDevice? getDefaultDevice() {
       : null;
 }
 
-//TODO Move to separate files when we add something useful
-
-class SessionsPage extends StatelessWidget {
-  const SessionsPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sessions'),
-      ),
-      body: Center(
-          child: TextButton(
-        child: const Text('Sessions'),
-        onPressed: () => Beamer.of(context).beamToNamed("/sessions/session"),
-      )),
-    );
-  }
-}
-
 class SessionPage extends StatelessWidget {
   const SessionPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final beamState = Beamer.of(context).currentBeamLocation.state as BeamState;
+    final sessionId = beamState.pathParameters['sessionId'];
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Session Details'),
+        title: const Text("Session Details"),
       ),
-      body: const Center(
-        child: Text('Session info'),
+      body: Center(
+        child: Text("Session id=$sessionId"),
       ),
     );
   }
