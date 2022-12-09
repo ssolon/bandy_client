@@ -3,6 +3,7 @@ import 'package:bandy_client/workout_session/list/workout_session_list_notifier.
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 class SessionsPage extends ConsumerStatefulWidget {
   const SessionsPage({super.key});
@@ -13,6 +14,7 @@ class SessionsPage extends ConsumerStatefulWidget {
 
 class _SessionsPageState extends ConsumerState<SessionsPage> {
   int retry = 0;
+  final dateFormat = DateFormat.yMMMMd().add_jm();
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,8 @@ class _SessionsPageState extends ConsumerState<SessionsPage> {
                 },
                 child: Card(
                   key: ValueKey(session.sessionId),
-                  child: ListTile(title: Text(session.sessionAt.toString())),
+                  child: ListTile(
+                      title: Text(dateFormat.format(session.sessionAt))),
                 ),
               );
             },
