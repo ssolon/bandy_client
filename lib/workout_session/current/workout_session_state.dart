@@ -13,7 +13,7 @@ class WorkoutSessionState with _$WorkoutSessionState {
   factory WorkoutSessionState.completed(
       {UuidValue? id,
       required DateTime starting,
-      required DateTime ending,
+      DateTime? ending,
       required List<WorkoutSetState> sets}) = Completed;
 
   factory WorkoutSessionState.initial() = Initial;

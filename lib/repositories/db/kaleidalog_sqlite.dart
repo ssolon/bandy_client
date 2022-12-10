@@ -7,10 +7,38 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
 
+// Table/field name names
+
+const tagsTable = "tags";
+const tagIdColumn = "tag_id";
+const tagNameColumn = "tag_name";
+const tagDescriptionColumn = "tag_description";
+
+const eventTypesTable = "event_types";
+const eventTypeIdColumn = "event_type_id";
+const eventTypeNameColumn = "event_type_name";
+const eventTypeDescriptionColumn = "event_type_description";
+const eventTypeDetailsColumn = "event_type_details";
+
+const eventsTable = "events";
+const eventIdColumn = "event_id";
+const eventAtColumn = "event_at";
+const eventParentIdColumn = "event_parent_id";
+const eventDetailsColumn = "event_details";
+
+const tagsForEventTable = "tags_for_event";
+
+const tagsForEventTypeTable = "tags_for_event_type";
+
+const userSettingsTable = "user_settings";
+const settingIdColumn = "setting_id";
+const settingsColumn = "settings";
+
 final kaleidaLogDbProvider =
     Provider<DB>((_) => throw Exception('KaleidalogDB not initialized'));
 
-typedef QueryResult = List<Map<String, Object?>>;
+typedef TableRow = Map<String, Object?>;
+typedef QueryResult = List<TableRow>;
 
 enum DateOrder {
   oldest('ASC'),
@@ -67,6 +95,26 @@ abstract class DB {
 
     return executeQuery(sql, []); //['DESC']);
   }
+
+  Future<QueryResult> fetchSession(UuidValue sessionId) {
+    const sql = '''
+      WITH RECURSIVE workout AS (
+        SELECT e.event_id, e.event_type_id, et.event_type_name, e.event_at, e.event_parent_id, e.event_details, 1 as level
+          FROM events e
+          JOIN event_types et USING(event_type_id)
+          WHERE event_id = ?
+          UNION ALL
+          SELECT this.event_id, this.event_type_id, et.event_type_name, this.event_at, this.event_parent_id, this.event_details, level + 1
+            FROM events this
+            JOIN event_types et USING(event_type_id)
+            INNER JOIN workout prior ON this.event_parent_id = prior.event_id
+      )
+      SELECT w.event_type_name, w.event_type_id, w.event_id, w.event_at, w.level, w.event_details
+      FROM workout w
+      ORDER BY w.event_at''';
+
+    return executeQuery(sql, [sessionId.toString()]);
+  }
 }
 
 /// Kaleidalog specific database operations
@@ -74,33 +122,6 @@ class KaleidaLogDb extends DB {
   late final String dbName;
   Database? _db;
   final Uuid uuid = const Uuid();
-
-  // Table/field name names
-
-  static const tagsTable = "tags";
-  static const tagIdColumn = "tag_id";
-  static const tagNameColumn = "tag_name";
-  static const tagDescriptionColumn = "tag_description";
-
-  static const eventTypesTable = "event_types";
-  static const eventTypeIdColumn = "event_type_id";
-  static const eventTypeNameColumn = "event_type_name";
-  static const eventTypeDescriptionColumn = "event_type_description";
-  static const eventTypeDetailsColumn = "event_type_details";
-
-  static const eventsTable = "events";
-  static const eventIdColumn = "event_id";
-  static const eventAtColumn = "event_at";
-  static const eventParentIdColumn = "event_parent_id";
-  static const eventDetailsColumn = "event_details";
-
-  static const tagsForEventTable = "tags_for_event";
-
-  static const tagsForEventTypeTable = "tags_for_event_type";
-
-  static const userSettingsTable = "user_settings";
-  static const settingIdColumn = "setting_id";
-  static const settingsColumn = "settings";
 
   Database get db =>
       _db != null ? _db! : throw Exception("Uninitialized/closed database");

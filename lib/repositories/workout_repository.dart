@@ -57,13 +57,17 @@ class WorkoutRepository {
 
   // Convert to a series of kaleidalog events
   // TODO Wrap these in a transaction?
-  Future<void> persistSession(UuidValue? id, DateTime starting, DateTime ending,
-      List<WorkoutSetState> sets) async {
+  Future<void> persistSession(UuidValue? id, DateTime starting,
+      DateTime? ending, List<WorkoutSetState> sets) async {
+    final details = ending == null
+        ? null
+        : json.encode("{'ending': ${ending.toIso8601String()}}");
+
     final sessionId = await ref.read(kaleidaLogDbProvider).createEvent(
           eventId: id,
           at: starting,
           eventTypeId: UuidValue(sessionTypeUUID),
-          jsonDetails: json.encode({'ending': ending.toIso8601String()}),
+          jsonDetails: details,
         );
 
     for (final s in sets) {
@@ -127,5 +131,109 @@ class WorkoutRepository {
     final instants = rep.instants;
 
     return instants.isNotEmpty ? Option.of(instants.first.when) : Option.none();
+  }
+
+  /// Get the session for [sessionId]
+  Future<WorkoutSessionState> getSession(UuidValue sessionId) async {
+    final sessionEvents =
+        await ref.read(kaleidaLogDbProvider).fetchSession(sessionId);
+
+    // TODO Error handling here or let the notifier handle it via AsyncValue?
+
+    if (sessionEvents.isEmpty) {
+      return Future.error("No session with id=$sessionId");
+    }
+
+    // The first entry should be the session -- or our SQL is broken
+
+    final firstEvent = sessionEvents.first;
+    if (typeId(firstEvent) != sessionTypeUUID) {
+      return Future.error(
+          "Malformed session - no session header (type=${type(firstEvent)}");
+    }
+
+    // Double check the sessionId is what we wanted
+    final eventSessionId = firstEvent[eventIdColumn].toString();
+    if (eventSessionId != sessionId.toString()) {
+      return Future.error("Fetch sessionId = $eventSessionId != $sessionId");
+    }
+
+    // Create the result session
+    var result = WorkoutSessionState.completed(
+        id: UuidValue(sessionId.toString()),
+        starting: at(firstEvent),
+        sets: []);
+
+    // Iterate over the rest of the events rebuilding the session
+
+    WorkoutSetState? currentSet;
+
+    for (final event in sessionEvents.skip(1)) {
+      switch (typeId(event)) {
+        case workoutSetTypeUUID:
+          if (currentSet != null) {
+            result = addSet(result, currentSet);
+          }
+
+          // Start the next set, if any
+          currentSet = makeWorkoutSet(event);
+
+          break;
+
+        default: // Should be a rep so add it the current set
+          currentSet = addRep(currentSet!, event);
+          break;
+      }
+    }
+
+    // Add the last set
+    if (currentSet != null) {
+      if (currentSet.maybeWhen((exercise, setNumber, reps) => reps.isNotEmpty,
+          orElse: () => false)) {
+        result = addSet(result, currentSet);
+      }
+    }
+    return Future.value(result);
+  }
+
+  /// Add [set] to [session] returning the updated session.
+  WorkoutSessionState addSet(WorkoutSessionState session, WorkoutSetState set) {
+    return session.maybeMap(
+        (s) => throw Exception("Unexpected session state InProgress"),
+        completed: (s) => s.copyWith(sets: List.from(s.sets)..add(set)),
+        orElse: () => throw Exception(
+            "Unexpected session state=${session.runtimeType} expected completed"));
+  }
+
+  /// Create a workoutSet from [row]
+  WorkoutSetState makeWorkoutSet(TableRow row) {
+    final details = json.decode(row[eventDetailsColumn].toString());
+    return WorkoutSetState(
+      setNumber: details['count'] ?? 0,
+      reps: [],
+    );
+  }
+
+  /// Create a RepCount from [row] and add it to [set] returning the updated
+  /// [WorkoutSetState].
+  WorkoutSetState addRep(WorkoutSetState workoutSet, TableRow row) {
+    final repCount =
+        RepCount.fromJson(json.decode(row[eventDetailsColumn].toString()));
+    return workoutSet.maybeMap(
+        (w) => w.copyWith(reps: List<RepCount>.from(w.reps)..add(repCount)),
+        orElse: () => throw Exception(
+            "addRep:Unexpected workoutSet state=${workoutSet.runtimeType}"));
+  }
+
+  DateTime at(TableRow row) {
+    return DateTime.parse(row[eventAtColumn] as String);
+  }
+
+  String type(TableRow row) {
+    return row[eventTypeNameColumn].toString();
+  }
+
+  String typeId(TableRow row) {
+    return row[eventTypeIdColumn].toString();
   }
 }

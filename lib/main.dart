@@ -5,6 +5,7 @@ import 'package:bandy_client/repositories/db/init_bandy_db.dart';
 import 'package:bandy_client/repositories/db/kaleidalog_sqlite.dart';
 import 'package:bandy_client/views/device_display.dart';
 import 'package:bandy_client/views/scanner_page.dart';
+import 'package:bandy_client/views/session_page.dart';
 import 'package:bandy_client/views/sessions_page.dart';
 import 'package:bandy_client/views/workout_display.dart';
 import 'package:beamer/beamer.dart';
@@ -397,25 +398,6 @@ ScannedDevice? getDefaultDevice() {
   return (name != null && id != null)
       ? ScannedDevice(deviceId: id, name: name)
       : null;
-}
-
-class SessionPage extends StatelessWidget {
-  const SessionPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final beamState = Beamer.of(context).currentBeamLocation.state as BeamState;
-    final sessionId = beamState.pathParameters['sessionId'];
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Session Details"),
-      ),
-      body: Center(
-        child: Text("Session id=$sessionId"),
-      ),
-    );
-  }
 }
 
 class SettingsPage extends StatelessWidget {
