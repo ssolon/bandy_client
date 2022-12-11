@@ -63,9 +63,22 @@ class WorkoutRepository {
         ? null
         : json.encode("{'ending': ${ending.toIso8601String()}}");
 
+    // Make sure that this session has a start before the first set.
+    // We shouldn't let this happen but we'll fix it if it does.
+    // FIXME to not let this happen by properly resetting things when we start
+    // the session, or not creating a set unless a session is open, or maybe
+    // we should allow this so you can start exercising even before you remember
+    // to start the session.
+    // In any case do something about it?
+    // TODO Should definitely have a test for this
+
+    final earliest = earliestInSets(sets);
+    final sessionStarts =
+        earliest != null && earliest.isBefore(starting) ? earliest : starting;
+
     final sessionId = await ref.read(kaleidaLogDbProvider).createEvent(
           eventId: id,
-          at: starting,
+          at: sessionStarts,
           eventTypeId: UuidValue(sessionTypeUUID),
           jsonDetails: details,
         );
@@ -76,6 +89,11 @@ class WorkoutRepository {
               throw ("Invalid state for persistSet=${s.runtimeType}"));
     }
   }
+
+  /// Return the earliest DateTime in [sets] which we'll assume is the
+  /// starting DateTime of the first set (if any).
+  DateTime? earliestInSets(List<WorkoutSetState> sets) =>
+      sets.isNotEmpty ? sets.first.starting : null;
 
   /// Persist [workoutSet] and all the children reps
   Future<void> persistSet(UuidValue parentId, Data workoutSet) async {

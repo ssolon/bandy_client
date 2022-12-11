@@ -6,6 +6,8 @@ part 'workout_set_state.freezed.dart';
 
 @freezed
 class WorkoutSetState with _$WorkoutSetState {
+  const WorkoutSetState._();
+
   /// Data is present state
   const factory WorkoutSetState(
       {Exercise? exercise,
@@ -20,4 +22,13 @@ class WorkoutSetState with _$WorkoutSetState {
 
   /// Error when loading data state
   const factory WorkoutSetState.error([String? message]) = Error;
+
+  /// Return the start of this set which is the first instance of the first rep.
+  DateTime? get starting {
+    // ignore: unnecessary_this
+    return this.maybeWhen(
+        (exercise, setNumber, reps) =>
+            reps.isNotEmpty ? reps.first.reps.instants.first.when : null,
+        orElse: () => null);
+  }
 }
