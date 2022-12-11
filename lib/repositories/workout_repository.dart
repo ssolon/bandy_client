@@ -91,9 +91,9 @@ class WorkoutRepository {
         final details = json.encode({
           if (workoutSet.exercise != null) ...{
             'exercise': workoutSet.exercise!.name,
-            'exercise_id': workoutSet.exercise!.id,
+            'exercise_id': workoutSet.exercise!.id.toString(),
           },
-          'count': repCounts.length,
+          'set_number': workoutSet.setNumber,
           // TODO Add "effort" when we compute it
         });
         final setId = await ref.read(kaleidaLogDbProvider).createEvent(
@@ -208,10 +208,19 @@ class WorkoutRepository {
   /// Create a workoutSet from [row]
   WorkoutSetState makeWorkoutSet(TableRow row) {
     final details = json.decode(row[eventDetailsColumn].toString());
+
     return WorkoutSetState(
-      setNumber: details['count'] ?? 0,
+      exercise: exerciseFromDetails(details),
+      setNumber: details['set_number'] ?? 0,
       reps: [],
     );
+  }
+
+  Exercise? exerciseFromDetails(details) {
+    final id = details['exercise_id'];
+    return id == null
+        ? null
+        : Exercise(UuidValue(id), details['exercise'] ?? '');
   }
 
   /// Create a RepCount from [row] and add it to [set] returning the updated
