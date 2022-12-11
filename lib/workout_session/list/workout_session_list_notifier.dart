@@ -26,6 +26,11 @@ class WorkoutSessionListNotifier extends _$WorkoutSessionListNotifier {
     return fetch();
   }
 
+  /// Reload the sessions list from the source
+  void reload() async {
+    state = AsyncValue.data(await fetch());
+  }
+
   FutureOr<WorkoutSessionListState> fetch() async {
     return WorkoutSessionListState(items: [
       for (final session

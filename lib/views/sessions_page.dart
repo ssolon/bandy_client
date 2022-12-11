@@ -79,6 +79,6 @@ class _SessionsPageState extends ConsumerState<SessionsPage> {
   }
 
   _refresh() {
-    ref.read(workoutSessionListNotifierProvider.notifier).fetch();
+    ref.read(workoutSessionListNotifierProvider.notifier).reload();
   }
 }
