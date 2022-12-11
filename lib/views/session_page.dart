@@ -5,9 +5,16 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:loggy/loggy.dart';
 import 'package:uuid/uuid.dart';
 
+import '../exercise/exercise.dart';
+import '../routine/rep_counter.dart';
+
 final dateFormat = DateFormat.MMMEd().add_jms();
+
+/// What we show when we don't have a name for an exercise
+const noExerciseName = '????';
 
 class SessionPage extends ConsumerStatefulWidget {
   const SessionPage({super.key});
@@ -35,7 +42,7 @@ class _SessionPageState extends ConsumerState<SessionPage> {
             data: (data) => data.maybeWhen(
               (starting, sets) => Text(
                   "session_page:Unexpected state for sessionId=$sessionId type=${data.runtimeType}"),
-              completed: (id, starting, ending, sets) => Column(
+              completed: (id, starting, ending, sets) => ListView(
                 children: [
                   Text(
                     dateFormat.format(starting),
@@ -70,12 +77,46 @@ class _WorkoutSetDisplayWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        workoutSet.maybeWhen((exercise, setNumber, reps) {
-          return Text("WorkoutSet - ${reps.length} reps");
+        workoutSet.maybeWhen((Exercise? exercise, setNumber, reps) {
+          return Card(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "${exercise?.name ?? noExerciseName} #$setNumber - ${reps.length} reps",
+                  textAlign: TextAlign.start,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+                for (final r in reps)
+                  Container(
+                    padding: const EdgeInsets.only(left: 32.0),
+                    child: Row(
+                      children: [
+                        Text("# ${r.count}"),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 32.0),
+                          child: Text("${r.maxValue}"),
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+          );
         },
             orElse: () => Text(
                 "WorkoutSetDisplay: Invalid set state=${workoutSet.runtimeType}"))
       ],
     );
+  }
+}
+
+class RepDisplayWidget extends StatelessWidget {
+  final RepCount rep;
+  const RepDisplayWidget(this.rep, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }
