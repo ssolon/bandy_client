@@ -22,8 +22,14 @@ class WorkoutRepository {
   final Ref ref;
 
   WorkoutRepository(this.ref) {
-    ref.listen(workoutSessionNotifierProvider,
-        (previous, WorkoutSessionState next) async => saveSession(next));
+    ref.listen(
+      workoutSessionNotifierProvider,
+      (previous, WorkoutSessionState next) async => next.maybeMap(
+        (value) => null, // Ignore in progress
+        completed: (completed) => saveSession(next),
+        orElse: () => null, // Ignore stuff we don't care about
+      ),
+    );
   }
 
   /// Return all bandy exercises

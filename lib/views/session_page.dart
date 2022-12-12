@@ -5,7 +5,6 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:loggy/loggy.dart';
 import 'package:uuid/uuid.dart';
 
 import '../exercise/exercise.dart';

@@ -4,6 +4,7 @@ import 'package:bandy_client/exercise/current/current_exercise_notifier.dart';
 import 'package:bandy_client/exercise/exercise.dart';
 import 'package:bandy_client/routine/rep_counter.dart';
 import 'package:bandy_client/workout_session/current/workout_session_notifier.dart';
+import 'package:bandy_client/workout_session/current/workout_session_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../exercise/current/current_exercise_state.dart';
@@ -29,6 +30,7 @@ class WorkoutSetNotifier extends _$WorkoutSetNotifier {
         setCurrentExercise(next.whenOrNull((exercise) => exercise));
       },
     );
+
     ref.listen(repCounterStateProvider(device),
         (RepCount? previous, RepCount next) {
       if (next.count == 0) {
@@ -40,14 +42,22 @@ class WorkoutSetNotifier extends _$WorkoutSetNotifier {
       }
     });
 
+    ref.listen(
+      workoutSessionNotifierProvider,
+      (WorkoutSessionState? previous, WorkoutSessionState next) {
+        next.maybeMap(
+          (value) => reset(), // start clean
+          finishing: (value) => endSet(), // clear out anything left over
+          orElse: () {}, // ignore anything else
+        );
+      },
+    );
+
     // End set on button click
-    // TODO Have rep counter feed back a reset
+    // TODO Have rep counter feed back an endSet?
     ref.listen(
       button1ClickedProvider(device),
-      (previous, next) {
-        ref.read(repCounterStateProvider(device).notifier).reset();
-        endSet();
-      },
+      (previous, next) => endSet(),
     );
     return const WorkoutSetState.initial();
   }
@@ -89,13 +99,25 @@ class WorkoutSetNotifier extends _$WorkoutSetNotifier {
         exercise: currentExercise, setNumber: setCount, reps: reps);
   }
 
+  /// Reset to a clean state throwing away anything that came before.
+  void reset() {
+    reps = [];
+    setCount = 1;
+
+    state = _createState();
+  }
+
   /// Complete the current set, recording it if there are any reps
   void endSet() {
     if (reps.isNotEmpty) {
       ref.read(workoutSessionNotifierProvider.notifier).addSet(_createState());
     }
 
+    // Prepare for next set (if any)
+    ref.read(repCounterStateProvider(device).notifier).reset();
     reps = [];
     setCount++; // Assume no change to the exercise
+
+    state = _createState();
   }
 }

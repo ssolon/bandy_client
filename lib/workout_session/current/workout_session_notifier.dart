@@ -1,3 +1,4 @@
+import 'package:bandy_client/main.dart';
 import 'package:bandy_client/routine/workout_set/logic/workout_set_state.dart';
 import 'package:loggy/loggy.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -35,18 +36,26 @@ class WorkoutSessionNotifier extends _$WorkoutSessionNotifier with UiLoggy {
       state.maybeMap((inProgress) {
         sets.add(set);
         state = inProgress.copyWith(sets: sets);
+      }, finishing: (value) {
+        // FIXME Update state with new set?
+        sets.add(set);
       }, orElse: () {});
     }, orElse: () {
       // Ignore anything other than Data
-      // TODO Some sort of warning logging/display
+      talker.warning(
+          "workoutSession:addSet called with set=${workoutSet.runtimeType}");
     });
   }
 
   /// End the current session
   void finish() {
     state = state.maybeWhen(
-      (starting, sets) => WorkoutSessionState.completed(
-          starting: starting, ending: DateTime.now(), sets: sets),
+      (starting, sets) {
+        //!!!! Will this work to deliver the message
+        state = WorkoutSessionState.finishing();
+        return WorkoutSessionState.completed(
+            starting: starting, ending: DateTime.now(), sets: sets);
+      },
       orElse: () => WorkoutSessionState.error(
           "Session cannot be finished (state = ${state.runtimeType})"),
     );

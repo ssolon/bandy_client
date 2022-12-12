@@ -18,5 +18,6 @@ class WorkoutSessionState with _$WorkoutSessionState {
 
   factory WorkoutSessionState.initial() = Initial;
   factory WorkoutSessionState.loading() = Loading;
+  factory WorkoutSessionState.finishing() = Finishing;
   factory WorkoutSessionState.error([String? message]) = Error;
 }
