@@ -15,6 +15,7 @@ import 'package:flutter_loggy/flutter_loggy.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loggy/loggy.dart';
+import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swipe/swipe.dart';
@@ -51,7 +52,17 @@ void main() async {
 
   storageDirectory = Platform.isAndroid
       ? await getExternalStorageDirectory()
-      : await getApplicationSupportDirectory();
+      // : await getApplicationSupportDirectory();
+      : await getApplicationDocumentsDirectory(); // so we can access via app
+
+  //!!!! Still not sure about where to write stuff
+  //!!!! Stick a file in documents directory and see if that's visible
+  //!!!! easily, everywhere.
+  final documentsDirectory = await getApplicationDocumentsDirectory();
+  final testDocumentsFile =
+      File(p.join(documentsDirectory.path, 'test_in_documents.txt'));
+  talker.info("Writing test file to=$testDocumentsFile");
+  testDocumentsFile.writeAsStringSync("This is in the documents directory");
 
   // TODO Handle unhandled error like this using talker?
   // runZonedGuarded(
