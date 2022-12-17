@@ -46,7 +46,8 @@ class WorkoutSetNotifier extends _$WorkoutSetNotifier {
       workoutSessionNotifierProvider,
       (WorkoutSessionState? previous, WorkoutSessionState next) {
         next.maybeMap(
-          (value) => reset(), // start clean
+          (value) => null, // ignore in progress
+          initial: (value) => reset(), // TODO Will we get this when we need to?
           finishing: (value) => endSet(), // clear out anything left over
           orElse: () {}, // ignore anything else
         );
