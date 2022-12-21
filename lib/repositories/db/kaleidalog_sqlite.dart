@@ -127,8 +127,7 @@ class KaleidaLogDb extends DB {
       _db != null ? _db! : throw Exception("Uninitialized/closed database");
 
   KaleidaLogDb([String? databaseName]) {
-    dbName = databaseName ??
-        join(storageDirectory!.path, 'bandy_client', 'kaleidalog.db');
+    dbName = databaseName ?? join(storageDirectory!.path, 'kaleidalog.db');
   }
 
   open() async {
