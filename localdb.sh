@@ -1,6 +1,6 @@
 #! /bin/sh
 # Operations on sqlite db on android device (the "local" database on device)
-DB_PATH="/storage/emulated/0/Android/data/com.samuelsolon.bandy_client/files/bandy_client"
+DB_PATH="/storage/emulated/0/Android/data/com.samuelsolon.bandy_client/files/"
 DB_NAME="kaleidalog.db"
 
 case "$1" in
