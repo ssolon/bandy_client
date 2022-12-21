@@ -1,3 +1,4 @@
+import 'package:bandy_client/effort/effort_state.dart';
 import 'package:bandy_client/exercise/exercise.dart';
 import 'package:bandy_client/routine/rep_counter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -12,6 +13,7 @@ class WorkoutSetState with _$WorkoutSetState {
   const factory WorkoutSetState(
       {Exercise? exercise,
       required int setNumber,
+      required EffortState effort,
       required List<RepCount> reps}) = Data;
 
   /// Initial/default state
@@ -27,7 +29,7 @@ class WorkoutSetState with _$WorkoutSetState {
   DateTime? get starting {
     // ignore: unnecessary_this
     return this.maybeWhen(
-        (exercise, setNumber, reps) =>
+        (exercise, setNumber, effort, reps) =>
             reps.isNotEmpty ? reps.first.reps.instants.first.when : null,
         orElse: () => null);
   }

@@ -76,13 +76,13 @@ class _WorkoutSetDisplayWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        workoutSet.maybeWhen((Exercise? exercise, setNumber, reps) {
+        workoutSet.maybeWhen((Exercise? exercise, setNumber, effort, reps) {
           return Card(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "${exercise?.name ?? noExerciseName} #$setNumber - ${reps.length} reps",
+                  "${exercise?.name ?? noExerciseName} #$setNumber - ${reps.length} reps     Effort: ${effort.total} = ${effort.concentric} + ${effort.eccentric}",
                   textAlign: TextAlign.start,
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
@@ -94,8 +94,13 @@ class _WorkoutSetDisplayWidget extends StatelessWidget {
                         Text("# ${r.count}"),
                         Padding(
                           padding: const EdgeInsets.only(left: 32.0),
-                          child: Text("${r.maxValue}"),
+                          child: Text("Max R: ${r.maxValue}"),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Text(
+                              "E: ${r.effort.total} = ${r.effort.concentric} + ${r.effort.eccentric}"),
+                        )
                       ],
                     ),
                   ),

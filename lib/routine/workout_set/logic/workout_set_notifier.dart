@@ -1,5 +1,6 @@
 import 'package:bandy_client/ble/device/logic/device_provider.dart';
 import 'package:bandy_client/ble/scanner/logic/scanned_device.dart';
+import 'package:bandy_client/effort/effort_state.dart';
 import 'package:bandy_client/exercise/current/current_exercise_notifier.dart';
 import 'package:bandy_client/exercise/exercise.dart';
 import 'package:bandy_client/routine/rep_counter.dart';
@@ -20,6 +21,7 @@ class WorkoutSetNotifier extends _$WorkoutSetNotifier {
   int setCount = 1;
 
   Exercise? currentExercise;
+  EffortState effort = EffortState(concentric: 0.0, eccentric: 0.0, total: 0.0);
 
   @override
   WorkoutSetState build(ScannedDevice d) {
@@ -37,8 +39,7 @@ class WorkoutSetNotifier extends _$WorkoutSetNotifier {
         // Ignore initial
         // TODO Use Rep to indicate?
       } else {
-        reps.add(next);
-        state = _createState();
+        state = addRep(next);
       }
     });
 
@@ -61,6 +62,16 @@ class WorkoutSetNotifier extends _$WorkoutSetNotifier {
       (previous, next) => endSet(),
     );
     return const WorkoutSetState.initial();
+  }
+
+  /// Add [rep] to this set
+  WorkoutSetState addRep(RepCount rep) {
+    reps.add(rep);
+
+    // Update effort
+    effort = effort.update(rep.effort);
+
+    return _createState();
   }
 
   /// Handle changing the current exercise by ending the current set
@@ -97,7 +108,10 @@ class WorkoutSetNotifier extends _$WorkoutSetNotifier {
   /// Update the state using the current values
   WorkoutSetState _createState() {
     return WorkoutSetState(
-        exercise: currentExercise, setNumber: setCount, reps: reps);
+        exercise: currentExercise,
+        setNumber: setCount,
+        effort: effort,
+        reps: reps);
   }
 
   /// Reset to a clean state throwing away anything that came before.

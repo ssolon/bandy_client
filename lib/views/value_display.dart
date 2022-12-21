@@ -1,3 +1,4 @@
+import 'package:bandy_client/views/effort_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,12 +15,19 @@ class ValueDisplayWidget extends ConsumerWidget {
     final instant = ref.watch(valueProvider(device));
 
     return Center(
-        child: Text(
-      "${instant.reading}",
-      style: Theme.of(context)
-          .textTheme
-          .displayLarge
-          ?.copyWith(fontWeight: FontWeight.bold),
-    ));
+      child: Column(
+        children: [
+          EffortWidget(device),
+          Text(
+            "${instant.reading}",
+            textAlign: TextAlign.center,
+            style: Theme.of(context)
+                .textTheme
+                .displayLarge
+                ?.copyWith(fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -134,7 +134,7 @@ void main() {
         await container.pump();
 
         workoutSet.maybeWhen(
-          (exercise, setNumber, reps) {
+          (exercise, setNumber, effort, reps) {
             expect(exercise, isNull, reason: 'Initial exercise is null');
             expect(setNumber, 1);
             expect(reps, hasLength(1));
@@ -151,7 +151,7 @@ void main() {
         await container.pump();
 
         workoutSet.maybeWhen(
-          (exercise, setNumber, reps) {
+          (exercise, setNumber, effort, reps) {
             expect(exercise, isNull, reason: 'Initial exercise is null');
             expect(setNumber, 1);
             expect(reps, hasLength(2));
@@ -174,7 +174,7 @@ void main() {
         await container.pump();
 
         workoutSet.maybeWhen(
-          (exercise, setNumber, reps) {
+          (exercise, setNumber, effort, reps) {
             expect(exercise, isNull, reason: 'Initial exercise is null');
             expect(setNumber, 2);
             expect(reps, hasLength(1));
@@ -195,7 +195,7 @@ void main() {
         await container.pump();
 
         workoutSet.maybeWhen(
-          (exercise, setNumber, reps) {
+          (exercise, setNumber, effort, reps) {
             expect(exercise?.id, dummyExerciseList[0].id,
                 reason: 'Current exercise id');
             expect(setNumber, 1, reason: 'Exercise change resets set counter');
@@ -213,7 +213,7 @@ void main() {
         await container.pump();
 
         workoutSet.maybeWhen(
-          (exercise, setNumber, reps) {
+          (exercise, setNumber, effort, reps) {
             expect(exercise?.id, dummyExerciseList[0].id,
                 reason: 'Current exercise id');
             expect(setNumber, 1, reason: 'Still same set for exercise[0]');
@@ -235,7 +235,7 @@ void main() {
         await container.pump();
 
         workoutSet.maybeWhen(
-          (exercise, setNumber, reps) {
+          (exercise, setNumber, effort, reps) {
             expect(exercise?.id, dummyExerciseList[1].id,
                 reason: 'Current exercise id');
             expect(setNumber, 1, reason: 'Exercise change resets set counter');
@@ -257,7 +257,7 @@ void main() {
         await container.pump();
 
         workoutSet.maybeWhen(
-          (exercise, setNumber, reps) {
+          (exercise, setNumber, effort, reps) {
             expect(exercise?.id, dummyExerciseList[0].id,
                 reason: 'Current exercise id');
             expect(setNumber, 2,
@@ -275,7 +275,7 @@ void main() {
         await container.pump();
 
         workoutSet.maybeWhen(
-          (exercise, setNumber, reps) {
+          (exercise, setNumber, effort, reps) {
             expect(exercise?.id, dummyExerciseList[0].id,
                 reason: 'Current exercise id');
             expect(setNumber, 2,
@@ -301,7 +301,7 @@ void main() {
         await container.pump();
 
         workoutSet.maybeWhen(
-          (exercise, setNumber, reps) {
+          (exercise, setNumber, effort, reps) {
             expect(exercise?.id, isNull, reason: 'No exericse');
             expect(setNumber, 3, reason: 'Third set of no exercise');
             expect(reps.length, 1, reason: 'First rep');

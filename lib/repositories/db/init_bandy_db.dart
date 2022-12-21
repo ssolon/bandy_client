@@ -31,7 +31,7 @@ class InitBandyDatabase extends KaleidaLogDb {
   static const ropePullDownUUID = '4bcdbf01-6026-4124-b223-887c2d1f8656';
   static const barPullDownUUID = 'c8f77f5d-efcd-452f-9b1a-3c199643fdb1';
   static const goodMorningUUID = '737ae21f-7873-4e9d-959e-8a6e6f644f52';
-
+  static const chestUpCrossUUID = '90c2d7fe-5017-497e-86df-e6e7209496ce';
   @override
   initEventTypes(Database db) {
     createEventType(
@@ -56,5 +56,6 @@ class InitBandyDatabase extends KaleidaLogDb {
     createEventType(db, barPullDownUUID, 'Bar Pull Down', 'Triceps pull down',
         exerciseTags);
     createEventType(db, goodMorningUUID, 'Good Morning', null, exerciseTags);
+    createEventType(db, chestUpCrossUUID, 'Chest Up Cross', null, exerciseTags);
   }
 }

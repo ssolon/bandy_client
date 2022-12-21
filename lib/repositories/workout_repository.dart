@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bandy_client/effort/effort_state.dart';
 import 'package:bandy_client/exercise/exercise.dart';
 import 'package:bandy_client/main.dart';
 import 'package:bandy_client/repositories/db/init_bandy_db.dart';
@@ -67,7 +68,7 @@ class WorkoutRepository {
       DateTime? ending, List<WorkoutSetState> sets) async {
     final details = ending == null
         ? null
-        : json.encode("{'ending': ${ending.toIso8601String()}}");
+        : json.encode({'ending': ending.toIso8601String()});
 
     // Make sure that this session has a start before the first set.
     // We shouldn't let this happen but we'll fix it if it does.
@@ -118,7 +119,7 @@ class WorkoutRepository {
             'exercise_id': workoutSet.exercise!.id.toString(),
           },
           'set_number': workoutSet.setNumber,
-          // TODO Add "effort" when we compute it
+          'effort': workoutSet.effort,
         });
         final setId = await ref.read(kaleidaLogDbProvider).createEvent(
             at: starting,
@@ -212,7 +213,8 @@ class WorkoutRepository {
 
     // Add the last set
     if (currentSet != null) {
-      if (currentSet.maybeWhen((exercise, setNumber, reps) => reps.isNotEmpty,
+      if (currentSet.maybeWhen(
+          (exercise, setNumber, effort, reps) => reps.isNotEmpty,
           orElse: () => false)) {
         result = addSet(result, currentSet);
       }
@@ -236,6 +238,7 @@ class WorkoutRepository {
     return WorkoutSetState(
       exercise: exerciseFromDetails(details),
       setNumber: details['set_number'] ?? 0,
+      effort: EffortState.fromJson(details['effort']),
       reps: [],
     );
   }

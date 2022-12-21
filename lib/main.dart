@@ -55,15 +55,6 @@ void main() async {
       // : await getApplicationSupportDirectory();
       : await getApplicationDocumentsDirectory(); // so we can access via app
 
-  //!!!! Still not sure about where to write stuff
-  //!!!! Stick a file in documents directory and see if that's visible
-  //!!!! easily, everywhere.
-  final documentsDirectory = await getApplicationDocumentsDirectory();
-  final testDocumentsFile =
-      File(p.join(documentsDirectory.path, 'test_in_documents.txt'));
-  talker.info("Writing test file to=$testDocumentsFile");
-  testDocumentsFile.writeAsStringSync("This is in the documents directory");
-
   // TODO Handle unhandled error like this using talker?
   // runZonedGuarded(
   // () => runApp(const ProviderScope(child: MyApp())),

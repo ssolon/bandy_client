@@ -14,7 +14,8 @@ def convert_date(val):
 def convert_datetime(val):
     return datetime.datetime.fromisoformat(val.decode())
 def convert_timestamp(val):
-    return datetime.datetime.fromtimestamp(int(val))
+    #return datetime.datetime.fromtimestamp(int(val))
+    return convert_datetime(val)
 
 def delta_formatter(delta :datetime.timedelta):
     seconds = delta.total_seconds()
@@ -42,10 +43,11 @@ def shortformat(d :datetime.datetime):
     return datetime.datetime.isoformat(d, timespec='minutes')
 
 def main():
-    sqlite3.register_converter("date", convert_date)
-    sqlite3.register_converter("datetime", convert_datetime)
+    # sqlite3.register_converter("date", convert_date)
+    # sqlite3.register_converter("datetime", convert_datetime)
     sqlite3.register_converter("timestamp", convert_timestamp)
 
+    # db_path = "/Users/samsolon/Downloads/kaleidalog.db 3"
     db_path = "/Users/samsolon/IdeaProjects/bandy_client/kaleidalog.db"
     con = sqlite3.connect(db_path, detect_types=sqlite3.PARSE_DECLTYPES|sqlite3.PARSE_COLNAMES)
     con.row_factory = sqlite3.Row
@@ -63,9 +65,9 @@ def main():
         print(i, sessions[i][0], sessions[i][1])
         
     print('Select session:')
-    selection_index = input()
+    selection_index = int(input())
 
-    session = sessions[int(selection_index)]
+    session = sessions[selection_index]
     selected_session_id = session[0]
     set_counter = SetCounter()
     title = session[2] + ' ' + shortformat(session[1])
@@ -129,6 +131,7 @@ def main():
         print('Beep!\07')
 
     def on_press(event):
+        nonlocal selection_index
         nonlocal set_index
         nonlocal set_indexes
         nonlocal workout
@@ -145,6 +148,12 @@ def main():
         elif key == 'left':
             if set_index > 0:
                 next_index = set_index - 1
+            else:
+                beep()
+        elif key == 'down':
+            if selection_index < len(sessions) - 1:
+                selection_index += 1
+                print(f"switch to {sessions[selection_index][1]}")
             else:
                 beep()
         elif key == 'q': 
@@ -177,7 +186,7 @@ def plot_set(events: list, session_event, set_description :str):
         
         if level == WORKOUT_SET_LEVEL: # Start workoutSet
             set_details=json.loads(d['event_details'])
-            rep_count = set_details['count']
+            rep_count = set_details['set_number']
             set_start = d['event_at']
 
             for r in events[i+1:]:

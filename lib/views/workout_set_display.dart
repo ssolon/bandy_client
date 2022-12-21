@@ -84,7 +84,8 @@ class WorkoutSetDisplay extends StatelessWidget {
 
   /// Display a historic set
   Widget historySetDisplay(WorkoutSetState historySet, BuildContext context) {
-    final reps = historySet.whenOrNull((exercise, setNumber, reps) => reps);
+    final reps =
+        historySet.whenOrNull((exercise, setNumber, effort, reps) => reps);
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -112,7 +113,7 @@ class WorkoutSetDisplay extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              "Effort", //"10 (5+5)",
+              "${theSet.effort.total}/${theSet.effort.concentric}/${theSet.effort.eccentric}", //"10 (5+5)",
               style: Theme.of(context).textTheme.headline6,
               textAlign: TextAlign.center,
             ),

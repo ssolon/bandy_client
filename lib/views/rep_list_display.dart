@@ -11,7 +11,7 @@ class RepListWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final reps = ref.watch(workoutSetNotifierProvider(device)).maybeWhen(
-        (uuid, name, reps) => reps,
+        (uuid, name, effort, reps) => reps,
         orElse: () => List<RepCount>.empty());
 
     return RepListTableWidget(reps);
@@ -58,6 +58,13 @@ class RepListWidgetState extends ConsumerState<RepListTableWidget> {
                 textAlign: TextAlign.center,
               ),
               numeric: true),
+          const DataColumn(
+            label: Text(
+              'Effort\nT/C/E',
+              textAlign: TextAlign.center,
+            ),
+            numeric: false,
+          )
         ],
         sortAscending: _sortAscending,
         sortColumnIndex: 0,
@@ -70,6 +77,8 @@ class RepListWidgetState extends ConsumerState<RepListTableWidget> {
       cells: [
         DataCell(Text(rep.count.toString())),
         DataCell(Text(rep.maxValue.toString())),
+        DataCell(Text(
+            "${rep.effort.total}/${rep.effort.concentric}/${rep.effort.eccentric}")),
       ],
     );
   }

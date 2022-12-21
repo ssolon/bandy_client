@@ -2,11 +2,13 @@ import 'dart:math';
 
 import 'package:bandy_client/ble/device/logic/device_provider.dart';
 import 'package:bandy_client/ble/device/logic/device_state.dart';
+import 'package:bandy_client/effort/effort_computer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:loggy/loggy.dart';
 
 import '../ble/scanner/logic/scanned_device.dart';
+import '../effort/effort_state.dart';
 
 part 'rep_counter.g.dart';
 
@@ -31,13 +33,17 @@ class RepCount {
   final int count;
   final int maxValue;
   final Rep reps;
+  late final EffortState effort;
 
-  RepCount(this.count, this.maxValue, this.reps);
+  RepCount(this.count, this.maxValue, this.reps) {
+    effort = EffortState.of(reps.instants);
+  }
 
   RepCount.zero()
       : count = 0,
         maxValue = 0,
-        reps = Rep([]);
+        reps = Rep([]),
+        effort = EffortState.zero();
 
   factory RepCount.fromJson(Map<String, dynamic> json) =>
       _$RepCountFromJson(json);
@@ -201,6 +207,7 @@ class InstantHandler {
       final repsEndIndex = (_minInstant?.index ?? 0);
       final reps = List<Instant>.from(
           _instants.getRange(repsStartIndex, repsEndIndex + 1));
+
       result = RepCount(++repCount, _maxValue, Rep(reps));
     }
 
