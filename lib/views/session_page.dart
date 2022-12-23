@@ -11,6 +11,7 @@ import '../exercise/exercise.dart';
 import '../routine/rep_counter.dart';
 
 final dateFormat = DateFormat.MMMEd().add_jms();
+final eFmt = NumberFormat.decimalPattern();
 
 /// What we show when we don't have a name for an exercise
 const noExerciseName = '????';
@@ -82,7 +83,10 @@ class _WorkoutSetDisplayWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "${exercise?.name ?? noExerciseName} #$setNumber - ${reps.length} reps     Effort: ${effort.total} = ${effort.concentric} + ${effort.eccentric}",
+                  "${exercise?.name ?? noExerciseName} #$setNumber - ${reps.length} reps "
+                  "Effort: ${eFmt.format(effort.total.roundToDouble())}"
+                  " = ${eFmt.format(effort.concentric.roundToDouble())}"
+                  " + ${eFmt.format(effort.eccentric.roundToDouble())}",
                   textAlign: TextAlign.start,
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
@@ -99,7 +103,9 @@ class _WorkoutSetDisplayWidget extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0),
                           child: Text(
-                              "E: ${r.effort.total} = ${r.effort.concentric} + ${r.effort.eccentric}"),
+                              "E: ${eFmt.format(r.effort.total.roundToDouble())}"
+                              " = ${eFmt.format(r.effort.concentric.roundToDouble())}"
+                              " + ${eFmt.format(r.effort.eccentric.roundToDouble())}"),
                         )
                       ],
                     ),

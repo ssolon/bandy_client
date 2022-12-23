@@ -5,9 +5,12 @@ import 'package:bandy_client/workout_session/current/workout_session_notifier.da
 import 'package:bandy_client/workout_session/current/workout_session_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../routine/workout_set/logic/workout_set_notifier.dart';
 import '../routine/workout_set/logic/workout_set_state.dart';
+
+final eFmt = NumberFormat.decimalPattern();
 
 /// Show current set and all sets in the session (if any)
 class WorkoutSetsWidget extends ConsumerStatefulWidget {
@@ -113,7 +116,9 @@ class WorkoutSetDisplay extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              "${theSet.effort.total}/${theSet.effort.concentric}/${theSet.effort.eccentric}", //"10 (5+5)",
+              "${eFmt.format(theSet.effort.total.roundToDouble())}"
+              "/${eFmt.format(theSet.effort.concentric.roundToDouble())}"
+              "/${eFmt.format(theSet.effort.eccentric.roundToDouble())}",
               style: Theme.of(context).textTheme.headline6,
               textAlign: TextAlign.center,
             ),

@@ -3,6 +3,9 @@ import 'package:bandy_client/routine/rep_counter.dart';
 import 'package:bandy_client/routine/workout_set/logic/workout_set_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
+
+final eFmt = NumberFormat.decimalPattern();
 
 class RepListWidget extends ConsumerWidget {
   final ScannedDevice device;
@@ -77,8 +80,9 @@ class RepListWidgetState extends ConsumerState<RepListTableWidget> {
       cells: [
         DataCell(Text(rep.count.toString())),
         DataCell(Text(rep.maxValue.toString())),
-        DataCell(Text(
-            "${rep.effort.total}/${rep.effort.concentric}/${rep.effort.eccentric}")),
+        DataCell(Text("${eFmt.format(rep.effort.total.roundToDouble())}"
+            "/${eFmt.format(rep.effort.concentric.roundToDouble())}"
+            "/${eFmt.format(rep.effort.eccentric.roundToDouble())}")),
       ],
     );
   }
