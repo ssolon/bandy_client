@@ -33,11 +33,9 @@ class RepCount {
   final int count;
   final int maxValue;
   final Rep reps;
-  late final EffortState effort;
+  final EffortState effort;
 
-  RepCount(this.count, this.maxValue, this.reps) {
-    effort = EffortState.of(reps.instants);
-  }
+  RepCount(this.count, this.maxValue, this.reps, this.effort);
 
   RepCount.zero()
       : count = 0,
@@ -208,7 +206,7 @@ class InstantHandler {
       final reps = List<Instant>.from(
           _instants.getRange(repsStartIndex, repsEndIndex + 1));
 
-      result = RepCount(++repCount, _maxValue, Rep(reps));
+      result = RepCount(++repCount, _maxValue, Rep(reps), EffortState.of(reps));
     }
 
     // Setup for this to be the next rep
