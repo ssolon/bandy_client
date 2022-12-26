@@ -2,7 +2,6 @@ import 'package:bandy_client/ble/scanner/logic/scanned_device.dart';
 import 'package:bandy_client/effort/effort_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:loggy/loggy.dart';
 
 class EffortWidget extends ConsumerStatefulWidget {
   final ScannedDevice device;

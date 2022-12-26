@@ -4,7 +4,6 @@ import 'package:bandy_client/ble/scanner/logic/scanned_device.dart';
 import 'package:bandy_client/effort/effort_computer.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'effort_state.dart';
 part 'effort_notifier.g.dart';
 
 @riverpod
