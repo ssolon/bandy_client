@@ -2,11 +2,16 @@ import 'package:bandy_client/ble/device/logic/device_state.dart';
 import 'package:bandy_client/effort/effort_computer.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../features/settings/logic/settings_state.dart';
+
 part 'effort_state.freezed.dart';
 part 'effort_state.g.dart';
 
 @freezed
 class EffortState with _$EffortState {
+  // TODO Listen for changes in settings
+  static SettingsState settings = const SettingsState();
+
   EffortState._();
 
   factory EffortState(
@@ -34,7 +39,7 @@ class EffortState with _$EffortState {
         if (e > 0) {
           concentric += e;
         } else {
-          eccentric += e.abs();
+          eccentric += e.abs() * settings.eccentricAdjustPercentage;
         }
       }
 
