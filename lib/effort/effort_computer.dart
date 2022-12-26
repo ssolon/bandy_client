@@ -10,6 +10,6 @@ class EffortComputer {
     final dmin = (min(i2.reading, i1.reading));
 
     final e = (dmin * dt * dv.sign) + (dv * dt / 2.0);
-    return (e / 100).roundToDouble();
+    return (e / 1000).roundToDouble();
   }
 }
