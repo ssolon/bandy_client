@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bandy_client/ble/scanner/logic/scanned_device.dart';
+import 'package:bandy_client/effort/effort_state.dart';
 import 'package:bandy_client/exercise/current/current_exercise_notifier.dart';
 import 'package:bandy_client/exercise/exercise_dummys.dart';
 import 'package:bandy_client/exercise/list/exercise_list_notifier.dart';
@@ -22,7 +23,7 @@ class FakeRepCounterNotifier extends RepCounterNotifier {
   /// Report a rep explicitly
   // TODO Should this just be part of [RepCounterNotifier]?
   void notifyRep(int count, int maxValue) {
-    state = RepCount(count, maxValue, Rep([]));
+    state = RepCount(count, maxValue, Rep([]), EffortState.zero());
   }
 }
 
