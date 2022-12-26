@@ -131,6 +131,7 @@ class WorkoutSetNotifier extends _$WorkoutSetNotifier {
     // Prepare for next set (if any)
     ref.read(repCounterStateProvider(device).notifier).reset();
     reps = [];
+    effort = EffortState.zero();
     setCount++; // Assume no change to the exercise
 
     state = _createState();
