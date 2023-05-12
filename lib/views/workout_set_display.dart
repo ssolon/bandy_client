@@ -119,14 +119,14 @@ class WorkoutSetDisplay extends StatelessWidget {
               "${eFmt.format(theSet.effort.total.roundToDouble())}"
               "/${eFmt.format(theSet.effort.concentric.roundToDouble())}"
               "/${eFmt.format(theSet.effort.eccentric.roundToDouble())}",
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.titleLarge,
               textAlign: TextAlign.center,
             ),
           ),
           Expanded(
             child: Text(
               "${theSet.reps.length}",
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.titleLarge,
               textAlign: TextAlign.end,
             ),
           ),

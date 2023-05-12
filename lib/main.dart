@@ -147,10 +147,10 @@ class _ExercisePageState extends State<ExercisePage> {
           const WorkoutWidget(),
           Expanded(
             child: device == null
-                ? Center(
+                ? const Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const <Widget>[
+                      children: <Widget>[
                         Text('No Bandy device selected. Tap scan to find one'),
                       ],
                     ),
